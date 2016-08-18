@@ -14,6 +14,7 @@
 #define LED_PIN2 GPIO13
 #define LED_PIN3 GPIO14
 #define LED_PIN4 GPIO15
+#define LED_LIST "LED_PIN1 | LED_PIN2 | LED_PIN3 | LED_PIN4"
 #define LED_RCC RCC_GPIOD
 #endif
 

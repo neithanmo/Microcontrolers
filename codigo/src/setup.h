@@ -11,7 +11,7 @@
 #include <libopencm3/stm32/rcc.h>
 #include <libopencm3/stm32/gpio.h>
 #include "defs.h"
-
+#include <stdlib.h>
 /**
  * @brief Initialize the internal LEDS for a STM32F Discovery board.
  * @param void.
