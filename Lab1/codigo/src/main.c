@@ -25,20 +25,32 @@ int main(void)
       _delay_ms(100);
 	/*llamar aqui a la funcion para encender los leds como un 
         efecto, simulando el calculo*/
-      int x = rand() % max + min;
-      switch(x){
-        case 1:
-	   gpio_set(GPIOD, LED_PIN1);
+      int x = rand() % max + min; 	//Se genera un número aleatorio del 1 al 4
+      
+	  switch(x){
+        
+		case 1:		//El numero es 1, 1 led encendido
+	   gpio_set(GPIOD, LED_PIN1); 
 	   break;
-        case 2:
+        
+		case 2:		//El numero es 2, 2 leds encendidos
+	   gpio_set(GPIOD, LED_PIN1); 
 	   gpio_set(GPIOD, LED_PIN2);
 	   break;
-        case 3:
+        
+		case 3:		//El numero es 3, 3 leds encendidos
+	   gpio_set(GPIOD, LED_PIN1);
+	   gpio_set(GPIOD, LED_PIN2);
 	   gpio_set(GPIOD, LED_PIN3);
 	   break;
-        case 4:
+        
+		case 4:	//El numero es 4, 4 leds encendidos
+	   gpio_set(GPIOD, LED_PIN1);
+	   gpio_set(GPIOD, LED_PIN2);
+	   gpio_set(GPIOD, LED_PIN3);
 	   gpio_set(GPIOD, LED_PIN4);
 	   break;
+	
 	default:
 	   break;			 
       }
