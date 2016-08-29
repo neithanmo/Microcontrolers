@@ -22,7 +22,7 @@ int main(void)
 
     if(gpio_get(GPIOA, GPIO0)){///< FUE PRESIONADO EL BOTON???
       gpio_port_write(GPIOD, 0);///<apagamos todos los leds
-      _delay_ms(100);
+      _delay_ms(1000);
 	/*llamar aqui a la funcion para encender los leds como un 
         efecto, simulando el calculo*/
       int x = rand() % max + min;
