@@ -24,7 +24,7 @@
 #define PWMFREQ_F                  ((float )(PWMFREQ)) //32000.0f
 #define PWMFREQ_CENTER_ALIGNED_F   (PWMFREQ_F/2.0f)     
 
-#define PRESCALE                                                   1 //freq_CK_CNT=freq_CK_PSC/(PSC[15:0]+1)
+#define PRESCALE                   1 //freq_CK_CNT=freq_CK_PSC/(PSC[15:0]+1)
 #define PWM_PERIOD_ARR               SYSFREQ/( PWMFREQ*(PRESCALE+1))
 #define INIT_DUTY 
 
