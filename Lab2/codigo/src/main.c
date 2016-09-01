@@ -6,11 +6,22 @@
 #include <libopencm3/stm32/exti.h>
 #include <libopencmsis/core_cm3.h>
 
-uint16_t frequency_sequence[18] = {
+uint16_t frequency_sequence[16] = {
+	15000,// primeros 10 segundos del ciclo de espera, en los cuales se acepta solicitud
+	750,//toggle del led3 indicando que se apagara y dara paso a los peatones
+	750,
+	750,
+	750,
+	750,
+	750,
 	1500,
-	1500,
-	1500,
-	1500,
+	15000,//peatones tienen 10 segundos para pasar
+	750,//toggle del led4 indicando que se apagara y dara paso a los vehiculos
+	750,
+	750,
+	750,
+	750,
+	750,
 	1500,
 };
 
@@ -19,6 +30,8 @@ uint16_t frequency_sel = 0;
 uint16_t compare_time;
 uint16_t new_time;
 uint16_t frequency;
+bool solicitud;
+bool fin_ciclo; 
 int debug = 0;
 
 static void clock_setup(void)
@@ -29,15 +42,17 @@ static void clock_setup(void)
 
 static void gpio_setup(void)
 {
+
 	/* Enable GPIO clock for leds. */
 	rcc_periph_clock_enable(RCC_GPIOD);
 
 	/* Set GPIO12 (in GPIO port D) to 'output push-pull'. */
 	gpio_mode_setup(GPIOD, GPIO_MODE_OUTPUT,
-		      GPIO_PUPD_NONE, GPIO12 | GPIO13);
+		      GPIO_PUPD_NONE, GPIO12 | GPIO13 | GPIO14 | GPIO15);
 
-	gpio_set(GPIOD, GPIO12);
-	gpio_clear(GPIOD, GPIO13);
+   	rcc_periph_clock_enable(RCC_GPIOA);
+	gpio_mode_setup(GPIOA, GPIO_MODE_INPUT, GPIO_PUPD_NONE, GPIO0); 
+
 }
 
 static void tim_setup(void)
@@ -106,7 +121,7 @@ static void tim_setup(void)
 	timer_set_oc_mode(TIM2, TIM_OC1, TIM_OCM_FROZEN);
 
 	/* Set the capture compare value for OC1. */
-	timer_set_oc_value(TIM2, TIM_OC1, 1000);
+	timer_set_oc_value(TIM2, TIM_OC1, frequency_sequence[0]);
 
 	/* ---- */
 
@@ -126,24 +141,59 @@ void tim2_isr(void)
 
 		/* Clear compare interrupt flag. */
 		timer_clear_flag(TIM2, TIM_SR_CC1IF);
+		/* activación de las luces del semaforo*/
+		if(solicitud){
+			fin_ciclo = false; //rechazamos solicitudes de paso
+			if(frequency_sel == 0){	
+				gpio_set(GPIOD, GPIO12 | GPIO15); //paso Vehiculos/alto Peatones
+				gpio_clear(GPIOD, GPIO13 | GPIO14);
+			}
+			else if((frequency_sel >= 1)&&(frequency_sel < 6)){
+				gpio_toggle(GPIOD, GPIO12);//alerta vehiculos/cambio a roja
 
+			}
+			else if(frequency_sel == 6){
+				gpio_clear(GPIOD, GPIO12);
+				gpio_set(GPIOD, GPIO14);//alto vehiculos
+			}
+			else if(frequency_sel == 7){
+				gpio_set(GPIOD, GPIO13);//luz verde para peatones
+				gpio_clear(GPIOD, GPIO12 | GPIO15);
+			}
+			else if(frequency_sel == 8){
+				gpio_set(GPIOD, GPIO13);
+			}
+			else if((frequency_sel >= 9)&&(frequency_sel < 14)){
+				gpio_toggle(GPIOD, GPIO13);//alerta peatones/cambio a roja
+			}
+			else if(frequency_sel == 14){
+				gpio_clear(GPIOD, GPIO13);//espera de un segundo antes de dar
+				gpio_set(GPIOD, GPIO15);//luz verde a vehiculos
+			}
+			else if(frequency_sel == 15){
+				gpio_set(GPIOD, GPIO12 | GPIO15);//paso a vehiculos
+				gpio_clear(GPIOD, GPIO14 | GPIO13);
+				fin_ciclo = true;
+				solicitud = false;
+			}
+		}
+		else{
+			gpio_set(GPIOD, GPIO12 | GPIO15);//paso a vehiculos
+			gpio_clear(GPIOD, GPIO14 | GPIO13);
+		}
 		/*
 		 * Get current timer value to calculate next
 		 * compare register value.
-		 */
+			*/
 		compare_time = timer_get_counter(TIM2);
 
 		/* Calculate and set the next compare value. */
 		frequency = frequency_sequence[frequency_sel++];
 		new_time = compare_time + frequency;
-
 		timer_set_oc_value(TIM2, TIM_OC1, new_time);
-		if (frequency_sel == 5)
+		if(frequency_sel == 16){
 			frequency_sel = 0;
-
-		/* Toggle LED to indicate compare event. */
-		//gpio_toggle(GPIOD, GPIO12);
-		gpio_toggle(GPIOD, GPIO13);
+		}
 	}
 }
 
@@ -152,6 +202,8 @@ int main(void)
 	clock_setup();
 	gpio_setup();
 	tim_setup();
+	solicitud = false;
+	fin_ciclo = true;
 
 	/* Loop calling Wait For Interrupt. In older pre cortex ARM this is
 	 * just equivalent to nop. On cortex it puts the cpu to sleep until
@@ -162,8 +214,11 @@ int main(void)
 	 * a Debug Entry request
 	 */
 	while (1){
-		__WFI(); /* Wait For Interrupt. */
+		if(gpio_get(GPIOA, GPIO0) && fin_ciclo){
+			solicitud = true;
+			frequency_sel = 0;
+		}
+		//__WFI(); /* Wait For Interrupt. */
 	}
-
 	return 0;
 }
