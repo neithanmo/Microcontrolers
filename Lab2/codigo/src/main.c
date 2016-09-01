@@ -7,24 +7,11 @@
 #include <libopencmsis/core_cm3.h>
 
 uint16_t frequency_sequence[18] = {
-	1000,
-	500,
-	1000,
-	500,
-	1000,
-	500,
-	2000,
-	500,
-	2000,
-	500,
-	2000,
-	500,
-	1000,
-	500,
-	1000,
-	500,
-	1000,
-	5000,
+	1500,
+	1500,
+	1500,
+	1500,
+	1500,
 };
 
 uint16_t frequency_sel = 0;
@@ -36,8 +23,8 @@ int debug = 0;
 
 static void clock_setup(void)
 {
-	rcc_clock_setup_hse_3v3(&rcc_hse_8mhz_3v3[RCC_CLOCK_3V3_168MHZ]);
-	gpio_set(GPIOD, GPIO14);
+	rcc_clock_setup_hse_3v3(&rcc_hse_8mhz_3v3[RCC_CLOCK_3V3_120MHZ]);
+
 }
 
 static void gpio_setup(void)
@@ -93,7 +80,7 @@ static void tim_setup(void)
 	 * For additional information see reference manual for the stm32f4
 	 * familiy of chips. Page 204 and 213
 	 */
-	timer_set_prescaler(TIM2, ((rcc_apb1_frequency * 2) / 10000));
+	timer_set_prescaler(TIM2, ((rcc_apb1_frequency * 2) / 10));
 
 	/* Enable preload. */
 	timer_disable_preload(TIM2);
@@ -151,18 +138,17 @@ void tim2_isr(void)
 		new_time = compare_time + frequency;
 
 		timer_set_oc_value(TIM2, TIM_OC1, new_time);
-		if (frequency_sel == 18)
+		if (frequency_sel == 5)
 			frequency_sel = 0;
 
 		/* Toggle LED to indicate compare event. */
-		gpio_toggle(GPIOD, GPIO12);
+		//gpio_toggle(GPIOD, GPIO12);
 		gpio_toggle(GPIOD, GPIO13);
 	}
 }
 
 int main(void)
-{
-	gpio_set(GPIOD, GPIO15);
+{	
 	clock_setup();
 	gpio_setup();
 	tim_setup();
@@ -177,7 +163,6 @@ int main(void)
 	 */
 	while (1){
 		__WFI(); /* Wait For Interrupt. */
-		//gpio_set(GPIOD, GPIO15);
 	}
 
 	return 0;
