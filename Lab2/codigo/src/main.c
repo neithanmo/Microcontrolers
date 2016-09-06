@@ -32,7 +32,6 @@ uint16_t new_time;
 uint16_t frequency;
 bool solicitud;
 bool fin_ciclo; 
-int debug = 0;
 
 static void clock_setup(void)
 {
@@ -170,7 +169,7 @@ void tim2_isr(void)
 				gpio_clear(GPIOD, GPIO13);//espera de un segundo antes de dar
 				gpio_set(GPIOD, GPIO15);//luz verde a vehiculos
 			}
-			else if(frequency_sel == 15){
+			else(frequency_sel == 15){
 				gpio_set(GPIOD, GPIO12 | GPIO15);//paso a vehiculos
 				gpio_clear(GPIOD, GPIO14 | GPIO13);
 				fin_ciclo = true;
