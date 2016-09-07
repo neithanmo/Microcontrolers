@@ -6,7 +6,7 @@
 #include <libopencm3/stm32/exti.h>
 #include <libopencmsis/core_cm3.h>
 
-uint16_t frequency_sequence[16] = {
+uint16_t frequency_sequence[18] = {
 	15000,// primeros 10 segundos del ciclo de espera, en los cuales se acepta solicitud
 	750,//toggle del led3 indicando que se apagara y dara paso a los peatones
 	750,
@@ -14,7 +14,8 @@ uint16_t frequency_sequence[16] = {
 	750,
 	750,
 	750,
-	1500,
+	1500,//amarillo
+	1500,//rojo
 	15000,//peatones tienen 10 segundos para pasar
 	750,//toggle del led4 indicando que se apagara y dara paso a los vehiculos
 	750,
@@ -22,7 +23,8 @@ uint16_t frequency_sequence[16] = {
 	750,
 	750,
 	750,
-	1500
+	1500,
+	750
 };
 
 uint16_t frequency_sel;
@@ -150,25 +152,26 @@ void tim2_isr(void)
 				gpio_set(GPIOD, GPIO12 | GPIO15); //paso Vehiculos/alto Peatones
 				gpio_clear(GPIOD, GPIO13 | GPIO14);
 			}*/
-			if((frequency_sel >= 1)&&(frequency_sel < 6)){
+			if((frequency_sel >= 1)&&(frequency_sel <= 6)){
 				gpio_toggle(GPIOD, GPIO1);//alerta vehiculos/cambio a roja
 
 			}
-			else if(frequency_sel == 6){
+			else if(frequency_sel == 7){
 				gpio_clear(GPIOD, GPIO1);
+				gpio_set(GPIOD, GPIO2);//amarillo
+			}
+			else if(frequency_sel == 8){
+				gpio_clear(GPIOD, GPIO2);
 				gpio_set(GPIOD, GPIO3);//alto vehiculos
 			}
-			else if(frequency_sel == 7){
+			else if(frequency_sel == 9){
 				gpio_set(GPIOD, GPIO4);//luz verde para peatones
 				gpio_clear(GPIOD, GPIO1 | GPIO5);
 			}
-			else if(frequency_sel == 8){
-				gpio_set(GPIOD, GPIO4);
-			}
-			else if((frequency_sel >= 9)&&(frequency_sel < 14)){
+			else if((frequency_sel > 9)&&(frequency_sel <= 15)){
 				gpio_toggle(GPIOD, GPIO4);//alerta peatones/cambio a roja
 			}
-			else if(frequency_sel == 14){
+			else if(frequency_sel == 16){
 				gpio_clear(GPIOD, GPIO4);//espera de un segundo antes de dar
 				gpio_set(GPIOD, GPIO5);//luz verde a vehiculos
 			}
@@ -193,8 +196,8 @@ void tim2_isr(void)
 				compare_time = timer_get_counter(TIM2);
 				new_time = compare_time + 500;
 				timer_set_oc_value(TIM2, TIM_OC1, new_time);
-				//frequency_sel = 1;
 				gpio_set(GPIOD, GPIO13);
+				frequency_sel = 1;
 			}
 			
 			else {
@@ -206,7 +209,7 @@ void tim2_isr(void)
 			}
 		}
 
-		if(frequency_sel == 16){
+		if(frequency_sel == 18){
 			frequency_sel = 0;
 		}
 	}
