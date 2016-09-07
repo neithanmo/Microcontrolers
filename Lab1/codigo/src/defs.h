@@ -9,7 +9,6 @@
 #define UC_DEFS_HPP
 
 #ifdef STM32F4
-#define LED_PORTA GPIOA
 #define LED_PORTD GPIOD
 #define LED_PIN0 GPIO0
 #define LED_PIN1 GPIO1
@@ -18,8 +17,6 @@
 #define LED_PIN4 GPIO4
 #define LED_PIN5 GPIO5
 #define LED_PIN6 GPIO6
-#define LED_PIN7 GPIO7
-//#define LED_LIST "LED_PIN1 | LED_PIN2 | LED_PIN3 | LED_PIN4"
 #define LED_RCC RCC_GPIOD
 #endif
 
