@@ -1,3 +1,4 @@
+
 #include <libopencm3/stm32/rcc.h>
 #include <libopencm3/stm32/gpio.h>
 #include <time.h>
@@ -5,8 +6,6 @@
 #include "setup.h"
 #include "utils.h"
 #include "defs.h"
-
-
 
 int main(void)
 {
@@ -22,7 +21,6 @@ int main(void)
 
     if(gpio_get(GPIOA, GPIO0)){///< FUE PRESIONADO EL BOTON???
       gpio_port_write(GPIOD, 0);///<apagamos todos los leds
-      gpio_port_write(GPIOA, 0);///<apagamos todos los leds
       _delay_ms(100);
 	/*llamar aqui a la funcion para encender los leds como un 
         efecto, simulando el calculo*/
