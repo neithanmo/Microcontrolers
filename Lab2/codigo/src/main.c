@@ -22,16 +22,17 @@ uint16_t frequency_sequence[16] = {
 	750,
 	750,
 	750,
-	1500,
+	1500
 };
 
-uint16_t frequency_sel = 0;
+uint16_t frequency_sel;
 
 uint16_t compare_time;
 uint16_t new_time;
 uint16_t frequency;
 bool solicitud;
-bool fin_ciclo; 
+bool fin_ciclo;
+bool seg10; 
 
 static void clock_setup(void)
 {
@@ -47,7 +48,7 @@ static void gpio_setup(void)
 
 	/* Set GPIO12 (in GPIO port D) to 'output push-pull'. */
 	gpio_mode_setup(GPIOD, GPIO_MODE_OUTPUT,
-		      GPIO_PUPD_NONE, GPIO12 | GPIO13 | GPIO14 | GPIO15);
+		      GPIO_PUPD_NONE, GPIO1 | GPIO2 | GPIO3 | GPIO4 | GPIO5 | GPIO12 | GPIO13 | GPIO14 | GPIO15);
 
    	rcc_periph_clock_enable(RCC_GPIOA);
 	gpio_mode_setup(GPIOA, GPIO_MODE_INPUT, GPIO_PUPD_NONE, GPIO0); 
@@ -142,54 +143,69 @@ void tim2_isr(void)
 		timer_clear_flag(TIM2, TIM_SR_CC1IF);
 		/* activación de las luces del semaforo*/
 		if(solicitud){
+			seg10 = false;
 			fin_ciclo = false; //rechazamos solicitudes de paso
-			if(frequency_sel == 0){	
+			/*if(frequency_sel == 0){
+				10seg = true;	
 				gpio_set(GPIOD, GPIO12 | GPIO15); //paso Vehiculos/alto Peatones
 				gpio_clear(GPIOD, GPIO13 | GPIO14);
-			}
-			else if((frequency_sel >= 1)&&(frequency_sel < 6)){
-				gpio_toggle(GPIOD, GPIO12);//alerta vehiculos/cambio a roja
+			}*/
+			if((frequency_sel >= 1)&&(frequency_sel < 6)){
+				gpio_toggle(GPIOD, GPIO1);//alerta vehiculos/cambio a roja
 
 			}
 			else if(frequency_sel == 6){
-				gpio_clear(GPIOD, GPIO12);
-				gpio_set(GPIOD, GPIO14);//alto vehiculos
+				gpio_clear(GPIOD, GPIO1);
+				gpio_set(GPIOD, GPIO3);//alto vehiculos
 			}
 			else if(frequency_sel == 7){
-				gpio_set(GPIOD, GPIO13);//luz verde para peatones
-				gpio_clear(GPIOD, GPIO12 | GPIO15);
+				gpio_set(GPIOD, GPIO4);//luz verde para peatones
+				gpio_clear(GPIOD, GPIO1 | GPIO5);
 			}
 			else if(frequency_sel == 8){
-				gpio_set(GPIOD, GPIO13);
+				gpio_set(GPIOD, GPIO4);
 			}
 			else if((frequency_sel >= 9)&&(frequency_sel < 14)){
-				gpio_toggle(GPIOD, GPIO13);//alerta peatones/cambio a roja
+				gpio_toggle(GPIOD, GPIO4);//alerta peatones/cambio a roja
 			}
 			else if(frequency_sel == 14){
-				gpio_clear(GPIOD, GPIO13);//espera de un segundo antes de dar
-				gpio_set(GPIOD, GPIO15);//luz verde a vehiculos
+				gpio_clear(GPIOD, GPIO4);//espera de un segundo antes de dar
+				gpio_set(GPIOD, GPIO5);//luz verde a vehiculos
 			}
-			else(frequency_sel == 15){
-				gpio_set(GPIOD, GPIO12 | GPIO15);//paso a vehiculos
-				gpio_clear(GPIOD, GPIO14 | GPIO13);
+			else{
+				gpio_set(GPIOD, GPIO1 | GPIO5);//paso a vehiculos
+				gpio_clear(GPIOD, GPIO3 | GPIO4);
 				fin_ciclo = true;
-				solicitud = false;
+				solicitud = false;	
 			}
+	
+			compare_time = timer_get_counter(TIM2);
+			frequency = frequency_sequence[frequency_sel++];
+			new_time = compare_time + frequency;
+			timer_set_oc_value(TIM2, TIM_OC1, new_time);				
 		}
 		else{
-			gpio_set(GPIOD, GPIO12 | GPIO15);//paso a vehiculos
-			gpio_clear(GPIOD, GPIO14 | GPIO13);
+			gpio_set(GPIOD, GPIO1 | GPIO5);//paso a vehiculos
+			gpio_clear(GPIOD, GPIO4 | GPIO3);
+			
+			if(seg10) {
+	
+				compare_time = timer_get_counter(TIM2);
+				new_time = compare_time + 500;
+				timer_set_oc_value(TIM2, TIM_OC1, new_time);
+				//frequency_sel = 1;
+				gpio_set(GPIOD, GPIO13);
+			}
+			
+			else {
+				compare_time = timer_get_counter(TIM2);
+				frequency = frequency_sequence[frequency_sel++];
+				new_time = compare_time + frequency;
+				timer_set_oc_value(TIM2, TIM_OC1, new_time);
+				seg10 = true;			
+			}
 		}
-		/*
-		 * Get current timer value to calculate next
-		 * compare register value.
-			*/
-		compare_time = timer_get_counter(TIM2);
 
-		/* Calculate and set the next compare value. */
-		frequency = frequency_sequence[frequency_sel++];
-		new_time = compare_time + frequency;
-		timer_set_oc_value(TIM2, TIM_OC1, new_time);
 		if(frequency_sel == 16){
 			frequency_sel = 0;
 		}
@@ -203,6 +219,9 @@ int main(void)
 	tim_setup();
 	solicitud = false;
 	fin_ciclo = true;
+	seg10 = false;
+	frequency_sel = 0;
+
 
 	/* Loop calling Wait For Interrupt. In older pre cortex ARM this is
 	 * just equivalent to nop. On cortex it puts the cpu to sleep until
@@ -215,7 +234,6 @@ int main(void)
 	while (1){
 		if(gpio_get(GPIOA, GPIO0) && fin_ciclo){
 			solicitud = true;
-			frequency_sel = 0;
 		}
 		//__WFI(); /* Wait For Interrupt. */
 	}
