@@ -15,15 +15,8 @@
 #define LED_DISCO_GREEN_PIN GPIO12
 //usbd_ep_write_packet(usbd_dev, 0x82, buf, len)
 
-uint16_t frequency_sequence[8] = {
-	500,
-	500,
-	500,
-	500,
-	500,
-	500,
-	500,
-	500
+uint16_t frequency_sequence[1] = {
+	1
 };
 
 uint16_t frequency_sel;
@@ -33,9 +26,11 @@ uint16_t new_time;
 uint16_t frequency;
 uint8_t frecuency_sel;
 char buffer[8];
+char buff;
+uint8_t channel_array[16];
 usbd_device *usbd_dev;
 uint16_t len = sizeof(buffer);
-
+uint16_t length = sizeof(buff);
 static void clock_setup(void)
 {
 	rcc_clock_setup_hse_3v3(&rcc_hse_8mhz_3v3[RCC_CLOCK_3V3_120MHZ]);
@@ -49,8 +44,9 @@ static void gpio_setup(void)
 	gpio_mode_setup(GPIOA, GPIO_MODE_ANALOG, GPIO_PUPD_NONE, GPIO0);
    	gpio_mode_setup(GPIOA, GPIO_MODE_ANALOG, GPIO_PUPD_NONE, GPIO1);
         gpio_mode_setup(LED_DISCO_GREEN_PORT, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE,
-		LED_DISCO_GREEN_PIN);
-	//gpio_clear(LED_DISCO_GREEN_PORT,LED_DISCO_GREEN_PIN);
+		LED_DISCO_GREEN_PIN | GPIO15 | GPIO13 | GPIO14);
+	gpio_toggle(LED_DISCO_GREEN_PORT, LED_DISCO_GREEN_PIN);
+	gpio_clear(LED_DISCO_GREEN_PORT,GPIO14);
 }
 
 static void adc_setup(void)
@@ -61,7 +57,12 @@ static void adc_setup(void)
 	//configurar el convertidor A/D
 	adc_power_off(ADC1);
 	adc_disable_scan_mode(ADC1);
+	channel_array[0] = 0;
+	//adc_set_regular_sequence(adc, length, channel[])
+	adc_set_regular_sequence(ADC1, 1, channel_array);
 	adc_set_sample_time_on_all_channels(ADC1, ADC_SMPR_SMP_3CYC);
+	adc_set_right_aligned(ADC1);
+	adc_set_resolution(ADC1, ADC_CR1_RES_8BIT);//char= 1 byte
 	adc_power_on(ADC1);
 }
 
@@ -91,7 +92,7 @@ static void tim_setup(void)
 	timer_set_mode(TIM2, TIM_CR1_CKD_CK_INT,
 		       TIM_CR1_CMS_EDGE, TIM_CR1_DIR_UP);
 
-	timer_set_prescaler(TIM2, ((rcc_apb1_frequency * 2) / 10));
+	timer_set_prescaler(TIM2, ((rcc_apb1_frequency * 2) / 10));//6MHz el prescalador
 
 	/* Enable preload. */
 	timer_disable_preload(TIM2);
@@ -128,19 +129,15 @@ static void tim_setup(void)
 	timer_enable_counter(TIM2);
 
 	/* Enable commutation interrupt. */
-	timer_enable_irq(TIM2, TIM_DIER_CC1IE);
+	//timer_enable_irq(TIM2, TIM_DIER_CC1IE);
 }
 
-static uint16_t read_adc_naiive(uint8_t channel)
+static void read_adc_send(void)
 {
-	uint8_t channel_array[16];
-	channel_array[0] = channel;
-	//adc_set_regular_sequence(adc, length, channel[])
-	adc_set_regular_sequence(ADC1, 1, channel_array);
 	adc_start_conversion_regular(ADC1);
 	while (!adc_eoc(ADC1));
-		uint16_t reg16 = adc_read_regular(ADC1);
-	return reg16;
+		buff = adc_read_regular(ADC1) + '0';
+	usbd_ep_write_packet(usbd_dev, 0x82, buff, length);
 }
 
 void tim2_isr(void)
@@ -148,22 +145,17 @@ void tim2_isr(void)
 	if (timer_get_flag(TIM2, TIM_SR_CC1IF)) {
 
 		timer_clear_flag(TIM2, TIM_SR_CC1IF);
-		
-		char buff= read_adc_naiive(0) + frecuency_sel + '0';//conversion a char del valor leido
+		read_adc_send();
 		gpio_toggle(LED_DISCO_GREEN_PORT, LED_DISCO_GREEN_PIN);
-		usbd_ep_write_packet(usbd_dev, 0x82, buff, 1);
-		/*if(frecuency_sel == 7){
-			
-			usbd_ep_write_packet(usbd_dev, 0x82, buffer, 8);
-		}*/
-
+		gpio_toggle(LED_DISCO_GREEN_PORT, GPIO14);
 		compare_time = timer_get_counter(TIM2);
 		frequency = frequency_sequence[frequency_sel++];
 		new_time = compare_time + frequency;
 		timer_set_oc_value(TIM2, TIM_OC1, new_time);
 			
-		if(frequency_sel == 8){
-			frequency_sel = 0;			
+		if(frequency_sel == 1){
+			frequency_sel = 0;
+						
 		}
 	}
 }
@@ -175,11 +167,10 @@ static int cdcacm_control_request(usbd_device *usbd_dev,
 	(void)complete;
 	(void)buf;
 	(void)usbd_dev;
-	gpio_toggle(LED_DISCO_GREEN_PORT, GPIO14);
-
 	switch (req->bRequest) {
 	case USB_CDC_REQ_SET_CONTROL_LINE_STATE: {
-		gpio_toggle(LED_DISCO_GREEN_PORT, GPIO14);
+		gpio_toggle(LED_DISCO_GREEN_PORT, GPIO15);
+		timer_enable_irq(TIM2, TIM_DIER_CC1IE);
 		return 1;
 		}
 	case USB_CDC_REQ_SET_LINE_CODING:
@@ -223,10 +214,9 @@ int main(void)
 			usbd_control_buffer, sizeof(usbd_control_buffer));
 
 	usbd_register_set_config_callback(usbd_dev, cdcacm_set_config);
+
 	while (1) {
-			
 			usbd_poll(usbd_dev);
 		}
-
 	return 0;
 }
