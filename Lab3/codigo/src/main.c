@@ -25,11 +25,9 @@ uint16_t compare_time;
 uint16_t new_time;
 uint16_t frequency;
 uint8_t frecuency_sel;
-char buffer[8];
 char buff;
 uint8_t channel_array[16];
 usbd_device *usbd_dev;
-uint16_t len = sizeof(buffer);
 uint16_t length = sizeof(buff);
 static void clock_setup(void)
 {
@@ -61,7 +59,8 @@ static void adc_setup(void)
 	//adc_set_regular_sequence(adc, length, channel[])
 	adc_set_regular_sequence(ADC1, 1, channel_array);
 	adc_set_sample_time_on_all_channels(ADC1, ADC_SMPR_SMP_3CYC);
-	adc_set_right_aligned(ADC1);
+	//adc_set_right_aligned(ADC1);
+        adc_set_left_aligned(ADC1);
 	adc_set_resolution(ADC1, ADC_CR1_RES_8BIT);//char= 1 byte
 	adc_power_on(ADC1);
 }
