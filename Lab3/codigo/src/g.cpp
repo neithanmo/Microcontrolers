@@ -9,7 +9,7 @@
 #include <sys/stat.h>
 
 using namespace std;
-
+void printBits(size_t const size, void const * const ptr);
 int serial_open(char *serial_name, speed_t baud)
 {
       struct termios newtermios;
@@ -43,14 +43,17 @@ int serial_read(int serial_fd, char *data, int size, int timeout_usec)
       do {
         FD_ZERO(&fds);
         FD_SET (serial_fd, &fds);
-        timeout.tv_sec = 0;
+        timeout.tv_sec = 1;
         timeout.tv_usec = timeout_usec;
         ret=select (FD_SETSIZE,&fds, NULL, NULL,&timeout);
         if (ret==1 && count <= size) {//control overflow del buffer
            // int  read(  int  handle,  void  *buffer,  int  nbyte );
-          n=read (serial_fd, &data[count], 8);//lee linea a linea el caracter de 8 bits
-	  int x = (int)data[count];
-          cout<<x<<'\t';//imprimir para prueba
+          n=read (serial_fd, &data[count], 1);//lee linea a linea el caracter de 8 bits
+	  short int x = data[count] ;//resto 48 para obtener el entero original
+	  printBits(sizeof(data[count]), &data[count]);
+	  printf("char:%c  entero:%d \n", data[count], x);
+	  printBits(sizeof(x), &x);
+	  printf("\n");
           count+=n;
           data[count]=0;
    	}
@@ -65,13 +68,35 @@ void serial_close(int fd)
    close(fd);
 }
 
+
+void printBits(size_t const size, void const * const ptr)
+{
+    unsigned char *b = (unsigned char*) ptr;
+    unsigned char byte;
+    int i, j;
+
+    for (i=size-1;i>=0;i--)
+    {
+        for (j=7;j>=0;j--)
+        {
+            byte = (b[i] >> j) & 1;
+            printf("%u", byte);
+        }
+    }
+    puts("");
+    
+}
+
 int main(int argc, char *argv[])
 {
    int serial_fd, n, longitud;
    char *device="/dev/ttyACM0";
    char data[256];//buffer de 256 bytes
    //longitud=strlen(device);
-
+   // char dt = 2+'0';
+    //int num = int(dt) - 48;
+    //printf("caracter:%c y el entero es %d \n", dt, num);
+    //cout<<"caracter"<<dt<< " el entero es"<<num<<"\n";
    serial_fd = serial_open("/dev/ttyACM0",115200);
     if (serial_fd == -1) {
             printf ("Error opening the serial device: %s\n",argv[1]);
@@ -81,9 +106,9 @@ int main(int argc, char *argv[])
     printf("SERIAL OPEN:%s\n", device);
     //serial_send(serial_fd, device, longitud);
     //printf ("String sent------> %s\n",device);
-    n=serial_read(serial_fd, data, sizeof(data), 100000);
-    printf("Se ha recibido %s \n Tamaño: %d\n n:%d \n serial_fd:%d\n",data, longitud,n,serial_fd);
-//puts(data);
+    n=serial_read(serial_fd, data, sizeof(data), 10000000);
+    printf("Se ha recibido %s \n Tamaño: %d\n n:%d \n serial_fd:%d\n",data,             longitud,n,serial_fd);
+     puts(data);
     serial_close(serial_fd);
     return 0;
 }
