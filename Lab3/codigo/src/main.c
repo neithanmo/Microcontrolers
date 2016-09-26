@@ -25,10 +25,11 @@ uint16_t compare_time;
 uint16_t new_time;
 uint16_t frequency;
 uint8_t frecuency_sel;
-char buff;
+char buff[1];//es necesario declarar un arrglo debido al cont void * ptr
 uint8_t channel_array[16];
+int prueba;
 usbd_device *usbd_dev;
-uint16_t length = sizeof(buff);
+uint16_t len = sizeof(buff);
 static void clock_setup(void)
 {
 	rcc_clock_setup_hse_3v3(&rcc_hse_8mhz_3v3[RCC_CLOCK_3V3_120MHZ]);
@@ -59,8 +60,8 @@ static void adc_setup(void)
 	//adc_set_regular_sequence(adc, length, channel[])
 	adc_set_regular_sequence(ADC1, 1, channel_array);
 	adc_set_sample_time_on_all_channels(ADC1, ADC_SMPR_SMP_3CYC);
-	//adc_set_right_aligned(ADC1);
-        adc_set_left_aligned(ADC1);
+	adc_set_right_aligned(ADC1);
+        //adc_set_left_aligned(ADC1);
 	adc_set_resolution(ADC1, ADC_CR1_RES_8BIT);//char= 1 byte
 	adc_power_on(ADC1);
 }
@@ -135,8 +136,9 @@ static void read_adc_send(void)
 {
 	adc_start_conversion_regular(ADC1);
 	while (!adc_eoc(ADC1));
-		buff = adc_read_regular(ADC1) + '0';
-	usbd_ep_write_packet(usbd_dev, 0x82, buff, length);
+		//buff[0] = adc_read_regular(ADC1) + '0';
+		buff[0] = prueba;
+	usbd_ep_write_packet(usbd_dev, 0x82, buff, len);
 }
 
 void tim2_isr(void)
@@ -144,6 +146,7 @@ void tim2_isr(void)
 	if (timer_get_flag(TIM2, TIM_SR_CC1IF)) {
 
 		timer_clear_flag(TIM2, TIM_SR_CC1IF);
+		prueba = prueba + 1;
 		read_adc_send();
 		gpio_toggle(LED_DISCO_GREEN_PORT, LED_DISCO_GREEN_PIN);
 		gpio_toggle(LED_DISCO_GREEN_PORT, GPIO14);
@@ -151,10 +154,15 @@ void tim2_isr(void)
 		frequency = frequency_sequence[frequency_sel++];
 		new_time = compare_time + frequency;
 		timer_set_oc_value(TIM2, TIM_OC1, new_time);
+		
 			
 		if(frequency_sel == 1){
 			frequency_sel = 0;
 						
+		}
+		if(prueba == 127){
+			prueba= 32;
+			gpio_toggle(LED_DISCO_GREEN_PORT, GPIO13);			
 		}
 	}
 }
@@ -208,6 +216,7 @@ int main(void)
 	tim_setup();
         usb_setup();
 	frequency_sel = 0;
+ 	prueba = 32;
 	usbd_dev = usbd_init(&otgfs_usb_driver, &dev, &config,
 			usb_strings, 3,
 			usbd_control_buffer, sizeof(usbd_control_buffer));
