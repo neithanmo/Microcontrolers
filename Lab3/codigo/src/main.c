@@ -41,7 +41,7 @@ static void gpio_setup(void)
 	rcc_periph_clock_enable(RCC_GPIOD);
     	rcc_periph_clock_enable(RCC_GPIOA);
 	gpio_mode_setup(GPIOA, GPIO_MODE_ANALOG, GPIO_PUPD_NONE, GPIO0);
-   	gpio_mode_setup(GPIOA, GPIO_MODE_ANALOG, GPIO_PUPD_NONE, GPIO1);
+   	//gpio_mode_setup(GPIOA, GPIO_MODE_ANALOG, GPIO_PUPD_NONE, GPIO1);
         gpio_mode_setup(LED_DISCO_GREEN_PORT, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE,
 		LED_DISCO_GREEN_PIN | GPIO15 | GPIO13 | GPIO14);
 	gpio_toggle(LED_DISCO_GREEN_PORT, LED_DISCO_GREEN_PIN);
@@ -136,8 +136,8 @@ static void read_adc_send(void)
 {
 	adc_start_conversion_regular(ADC1);
 	while (!adc_eoc(ADC1));
-		//buff[0] = adc_read_regular(ADC1) + '0';
-		buff[0] = prueba;
+		buff[0] = adc_read_regular(ADC1) + '0';
+		//buff[0] = prueba;
 	usbd_ep_write_packet(usbd_dev, 0x82, buff, len);
 }
 

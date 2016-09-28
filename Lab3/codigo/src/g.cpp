@@ -1,15 +1,21 @@
+#include "gnuplot-iostream.h"
 #include <sys/time.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include <string.h>
+#include <vector>
 #include <termios.h>
 #include <stdio.h>
 #include <iostream>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <ctime>
+#include <cmath>
 
 using namespace std;
 void printBits(size_t const size, void const * const ptr);
+Gnuplot gnp;
+std::vector<std::pair<int, int> > xy_pts_A;
 int serial_open(char *serial_name, speed_t baud)
 {
       struct termios newtermios;
@@ -49,13 +55,19 @@ int serial_read(int serial_fd, char *data, int size, int timeout_usec)
         if (ret==1 && count <= size) {//control overflow del buffer
            // int  read(  int  handle,  void  *buffer,  int  nbyte );
           n=read (serial_fd, &data[count], 1);//lee linea a linea el caracter de 8 bits
-	  short int x = data[count] ;//resto 48 para obtener el entero original
+	  int x = (data[count] - '0');//resto 48 para obtener el entero original
+
 	  printBits(sizeof(data[count]), &data[count]);
-	  printf("char:%c  entero:%d \n", data[count], x);
+	  printf("char:%c  entero:%u \n", data[count], x);
 	  printBits(sizeof(x), &x);
 	  printf("\n");
           count+=n;
           data[count]=0;
+	  xy_pts_A.push_back(std::make_pair(count,x));
+          gnp << "set xlabel 'Tiempo'\n";
+          gnp << "set ylabel 'Volts (%)'\n";
+          gnp << "set xrange [0:"<<count<<"]\nset yrange [-5:5]\n"; //pasando comandos al gnuplot object
+          gnp << "plot" << gnp.file1d(xy_pts_A) << "with lines title 'Volts'"<<std::endl;
    	}
 	else
 	  count=0;
@@ -89,6 +101,8 @@ void printBits(size_t const size, void const * const ptr)
 
 int main(int argc, char *argv[])
 {
+    
+   //vetores para graficar resultados
    int serial_fd, n, longitud;
    char *device="/dev/ttyACM0";
    char data[256];//buffer de 256 bytes
