@@ -25,7 +25,7 @@ uint16_t compare_time;
 uint16_t new_time;
 uint16_t frequency;
 uint8_t frecuency_sel;
-char buff[1];//es necesario declarar un arrglo debido al cont void * ptr
+uint16_t buff[1];//es necesario declarar un arrglo debido al cont void * ptr
 uint8_t channel_array[16];
 int prueba;
 usbd_device *usbd_dev;
@@ -41,7 +41,7 @@ static void gpio_setup(void)
 	rcc_periph_clock_enable(RCC_GPIOD);
     	rcc_periph_clock_enable(RCC_GPIOA);
 	gpio_mode_setup(GPIOA, GPIO_MODE_ANALOG, GPIO_PUPD_NONE, GPIO0);
-   	gpio_mode_setup(GPIOA, GPIO_MODE_ANALOG, GPIO_PUPD_NONE, GPIO1);
+   	//gpio_mode_setup(GPIOA, GPIO_MODE_ANALOG, GPIO_PUPD_NONE, GPIO1);
         gpio_mode_setup(LED_DISCO_GREEN_PORT, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE,
 		LED_DISCO_GREEN_PIN | GPIO15 | GPIO13 | GPIO14);
 	gpio_toggle(LED_DISCO_GREEN_PORT, LED_DISCO_GREEN_PIN);
@@ -62,7 +62,7 @@ static void adc_setup(void)
 	adc_set_sample_time_on_all_channels(ADC1, ADC_SMPR_SMP_3CYC);
 	adc_set_right_aligned(ADC1);
         //adc_set_left_aligned(ADC1);
-	adc_set_resolution(ADC1, ADC_CR1_RES_8BIT);//char= 1 byte
+	adc_set_resolution(ADC1, ADC_CR1_RES_12BIT);//char= 1 byte
 	adc_power_on(ADC1);
 }
 
@@ -137,7 +137,8 @@ static void read_adc_send(void)
 	adc_start_conversion_regular(ADC1);
 	while (!adc_eoc(ADC1));
 		//buff[0] = adc_read_regular(ADC1) + '0';
-		buff[0] = prueba;
+                buff[0] = adc_read_regular(ADC1);
+		//buff[0] = prueba;
 	usbd_ep_write_packet(usbd_dev, 0x82, buff, len);
 }
 
