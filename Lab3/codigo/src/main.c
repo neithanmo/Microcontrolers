@@ -86,7 +86,7 @@ static void tim_setup(void)
 	timer_set_mode(TIM2, TIM_CR1_CKD_CK_INT,
 		       TIM_CR1_CMS_EDGE, TIM_CR1_DIR_UP);
 
-	timer_set_prescaler(TIM2, ((rcc_apb1_frequency * 2) / 10));//6MHz el prescalador
+	timer_set_prescaler(TIM2, ((rcc_apb1_frequency * 2) / 100));//muestreamos a 15KHz
 	timer_disable_preload(TIM2);
 	timer_continuous_mode(TIM2);
 

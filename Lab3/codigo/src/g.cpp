@@ -15,9 +15,9 @@
 using namespace std;
 void printBits(size_t const size, void const * const ptr);
 Gnuplot gnp;
-std::vector<std::pair<float, float> > xy_pts_A;
-float y;
-float tim;
+std::vector<std::pair<double, double> > xy_pts_A;
+double y;
+double tim;
 int data;
 clock_t t;
 
@@ -51,6 +51,7 @@ int serial_read(int serial_fd, int timeout_usec)
       int count=0;
       int ret;
       int n;
+      //namespace plt = matplotlibcpp;
       do {
         FD_ZERO(&fds);
         FD_SET (serial_fd, &fds);
@@ -62,9 +63,8 @@ int serial_read(int serial_fd, int timeout_usec)
           n=read (serial_fd, &data, sizeof(short int));//lee linea a linea el caracter de 16 bits
           t = clock()-t;
 	  //printBits(sizeof(data[count]), &data[count]);
-          y = (data-2047)>0 ? (data-2047)/2048.00 : (data-2047)/2047.00;
-          tim = float(t)/CLOCKS_PER_SEC;
-	  cout<<"leo un: "<<y<<endl;
+          y = (data-2047)>0 ? (data-2047)/2048.00 : (data-2047)/2047.00;   
+          tim = double(t)/CLOCKS_PER_SEC;
 	  xy_pts_A.push_back(std::make_pair(tim,y));
           gnp << "set xrange [0:"<<tim<<"]\n"; //pasando comandos al gnuplot object
           gnp << "plot" << gnp.file1d(xy_pts_A) << "with lines title 'signal'"<<std::endl;
@@ -92,6 +92,6 @@ int main(int argc, char *argv[])
     t = clock();
     n=serial_read(serial_fd, 1000000000);
     printf("Se ha recibido %s \n Tamaño: %d\n n:%d\nserial_fd:%d\n",data,longitud,n,serial_fd);
-    serial_close(serial_fd);
+    close(serial_fd);
     return 0;
 }
