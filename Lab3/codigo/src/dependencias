@@ -1,0 +1,3 @@
+para qt se debe instalar
+
+sudo apt-get install qt5-default qt5-qmake qtcreator
