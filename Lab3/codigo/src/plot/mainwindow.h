@@ -84,6 +84,7 @@ public:
 private slots:
   void realtimeDataSlot();
   void bracketDataSlot();
+  void mouseWheel();
   
 private:
   Ui::MainWindow *ui;

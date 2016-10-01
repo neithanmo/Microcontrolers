@@ -51,10 +51,22 @@ void MainWindow::setupRealtimeDataDemo(QCustomPlot *customPlot)
   customPlot->xAxis->setTicker(timeTicker);
   customPlot->axisRect()->setupFullAxesBox();
   customPlot->yAxis->setRange(-1.2, 1.2);
-  customPlot->
+  ui->customPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectAxes |
+                                  QCP::iSelectLegend | QCP::iSelectPlottables);
+  ui->customPlot->xAxis->setLabel("tiempo(s)");
+  ui->customPlot->yAxis->setLabel("volts(v)");
+
+  QCPTextElement *title = new QCPTextElement(ui->customPlot, "Microcontroladores: Lab.3", QFont("sans", 17, QFont::Bold));
+  ui->customPlot->plotLayout()->addElement(0, 0, title);
+  QFont legendFont = font();
+  legendFont.setPointSize(10);
+  ui->customPlot->legend->setFont(legendFont);
+  ui->customPlot->legend->setSelectedFont(legendFont);
+  ui->customPlot->legend->setSelectableParts(QCPLegend::spItems);
   
   // make left and bottom axes transfer their ranges to right and top axes:
   connect(customPlot->xAxis, SIGNAL(rangeChanged(QCPRange)), customPlot->xAxis2, SLOT(setRange(QCPRange)));
+  connect(ui->customPlot, SIGNAL(mouseWheel(QWheelEvent*)), this, SLOT(mouseWheel()));
 
   
   // setup a timer that repeatedly calls MainWindow::realtimeDataSlot:
@@ -159,6 +171,21 @@ void MainWindow::bracketDataSlot()
     frameCount = 0;
   }
 }
+
+void MainWindow::mouseWheel()
+{
+  // if an axis is selected, only allow the direction of that axis to be zoomed
+  // if no axis is selected, both directions may be zoomed
+
+  if (ui->customPlot->xAxis->selectedParts().testFlag(QCPAxis::spAxis))
+    ui->customPlot->axisRect()->setRangeZoom(ui->customPlot->xAxis->orientation());
+  else if (ui->customPlot->yAxis->selectedParts().testFlag(QCPAxis::spAxis))
+    ui->customPlot->axisRect()->setRangeZoom(ui->customPlot->yAxis->orientation());
+  else
+    ui->customPlot->axisRect()->setRangeZoom(Qt::Horizontal|Qt::Vertical);
+}
+
+
 
 void MainWindow::setupPlayground(QCustomPlot *customPlot)
 {
