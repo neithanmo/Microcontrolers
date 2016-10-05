@@ -93,7 +93,7 @@ void MainWindow::realtimeDataSlot()
   // calculate two new data points:
   double key = time.elapsed()/350.0; // time elapsed since start of demo, in seconds
   static double lastPointKey = 0;
-if (key-lastPointKey > 0.0000000001) // at most add point every 2 ms
+if (key-lastPointKey > 0.0000000001);
   {
     // add data to lines:
     n=read (serial_fd, &data, sizeof(short int));//lee linea a linea el caracter de 16 bits

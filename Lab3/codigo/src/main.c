@@ -27,7 +27,6 @@ uint16_t frequency;
 uint8_t frecuency_sel;
 uint16_t buff[1];//es necesario declarar un arrglo debido al cont void * ptr
 uint8_t channel_array[16];
-uint32_t prueba;
 usbd_device *usbd_dev;
 static void clock_setup(void)///
 {
@@ -128,7 +127,7 @@ static void read_adc_send(void)
 	adc_start_conversion_regular(ADC1);
 	while (!adc_eoc(ADC1));
                 buff[0] = adc_read_regular(ADC1);
-        //usbd_ep_write_packet(usbd_dev, 0x82, buff, sizeof(buff));
+        usbd_ep_write_packet(usbd_dev, 0x82, buff, sizeof(buff));
 }
 
 void adc_isr()
@@ -142,10 +141,7 @@ void tim2_isr(void)
 	if (timer_get_flag(TIM2, TIM_SR_CC1IF)) {
 
 		timer_clear_flag(TIM2, TIM_SR_CC1IF);
-                //read_adc_send();
-                usbd_ep_write_packet(usbd_dev, 0x82, buff, sizeof(buff));
-                prueba++;
-		//gpio_toggle(LED_DISCO_GREEN_PORT, GPIO13);
+                read_adc_send();
 		compare_time = timer_get_counter(TIM2);
 		frequency = frequency_sequence[frequency_sel++];
 		new_time = compare_time + frequency;
@@ -153,10 +149,6 @@ void tim2_isr(void)
 		if(frequency_sel == 1){
 			frequency_sel = 0;				
 		}
-                if(prueba == 1520){
-                        prueba = 0;
-                        gpio_toggle(LED_DISCO_GREEN_PORT, GPIO13);
-                }
 	}
 }
 
@@ -209,7 +201,7 @@ int main(void)
         tim_setup();
         usb_setup();
 	frequency_sel = 0;
-        prueba = 0;
+
 	usbd_dev = usbd_init(&otgfs_usb_driver, &dev, &config,
 			usb_strings, 3,
 			usbd_control_buffer, sizeof(usbd_control_buffer));
@@ -217,7 +209,6 @@ int main(void)
 	usbd_register_set_config_callback(usbd_dev, cdcacm_set_config);
 
 	while (1) {
-                        read_adc_send();
 			usbd_poll(usbd_dev);
 		}
 	return 0;
