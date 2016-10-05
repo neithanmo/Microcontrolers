@@ -25,16 +25,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
 void MainWindow::setupRealtimeDataDemo(QCustomPlot *customPlot)
 {
-  demoName = "Real Time Data Demo";
-  
-  // include this section to fully disable antialiasing for higher performance:
-  /*customPlot->setNotAntialiasedElements(QCP::aeAll);
-  QFont font;
-  font.setStyleStrategy(QFont::NoAntialias);
-  customPlot->xAxis->setTickLabelFont(font);
-  customPlot->yAxis->setTickLabelFont(font);
-  customPlot->legend->setFont(font);*/
-
   serial_fd = serial_open("/dev/ttyACM0",115200);
   if (serial_fd == -1) {
           printf ("Error opening the serial device:\n");
@@ -43,8 +33,8 @@ void MainWindow::setupRealtimeDataDemo(QCustomPlot *customPlot)
   }
   customPlot->addGraph(); // blue line
   customPlot->graph(0)->setPen(QPen(QColor(40, 110, 255)));
-  customPlot->addGraph(); // red line
-  customPlot->graph(1)->setPen(QPen(QColor(255, 110, 40)));
+  //customPlot->addGraph(); // red line
+  //customPlot->graph(1)->setPen(QPen(QColor(255, 110, 40)));
 
   QSharedPointer<QCPAxisTickerTime> timeTicker(new QCPAxisTickerTime);
   timeTicker->setTimeFormat("%h:%m:%s");
@@ -101,22 +91,20 @@ void MainWindow::realtimeDataSlot()
 
   static QTime time(QTime::currentTime());
   // calculate two new data points:
-  double key = time.elapsed()/300.0; // time elapsed since start of demo, in seconds
+  double key = time.elapsed()/350.0; // time elapsed since start of demo, in seconds
   static double lastPointKey = 0;
-  if (key-lastPointKey > 0.00001) // at most add point every 2 ms
+if (key-lastPointKey > 0.0000000001) // at most add point every 2 ms
   {
     // add data to lines:
     n=read (serial_fd, &data, sizeof(short int));//lee linea a linea el caracter de 16 bits
-    y = (data-2047)>0 ? (data-2047)/2048.00 : (data-2047)/2047.00;
+    y = (data-2047)/2048.0;
     ui->customPlot->graph(0)->addData(key, y);
-    //ui->customPlot->graph(1)->addData(key, qCos(key)+qrand()/(double)RAND_MAX*0.5*qSin(key/0.4364));
     // rescale value (vertical) axis to fit the current data:
     //ui->customPlot->graph(0)->rescaleValueAxis();
-    //ui->customPlot->graph(1)->rescaleValueAxis(true);
     lastPointKey = key;
   }
-  // make key axis range scroll with the data (at a constant range size of 8):
-  ui->customPlot->xAxis->setRange(key, 8, Qt::AlignRight);
+  // make key axis range scroll with the data (at a constant range size of 20):
+  ui->customPlot->xAxis->setRange(key, 10, Qt::AlignRight);
   ui->customPlot->replot();
   
   // calculate frames per second:
@@ -126,9 +114,10 @@ void MainWindow::realtimeDataSlot()
   if (key-lastFpsKey > 2) // average fps over 2 seconds
   {
     ui->statusBar->showMessage(
-          QString("%1 FPS, Total Data points: %2")
+          QString("%1 FPS, Total Data points: %2, adc conversion: %3")
           .arg(frameCount/(key-lastFpsKey), 0, 'f', 0)
-          .arg(ui->customPlot->graph(0)->data()->size()+ui->customPlot->graph(1)->data()->size())
+          .arg(ui->customPlot->graph(0)->data()->size())
+          .arg(y)
           , 0);
     lastFpsKey = key;
     frameCount = 0;

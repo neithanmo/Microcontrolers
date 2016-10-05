@@ -63,7 +63,7 @@ int serial_read(int serial_fd, int timeout_usec)
           n=read (serial_fd, &data, sizeof(short int));//lee linea a linea el caracter de 16 bits
           t = clock()-t;
 	  //printBits(sizeof(data[count]), &data[count]);
-          y = (data-2047)>0 ? (data-2047)/2048.00 : (data-2047)/2047.00;   
+          y = (data-2047)/2048.00;   
           tim = double(t)/CLOCKS_PER_SEC;
 	  xy_pts_A.push_back(std::make_pair(tim,y));
           gnp << "set xrange [0:"<<tim<<"]\n"; //pasando comandos al gnuplot object
@@ -90,7 +90,7 @@ int main(int argc, char *argv[])
     }
     printf("SERIAL OPEN:%s\n", device);
     t = clock();
-    n=serial_read(serial_fd, 1000000000);
+    n=serial_read(serial_fd, 1000000);
     printf("Se ha recibido %s \n Tamaño: %d\n n:%d\nserial_fd:%d\n",data,longitud,n,serial_fd);
     close(serial_fd);
     return 0;
