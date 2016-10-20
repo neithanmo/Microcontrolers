@@ -40,7 +40,7 @@ void MainWindow::setupRealtimeDataDemo(QCustomPlot *customPlot)
   timeTicker->setTimeFormat("%h:%m:%s");
   customPlot->xAxis->setTicker(timeTicker);
   customPlot->axisRect()->setupFullAxesBox();
-  customPlot->yAxis->setRange(-1.2, 1.2);
+  customPlot->yAxis->setRange(-1.5, 1.5);
   ui->customPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectAxes |
                                   QCP::iSelectLegend | QCP::iSelectPlottables);
   ui->customPlot->xAxis->setLabel("tiempo(s)");
@@ -91,7 +91,7 @@ void MainWindow::realtimeDataSlot()
 
   static QTime time(QTime::currentTime());
   // calculate two new data points:
-  double key = time.elapsed()/350.0; // time elapsed since start of demo, in seconds
+  double key = time.elapsed()/700.0; // time elapsed since start of demo, in seconds
   static double lastPointKey = 0;
 if (key-lastPointKey > 0.0000000001);
   {
@@ -104,14 +104,14 @@ if (key-lastPointKey > 0.0000000001);
     lastPointKey = key;
   }
   // make key axis range scroll with the data (at a constant range size of 20):
-  ui->customPlot->xAxis->setRange(key, 10, Qt::AlignRight);
+  ui->customPlot->xAxis->setRange(key, 8, Qt::AlignRight);
   ui->customPlot->replot();
   
   // calculate frames per second:
   static double lastFpsKey;
   static int frameCount;
   ++frameCount;
-  if (key-lastFpsKey > 2) // average fps over 2 seconds
+  if (key-lastFpsKey > 1) // average fps over 2 seconds
   {
     ui->statusBar->showMessage(
           QString("%1 FPS, Total Data points: %2, adc conversion: %3")
