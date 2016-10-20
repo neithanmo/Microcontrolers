@@ -13,7 +13,7 @@
 #include <libopencm3/usb/cdc.h>
 #include <libopencm3/cm3/scb.h>
 
-#define PWM_PERIOD 65536
+#define PWM_PERIOD 2999
 #define LED_DISCO_GREEN_PORT GPIOD
 #define LED_DISCO_GREEN_PIN GPIO12
 //usbd_ep_write_packet(usbd_dev, 0x82, buf, len)
@@ -44,15 +44,18 @@ static void gpio_setup(void)
 {
 	rcc_periph_clock_enable(RCC_GPIOD);
     	rcc_periph_clock_enable(RCC_GPIOA);
-	rcc_periph_clock_enable(RCC_GPIOB);
+	//rcc_peripheral_enable_clock(&RCC_AHB1ENR, RCC_AHB1ENR_IOPCEN);
+	
 
 	gpio_mode_setup(GPIOA, GPIO_MODE_ANALOG, GPIO_PUPD_NONE, GPIO0);
    	gpio_mode_setup(GPIOA, GPIO_MODE_ANALOG, GPIO_PUPD_NONE, GPIO1);
         gpio_mode_setup(LED_DISCO_GREEN_PORT, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE,
 		LED_DISCO_GREEN_PIN | GPIO15 | GPIO13 | GPIO14);
 
-   	gpio_mode_setup(GPIOB, GPIO_MODE_AF, GPIO_PUPD_NONE, GPIO3);
-   	gpio_set_af(GPIOB, GPIO_AF2, GPIO3);
+   	gpio_mode_setup(GPIOA, GPIO_MODE_AF, GPIO_PUPD_NONE, GPIO3);//pin de uso para el canal 4 del TIM5
+   	gpio_set_af(GPIOA, GPIO_AF2, GPIO3);
+	//gpio_mode_setup(GPIOB, GPIO_MODE_ANALOG, GPIO_PUPD_NONE, GPIO3);
+        //gpio_set_output_options(GPIOB, GPIO_OTYPE_PP, GPIO_OSPEED_100MHZ, GPIO3);
 }
 
 static void adc_setup(void)
@@ -125,7 +128,6 @@ static void tim_setup(void)
 	timer_set_oc_slow_mode(TIM2, TIM_OC1);
 	timer_set_oc_mode(TIM2, TIM_OC1, TIM_OCM_FROZEN);
 	timer_set_oc_value(TIM2, TIM_OC1, frequency_sequence[0]);
-	timer_disable_preload(TIM2);
         timer_enable_counter(TIM2);
 
 }
@@ -142,10 +144,9 @@ static void tim_pwm_setup(uint32_t timer,
     case 4:   chan = TIM_OC4; break;
     default: assert(false); chan = -1; break;
   }
-
   // Timer Base Configuration
-  // timer_reset(timer);
   timer_reset(timer);
+  rcc_peripheral_enable_clock(&RCC_APB1ENR, RCC_APB1ENR_TIM5EN);
   timer_disable_oc_output(timer, chan);
   timer_set_mode(timer, TIM_CR1_CKD_CK_INT, // clock division
                         TIM_CR1_CMS_EDGE,   // Center-aligned mode selection
@@ -162,22 +163,8 @@ static void tim_pwm_setup(uint32_t timer,
   timer_set_oc_mode(timer, chan, TIM_OCM_PWM1);   // Sets PWM Mode 1
   timer_enable_oc_preload(timer, chan);           // Sets OCxPE in TIMx_CCMRx
   timer_set_oc_polarity_high(timer, chan);        // set desired polarity in TIMx_CCER
-  timer_enable_oc_output(timer, chan);             // set CCxE bit in TIMx_CCER  (enable output)
-  
-
-  // Initialize all counters in the register
-  switch (timer) {
-    case TIM1:  TIM1_EGR |= TIM_EGR_UG; break;
-    case TIM2:  TIM2_EGR |= TIM_EGR_UG; break;
-    case TIM3:  TIM3_EGR |= TIM_EGR_UG; break;
-    case TIM4:  TIM4_EGR |= TIM_EGR_UG; break;
-    case TIM5:  TIM5_EGR |= TIM_EGR_UG; break;
-    case TIM6:  TIM6_EGR |= TIM_EGR_UG; break;
-    case TIM7:  TIM7_EGR |= TIM_EGR_UG; break;
-    case TIM8:  TIM8_EGR |= TIM_EGR_UG; break;
-    default: assert(false); break;
-    }
-   timer_enable_counter(timer);
+  timer_enable_oc_output(timer, chan); 
+  timer_enable_counter(timer);
 }
 
 static void read_adc_send(void)
@@ -253,7 +240,10 @@ int main(void)
 	adc_setup();
         tim_setup();
         usb_setup();
-	tim_pwm_setup(TIM4, 1, PWM_PERIOD);
+/*El pin 3 del puerto A esta conectado
+  al canal 4 del timer 5, esto cuando el pint esta
+  configurado como AF2*/
+	tim_pwm_setup(TIM5, 4, PWM_PERIOD);
 	frequency_sel = 0;
 	pid_filter_t pid;
 	pid_init(&pid);
@@ -262,7 +252,7 @@ int main(void)
 	float error;
 	uint32_t  Out_Compare;
 	/* PD controller. */
-	pid_set_gains(&pid, 10.0, 0, 0);
+	pid_set_gains(&pid, 1.0, 0, 0.5);
 
 
 	usbd_dev = usbd_init(&otgfs_usb_driver, &dev, &config,
@@ -272,14 +262,17 @@ int main(void)
 	usbd_register_set_config_callback(usbd_dev, cdcacm_set_config);
 
 	while (1) {
-			//temperatura = (300/256.0) * buff[0]- 50;
-			//temperatura = 40;
 	                (buff[0] <= 50) ? (temperatura = buff[0]-50.0):(temperatura = (buff[0]/4046.0)*150);
-			usbd_poll(usbd_dev);
-			error = 10.0 - temperatura;
+			
+			error = temperatura - 22.0;
     			motor_pwm = pid_process(&pid, error);
-    			Out_Compare = (uint32_t) (motor_pwm * 10000 + 0.5);
-    			timer_set_oc_value(TIM4, TIM_OC1, Out_Compare); 
+			Out_Compare = (uint32_t) (motor_pwm * 10);//(uint32_t)motor_pwm;
+    			timer_set_oc_value(TIM5, TIM_OC4, Out_Compare); 
+                        if(Out_Compare > 1000)
+				gpio_set(LED_DISCO_GREEN_PORT, GPIO13);
+			else
+				gpio_clear(LED_DISCO_GREEN_PORT, GPIO13);
+			usbd_poll(usbd_dev);
 		}
 	return 0;
 }
