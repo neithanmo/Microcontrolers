@@ -1,7 +1,7 @@
 #include "usb.h"
 #include "pid.h"
 #include <stdlib.h>
-#include <stdio.h>
+#include <assert.h>
 #include <libopencm3/stm32/rcc.h>
 #include <libopencm3/stm32/gpio.h>
 #include <libopencm3/stm32/timer.h>
@@ -12,26 +12,27 @@
 #include <libopencm3/usb/usbd.h>
 #include <libopencm3/usb/cdc.h>
 #include <libopencm3/cm3/scb.h>
-#include <libopencm3/stm32/dac.h>
 
+#define PWM_PERIOD 65536
 #define LED_DISCO_GREEN_PORT GPIOD
 #define LED_DISCO_GREEN_PIN GPIO12
 //usbd_ep_write_packet(usbd_dev, 0x82, buf, len)
 
-uint16_t frequency_sequence[1] = {1};
+uint16_t frequency_sequence[1] = {
+	1
+};
 
 uint16_t frequency_sel;
-
+float motor_pwm;
 uint16_t compare_time;
 uint16_t new_time;
 uint16_t frequency;
 uint8_t frecuency_sel;
-uint16_t buff[1];		//es necesario declarar un arrglo debido al cont void * ptr
+uint16_t buff[1];//es necesario declarar un arrglo debido al cont void * ptr
 uint8_t channel_array[16];
 usbd_device *usbd_dev;
-float motor_pwm;
-
-static void clock_setup(void){
+static void clock_setup(void)///
+{
         rcc_clock_setup_hse_3v3(&rcc_hse_8mhz_3v3[RCC_CLOCK_3V3_120MHZ]);
   /* apb1 = 30MHz
      apb2 = 60MHz usado por adc
@@ -43,17 +44,15 @@ static void gpio_setup(void)
 {
 	rcc_periph_clock_enable(RCC_GPIOD);
     	rcc_periph_clock_enable(RCC_GPIOA);
-    	rcc_periph_clock_enable(RCC_GPIOB);
-    	//rcc_peripheral_enable_clock(&RCC_AHB1ENR, RCC_AHB1ENR_IOPBEN);
-    	
+	rcc_periph_clock_enable(RCC_GPIOB);
+
 	gpio_mode_setup(GPIOA, GPIO_MODE_ANALOG, GPIO_PUPD_NONE, GPIO0);
    	gpio_mode_setup(GPIOA, GPIO_MODE_ANALOG, GPIO_PUPD_NONE, GPIO1);
-   	
-   	gpio_mode_setup(GPIOB, GPIO_MODE_AF, GPIO_PUPD_NONE, GPIO3);
-   	gpio_set_af(GPIOB, GPIO_AF2, GPIO3);
-   	
         gpio_mode_setup(LED_DISCO_GREEN_PORT, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE,
 		LED_DISCO_GREEN_PIN | GPIO15 | GPIO13 | GPIO14);
+
+   	gpio_mode_setup(GPIOB, GPIO_MODE_AF, GPIO_PUPD_NONE, GPIO3);
+   	gpio_set_af(GPIOB, GPIO_AF2, GPIO3);
 }
 
 static void adc_setup(void)
@@ -73,7 +72,22 @@ static void adc_setup(void)
         adc_set_dma_continue(ADC1);
         //adc_enable_eoc_interrupt(ADC1);
 	adc_power_on(ADC1);
-
+/*
+ADC_SMPR_SMP_3CYC   0x0
+ 
+ADC_SMPR_SMP_15CYC   0x1
+ 
+ADC_SMPR_SMP_28CYC   0x2
+ 
+ADC_SMPR_SMP_56CYC   0x3
+ 
+ADC_SMPR_SMP_84CYC   0x4
+ 
+ADC_SMPR_SMP_112CYC   0x5
+ 
+ADC_SMPR_SMP_144CYC   0x6
+ 
+ADC_SMPR_SMP_480CYC   0x7*/
 }
 
 static void usb_setup(void){
@@ -84,7 +98,7 @@ static void usb_setup(void){
 	gpio_set_af(GPIOA, GPIO_AF10, GPIO9 | GPIO11 | GPIO12);
 }
 
-static void tim2_setup(void)
+static void tim_setup(void)
 {
 	rcc_periph_clock_enable(RCC_TIM2);
 	nvic_enable_irq(NVIC_TIM2_IRQ);
@@ -96,7 +110,7 @@ static void tim2_setup(void)
          * esto asegura junto al periodo
          * una buena tasa de bits en la
          * transmision de datos usb*/
-        timer_set_prescaler(TIM2, 1);
+        timer_set_prescaler(TIM2, 10);
 	timer_disable_preload(TIM2);
 	timer_continuous_mode(TIM2);
 
@@ -116,35 +130,54 @@ static void tim2_setup(void)
 
 }
 
-static void tim4_setup(void)
-{
-	
-	//rcc_periph_clock_enable(RCC_TIM4);
-	rcc_peripheral_enable_clock(&RCC_APB1ENR, RCC_APB1ENR_TIM4EN);
-	timer_reset(TIM4);
+static void tim_pwm_setup(uint32_t timer,
+         uint8_t channel,
+         uint32_t period) {
+  // Convert channel number to internal rep
+  enum tim_oc_id chan;
+  switch (channel) {
+    case 1:   chan = TIM_OC1; break;
+    case 2:   chan = TIM_OC2; break;
+    case 3:   chan = TIM_OC3; break;
+    case 4:   chan = TIM_OC4; break;
+    default: assert(false); chan = -1; break;
+  }
 
-        uint32_t TIM_Period = 65536;				
-        // = 30000000 / 10000 - 1 
-        
-	
-	timer_set_mode(TIM4, TIM_CR1_CKD_CK_INT, 	// clock division
-                        TIM_CR1_CMS_EDGE,   		// Center-aligned mode selection
-                        TIM_CR1_DIR_UP);   		 // TIMx_CR1 DIR: Direction
-  	timer_continuous_mode(TIM4);                    // Disables TIM_CR1_OPM (One pulse mode)
-  	timer_set_period(TIM4, TIM_Period);             // Sets TIMx_ARR
-  	timer_set_prescaler(TIM4, 1);               	// Adjusts speed of timer
-  	timer_set_clock_division(TIM4, 0);              // Adjusts speed of timer
-  	timer_set_master_mode(TIM4, TIM_CR2_MMS_UPDATE);   // Master Mode Selection
-  	timer_enable_preload(TIM4);                        // Set ARPE bit in TIMx_CR1
+  // Timer Base Configuration
+  // timer_reset(timer);
+  timer_reset(timer);
+  timer_disable_oc_output(timer, chan);
+  timer_set_mode(timer, TIM_CR1_CKD_CK_INT, // clock division
+                        TIM_CR1_CMS_EDGE,   // Center-aligned mode selection
+                        TIM_CR1_DIR_UP);    // TIMx_CR1 DIR: Direction
+  timer_continuous_mode(timer);             // Disables TIM_CR1_OPM (One pulse mode)
+  timer_set_period(timer, period);                    // Sets TIMx_ARR
+  timer_set_prescaler(timer, 1);               // Adjusts speed of timer
+  timer_set_clock_division(timer, 0);            // Adjusts speed of timer
+  timer_set_master_mode(timer, TIM_CR2_MMS_UPDATE);   // Master Mode Selection
+  timer_enable_preload(timer);                        // Set ARPE bit in TIMx_CR1
 
   // Channel-specific settings
-  	timer_set_oc_value(TIM4, TIM_OC1, 0);             // sets TIMx_CCRx
-  	timer_set_oc_mode(TIM4, TIM_OC1, TIM_OCM_PWM1);   // Sets PWM Mode 1
-  	timer_enable_oc_preload(TIM4, TIM_OC1);           // Sets OCxPE in TIMx_CCMRx
-  	timer_set_oc_polarity_high(TIM4, TIM_OC1);        // set desired polarity in TIMx_CCER
-  	timer_enable_oc_output(TIM4, TIM_OC1);             // set CCxE bit in TIMx_CCER  (enable output)
-  	timer_enable_count
-  	
+  timer_set_oc_value(timer, chan, 0);             // sets TIMx_CCRx
+  timer_set_oc_mode(timer, chan, TIM_OCM_PWM1);   // Sets PWM Mode 1
+  timer_enable_oc_preload(timer, chan);           // Sets OCxPE in TIMx_CCMRx
+  timer_set_oc_polarity_high(timer, chan);        // set desired polarity in TIMx_CCER
+  timer_enable_oc_output(timer, chan);             // set CCxE bit in TIMx_CCER  (enable output)
+  
+
+  // Initialize all counters in the register
+  switch (timer) {
+    case TIM1:  TIM1_EGR |= TIM_EGR_UG; break;
+    case TIM2:  TIM2_EGR |= TIM_EGR_UG; break;
+    case TIM3:  TIM3_EGR |= TIM_EGR_UG; break;
+    case TIM4:  TIM4_EGR |= TIM_EGR_UG; break;
+    case TIM5:  TIM5_EGR |= TIM_EGR_UG; break;
+    case TIM6:  TIM6_EGR |= TIM_EGR_UG; break;
+    case TIM7:  TIM7_EGR |= TIM_EGR_UG; break;
+    case TIM8:  TIM8_EGR |= TIM_EGR_UG; break;
+    default: assert(false); break;
+    }
+   timer_enable_counter(timer);
 }
 
 static void read_adc_send(void)
@@ -152,7 +185,7 @@ static void read_adc_send(void)
 	adc_start_conversion_regular(ADC1);
 	while (!adc_eoc(ADC1));
                 buff[0] = adc_read_regular(ADC1);
-        usbd_ep_write_packet(usbd_dev, 0x82, buff[0], sizeof(buff));
+        usbd_ep_write_packet(usbd_dev, 0x82, buff, sizeof(buff));
 }
 
 
@@ -206,7 +239,7 @@ static void cdcacm_set_config(usbd_device *usbd, uint16_t wValue)
 
 	usbd_register_control_callback(
                                 usbd,
-                          	USB_REQ_TYPE_CLASS | USB_REQ_TYPE_INTERFACE,
+				USB_REQ_TYPE_CLASS | USB_REQ_TYPE_INTERFACE,
 				USB_REQ_TYPE_TYPE | USB_REQ_TYPE_RECIPIENT,
 				cdcacm_control_request);
 }
@@ -218,37 +251,35 @@ int main(void)
 	clock_setup();
 	gpio_setup();
 	adc_setup();
-        tim2_setup();
-        tim4_setup();
+        tim_setup();
         usb_setup();
-        frequency_sel = 0;
-
-	usbd_dev = usbd_init(&otgfs_usb_driver, &dev, &config,
-			usb_strings, 3,
-			usbd_control_buffer, sizeof(usbd_control_buffer));
-
-	usbd_register_set_config_callback(usbd_dev, cdcacm_set_config);
-	
+	tim_pwm_setup(TIM4, 1, PWM_PERIOD);
+	frequency_sel = 0;
 	pid_filter_t pid;
 	pid_init(&pid);
 	
 	float temperatura;
 	float error;
 	uint32_t  Out_Compare;
-	
 	/* PD controller. */
 	pid_set_gains(&pid, 10.0, 0, 0);
-	
+
+
+	usbd_dev = usbd_init(&otgfs_usb_driver, &dev, &config,
+			usb_strings, 3,
+			usbd_control_buffer, sizeof(usbd_control_buffer));
+
+	usbd_register_set_config_callback(usbd_dev, cdcacm_set_config);
+
 	while (1) {
-			temperatura = (300/256.0) * buff[0]- 50;
+			//temperatura = (300/256.0) * buff[0]- 50;
 			//temperatura = 40;
+	                (buff[0] <= 50) ? (temperatura = buff[0]-50.0):(temperatura = (buff[0]/4046.0)*150);
 			usbd_poll(usbd_dev);
 			error = 10.0 - temperatura;
     			motor_pwm = pid_process(&pid, error);
-    			Out_Compare = motor_pwm * 65536 / 4294967296;
-    			timer_set_oc_value(TIM4, TIM_OC1, Out_Compare);    		
-    			
+    			Out_Compare = (uint32_t) (motor_pwm * 10000 + 0.5);
+    			timer_set_oc_value(TIM4, TIM_OC1, Out_Compare); 
 		}
-
 	return 0;
 }

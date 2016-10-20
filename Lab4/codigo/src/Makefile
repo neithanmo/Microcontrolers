@@ -21,7 +21,7 @@
 
 ## Cambiar esto segun sea el caso
 BINARY = main
-LDSCRIPT = /home/boris/Documentos/Microcontroladores/Microcontrolers/Lab3/codigo/common/stm32f4-discovery.ld
+LDSCRIPT = /home/neithan/Microcontrolers/Lab3/codigo/common/stm32f4-discovery.ld
 
 ## De aca para abajo nada cambia
 SOURCES = $(filter-out $(BINARY).c, $(wildcard *.c))
