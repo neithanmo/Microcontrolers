@@ -30,6 +30,7 @@ uint16_t frequency;
 uint8_t frecuency_sel;
 uint16_t buff[1];//es necesario declarar un arrglo debido al cont void * ptr
 uint8_t channel_array[16];
+uint16_t set_point;
 usbd_device *usbd_dev;
 static void clock_setup(void)///
 {
@@ -215,12 +216,26 @@ static int cdcacm_control_request(usbd_device *usbd,
 	return 0;
 }
 
+static void cdcacm_data_rx_cb(usbd_device *usbd_read, uint8_t ep)///leer el setpoint enviado por el usuario
+{
+	(void)ep;
+
+	char buf[1];
+	int len = usbd_ep_read_packet(usbd_read, 0x01, buf, sizeof(char));
+        set_point = buf[0];
+
+	if (len) {
+		//while (usbd_ep_write_packet(usbd_dev, 0x82, buf, len) == 0);
+                gpio_toggle(LED_DISCO_GREEN_PORT, GPIO14);
+	}
+}
+
 
 
 static void cdcacm_set_config(usbd_device *usbd, uint16_t wValue)
 {
 	(void)wValue;
-
+	usbd_ep_setup(usbd_dev, 0x01, USB_ENDPOINT_ATTR_BULK, 64, cdcacm_data_rx_cb);///lectura
         usbd_ep_setup(usbd, 0x82, USB_ENDPOINT_ATTR_BULK, 64, NULL);
         usbd_ep_setup(usbd, 0x83, USB_ENDPOINT_ATTR_INTERRUPT, 16, NULL);
 
@@ -264,7 +279,7 @@ int main(void)
 	while (1) {
 	                (buff[0] <= 50) ? (temperatura = buff[0]-50.0):(temperatura = (buff[0]/4046.0)*150);
 			
-			error = temperatura - 22.0;
+			error = temperatura - set_point;
     			motor_pwm = pid_process(&pid, error);
 			Out_Compare = (uint32_t) (motor_pwm * 10);//(uint32_t)motor_pwm;
     			timer_set_oc_value(TIM5, TIM_OC4, Out_Compare); 
