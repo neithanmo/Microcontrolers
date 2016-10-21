@@ -28,7 +28,7 @@ uint16_t compare_time;
 uint16_t new_time;
 uint16_t frequency;
 uint8_t frecuency_sel;
-uint16_t buff[1];//es necesario declarar un arrglo debido al cont void * ptr
+uint16_t buff[2];//es necesario declarar un arrglo debido al cont void * ptr
 uint8_t channel_array[16];
 uint16_t set_point;
 usbd_device *usbd_dev;
@@ -226,6 +226,7 @@ static void cdcacm_data_rx_cb(usbd_device *usbd_read, uint8_t ep)///leer el setp
 
 	if (len) {
 		//while (usbd_ep_write_packet(usbd_dev, 0x82, buf, len) == 0);
+                buff[1] = set_point;
                 gpio_toggle(LED_DISCO_GREEN_PORT, GPIO14);
 	}
 }
@@ -249,7 +250,7 @@ static void cdcacm_set_config(usbd_device *usbd, uint16_t wValue)
 
 int main(void)
 {	
-	
+	set_point = 10;
 	clock_setup();
 	gpio_setup();
 	adc_setup();
@@ -283,10 +284,6 @@ int main(void)
     			motor_pwm = pid_process(&pid, error);
 			Out_Compare = (uint32_t) (motor_pwm * 10);//(uint32_t)motor_pwm;
     			timer_set_oc_value(TIM5, TIM_OC4, Out_Compare); 
-                        if(Out_Compare > 1000)
-				gpio_set(LED_DISCO_GREEN_PORT, GPIO13);
-			else
-				gpio_clear(LED_DISCO_GREEN_PORT, GPIO13);
 			usbd_poll(usbd_dev);
 		}
 	return 0;

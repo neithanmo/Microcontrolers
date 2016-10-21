@@ -7,6 +7,7 @@
 #include <QScreen>
 #include <QMessageBox>
 #include <QMetaEnum>
+#include <iostream>
 
 MainWindow::MainWindow(QWidget *parent) :
   QMainWindow(parent),
@@ -33,8 +34,8 @@ void MainWindow::setupRealtimeDataDemo(QCustomPlot *customPlot)
   }
   customPlot->addGraph(); // blue line
   customPlot->graph(0)->setPen(QPen(QColor(40, 110, 255)));
-  //customPlot->addGraph(); // red line
-  //customPlot->graph(1)->setPen(QPen(QColor(255, 110, 40)));
+  customPlot->addGraph(); // red line
+  customPlot->graph(1)->setPen(QPen(QColor(255, 110, 40)));///grafica para la señal de control
 
   QSharedPointer<QCPAxisTickerTime> timeTicker(new QCPAxisTickerTime);
   timeTicker->setTimeFormat("%h:%m:%s");
@@ -44,9 +45,9 @@ void MainWindow::setupRealtimeDataDemo(QCustomPlot *customPlot)
   ui->customPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectAxes |
                                   QCP::iSelectLegend | QCP::iSelectPlottables);
   ui->customPlot->xAxis->setLabel("tiempo(s)");
-  ui->customPlot->yAxis->setLabel("volts(v)");
+  ui->customPlot->yAxis->setLabel("temperatura(C°)");
 
-  QCPTextElement *title = new QCPTextElement(ui->customPlot, "Microcontroladores: Lab.3", QFont("sans", 17, QFont::Bold));
+  QCPTextElement *title = new QCPTextElement(ui->customPlot, "Microcontroladores: Lab.4", QFont("sans", 17, QFont::Bold));
   ui->customPlot->plotLayout()->addElement(0, 0, title);
   QFont legendFont = font();
   legendFont.setPointSize(10);
@@ -93,14 +94,16 @@ void MainWindow::realtimeDataSlot()
   // calculate two new data points:
   double key = time.elapsed()/700.0; // time elapsed since start of demo, in seconds
   static double lastPointKey = 0;
+  int dataC;
 if (key-lastPointKey > 0.0000000001);
   {
     // add data to lines:
-    n=read (serial_fd, &data, sizeof(short int));//lee linea a linea el caracter de 16 bits
-    (data <= 50) ? (y = data-50.0):(y = (data/4046.0)*150);
-    //y = (300/256.0)*data - 50;
-//y = (data-2047)/2048.0;
+    n=read (serial_fd, &data, 2 * sizeof(int));//lee linea a linea el caracter de 16 bits
+    int dataT = data & 0x0fff;
+    (dataT <= 50) ? (y = dataT-50.0):(y = (dataT/4046.0)*150);
+    dataC = (data >> 16); //el valor deseado son los 8 bits mas significativos
     ui->customPlot->graph(0)->addData(key, y);
+    ui->customPlot->graph(1)->addData(key, dataC);
     // rescale value (vertical) axis to fit the current data:
     //ui->customPlot->graph(0)->rescaleValueAxis();
     lastPointKey = key;
@@ -116,10 +119,11 @@ if (key-lastPointKey > 0.0000000001);
   if (key-lastFpsKey > 1) // average fps over 2 seconds
   {
     ui->statusBar->showMessage(
-          QString("%1 FPS, Total Data points: %2, adc conversion: %3")
+          QString("%1 FPS, Total Data points: %2, temperatura: %3 C°, valor deseado: %4 C°")
           .arg(frameCount/(key-lastFpsKey), 0, 'f', 0)
           .arg(ui->customPlot->graph(0)->data()->size())
           .arg(y)
+          .arg(dataC)
           , 0);
     lastFpsKey = key;
     frameCount = 0;
@@ -187,44 +191,4 @@ MainWindow::~MainWindow()
 {
   delete ui;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
