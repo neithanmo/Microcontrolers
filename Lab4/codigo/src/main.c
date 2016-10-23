@@ -74,8 +74,10 @@ static void adc_setup(void)
 	adc_set_right_aligned(ADC1);
 	adc_set_resolution(ADC1, ADC_CR1_RES_12BIT);//2 byte
         adc_set_dma_continue(ADC1);
+        adc_set_continuous_conversion_mode(ADC1);
         //adc_enable_eoc_interrupt(ADC1);
 	adc_power_on(ADC1);
+        adc_start_conversion_regular(ADC1);
 /*
 ADC_SMPR_SMP_3CYC   0x0
  
@@ -135,7 +137,8 @@ static void tim_setup(void)
 
 static void tim_pwm_setup(uint32_t timer,
          uint8_t channel,
-         uint32_t period) {
+         uint32_t period) 
+{
   // Convert channel number to internal rep
   enum tim_oc_id chan;
   switch (channel) {
@@ -170,8 +173,8 @@ static void tim_pwm_setup(uint32_t timer,
 
 static void read_adc_send(void)
 {
-	adc_start_conversion_regular(ADC1);
-	while (!adc_eoc(ADC1));
+	//adc_start_conversion_regular(ADC1);
+	//while (!adc_eoc(ADC1));
                 buff[0] = adc_read_regular(ADC1);
         usbd_ep_write_packet(usbd_dev, 0x82, buff, sizeof(buff));
 }
@@ -278,13 +281,13 @@ int main(void)
 	usbd_register_set_config_callback(usbd_dev, cdcacm_set_config);
 
 	while (1) {
-	                (buff[0] <= 50) ? (temperatura = buff[0]-50.0):(temperatura = (buff[0]/4046.0)*150);
+	         (buff[0] <= 50) ? (temperatura = buff[0]-50.0):(temperatura = (buff[0]/4046.0)*150);
 			
-			error = temperatura - set_point;
-    			motor_pwm = pid_process(&pid, error);
-			Out_Compare = (uint32_t) (motor_pwm * 10);//(uint32_t)motor_pwm;
-    			timer_set_oc_value(TIM5, TIM_OC4, Out_Compare); 
-			usbd_poll(usbd_dev);
+	         error = temperatura - set_point;
+    		 motor_pwm = pid_process(&pid, error);
+		 Out_Compare = (uint32_t) (motor_pwm * 10);//dos decimales despues del punto
+    		 timer_set_oc_value(TIM5, TIM_OC4, Out_Compare); 
+		 usbd_poll(usbd_dev);
 		}
 	return 0;
 }
