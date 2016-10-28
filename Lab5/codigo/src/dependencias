@@ -1,0 +1,12 @@
+para compilar el programa de graficación de datos, cuyos archivos fuentes estan en ../plot, se ha de instalar los siguientes paquetes de QT
+
+sudo apt-get install qt5-default qt5-qmake qtcreator
+
+tambien es posible comunicarse con la tarjeta a través del puerto serial, para compilar este programa ejecute lo siguiente:
+g++ control.cpp -o set
+
+y ejecutelo con permisos de root
+
+sudo ./set
+
+se mostrara en consola las teclas a utilizar para actualizar y setear los datos en la tarjeta STM32F4
