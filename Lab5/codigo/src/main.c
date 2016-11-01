@@ -1,19 +1,8 @@
 #include "usb.h"
 #include "pid.h"
 #include "st7735.h"
-#include <stdlib.h>
-#include <assert.h>
-#include <libopencm3/stm32/rcc.h>
-#include <libopencm3/stm32/gpio.h>
-#include <libopencm3/stm32/timer.h>
-#include <libopencm3/cm3/nvic.h>
-#include <libopencm3/stm32/exti.h>
-#include <libopencmsis/core_cm3.h>
-#include <libopencm3/stm32/adc.h>
-#include <libopencm3/usb/usbd.h>
-#include <libopencm3/usb/cdc.h>
-#include <libopencm3/cm3/scb.h>
-#include <libopencm3/stm32/spi.h>
+
+
 
 #define PWM_PERIOD 2999
 #define LED_DISCO_GREEN_PORT GPIOD
@@ -23,7 +12,8 @@
 uint16_t frequency_sequence[1] = {
 	1
 };
-
+uint16_t scr_width;
+uint16_t scr_height;
 uint16_t frequency_sel;
 float motor_pwm;
 uint16_t compare_time;
@@ -60,24 +50,19 @@ static void gpio_setup(void)
 	//rcc_peripheral_enable_clock(&RCC_AHB1ENR, RCC_AHB1ENR_IOPCEN);
 	
 
-	//gpio_mode_setup(GPIOA, GPIO_MODE_ANALOG, GPIO_PUPD_NONE, GPIO0);
+	gpio_mode_setup(GPIOA, GPIO_MODE_ANALOG, GPIO_PUPD_NONE, GPIO0);
 	gpio_mode_setup(GPIOA, GPIO_MODE_INPUT, GPIO_PUPD_NONE, GPIO0);
    	gpio_mode_setup(GPIOA, GPIO_MODE_ANALOG, GPIO_PUPD_NONE, GPIO1);
         gpio_mode_setup(LED_DISCO_GREEN_PORT, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE,
-		LED_DISCO_GREEN_PIN | GPIO15 | GPIO13 | GPIO14 | GPIO3 | GPIO4 | GPIO5 | GPIO1);
-	gpio_set(GPIOD, GPIO_PIN_RST);//no reset la TFT
+		LED_DISCO_GREEN_PIN | GPIO15 | GPIO12 | GPIO13 | GPIO14 | GPIO3 | GPIO4 | GPIO5 | GPIO1);
 
    	gpio_mode_setup(GPIOA, GPIO_MODE_AF, GPIO_PUPD_NONE, GPIO3);//pin de uso para el canal 4 del TIM5
    	gpio_set_af(GPIOA, GPIO_AF2, GPIO3);
-	//gpio_mode_setup(GPIOB, GPIO_MODE_ANALOG, GPIO_PUPD_NONE, GPIO3);
-        //gpio_set_output_options(GPIOB, GPIO_OTYPE_PP, GPIO_OSPEED_100MHZ, GPIO3);
 
 	///CONFIGURACION GPIOS PARA spi
-	gpio_mode_setup(GPIOA, GPIO_MODE_AF, GPIO_PUPD_PULLDOWN, GPIO5 | GPIO7);
-  	//rcc_periph_clock_enable(RCC_AFIO);//???????????
-	//gpio_set_mode(GPIOA, GPIO_MODE_OUTPUT_50_MHZ, GPIO_CNF_OUTPUT_ALTFN_PUSHPULL, GPIO5 | GPIO7 );
+	gpio_mode_setup(GPIOA, GPIO_MODE_AF, GPIO_PUPD_NONE, GPIO5 | GPIO7);
         gpio_set_af(GPIOA, GPIO_AF5, GPIO5 | GPIO7);
-	//gpio_set_output_options(GPIOA, GPIO_OTYPE_PP, GPIO_OSPEED_25MHZ, GPIO7 | GPIO5);
+	gpio_set_output_options(GPIOA, GPIO_OTYPE_PP, GPIO_OSPEED_25MHZ, GPIO7 | GPIO5);
 	/* D/C =  conectado al pin 3 del puerto c
           D/C = 1; data
           D/C = 0; commando de control
@@ -128,29 +113,21 @@ static void usb_setup(void){
 		GPIO9 | GPIO11 | GPIO12);
 	gpio_set_af(GPIOA, GPIO_AF10, GPIO9 | GPIO11 | GPIO12);
 }
-
 static void spi_setup(void)
 {
 	rcc_periph_clock_enable(RCC_SPI1);
 	spi_reset(SPI1);
-	SPI1_I2SCFGR = 0;
-	/*spi_set_master_mode(SPI1);
-	spi_set_clock_polarity_1(SPI1);
-	spi_set_dff_16bit(SPI1);*/
-	/*uint32_t cr_tmp = SPI_CR1_BAUDRATE_FPCLK_DIV_8 |
-		 SPI_CR1_MSTR |
-		 SPI_CR1_SPE |
-		 SPI_CR1_CPHA | SPI_CR1_CPOL_CLK_TO_1_WHEN_IDLE;
-	SPI_CR2(SPI1) |= (SPI_CR2_SSOE | SPI_CR2_RXNEIE);
-	SPI_CR1(SPI1) = cr_tmp;
-	//spi_enable(SPI1);
-	/*spi_init_master(SPI1, SPI_CR1_BAUDRATE_FPCLK_DIV_8, SPI_CR1_CPOL_CLK_TO_1_WHEN_IDLE,
-		SPI_CR1_CPHA_CLK_TRANSITION_1, SPI_CR1_DFF_16BIT, SPI_CR1_MSBFIRST);*/
-	spi_init_master(SPI1, SPI_CR1_BAUDRATE_FPCLK_DIV_64, SPI_CR1_CPOL_CLK_TO_1_WHEN_IDLE,
-SPI_CR1_CPHA_CLK_TRANSITION_2, SPI_CR1_DFF_8BIT, SPI_CR1_MSBFIRST);
-	spi_enable_software_slave_management(SPI1);
-	spi_set_nss_high(SPI1);
-
+	spi_set_master_mode(SPI1);
+        spi_send_msb_first(SPI1);
+	spi_set_baudrate_prescaler(SPI1, SPI_CR1_BR_FPCLK_DIV_2);
+	//spi_set_clock_polarity_0(SPI1);
+	spi_set_dff_8bit(SPI1);
+	//spi_set_unidirectional_mode(SPI1);
+	//spi_set_clock_phase_1(SPI1);
+	//spi_set_bidirectional_transmit_only_mode(SPI1);//???
+	//spi_set_nss_low(SPI1);// ???
+	spi_init_master(SPI1, SPI_CR1_BAUDRATE_FPCLK_DIV_2, SPI_CR1_CPOL_CLK_TO_0_WHEN_IDLE,
+SPI_CR1_CPHA_CLK_TRANSITION_1, SPI_CR1_DFF_8BIT, SPI_CR1_MSBFIRST);
 	/* Enable SPI1 periph. */
 	spi_enable(SPI1);
 }
@@ -226,7 +203,7 @@ static void read_adc_send(void)
 {
 	//adc_start_conversion_regular(ADC1);
 	//while (!adc_eoc(ADC1));
-        buff[0] = adc_read_regular(ADC1);
+                buff[0] = adc_read_regular(ADC1);
         usbd_ep_write_packet(usbd_dev, 0x82, buff, sizeof(buff));
 }
 
@@ -301,119 +278,6 @@ static void cdcacm_set_config(usbd_device *usbd, uint16_t wValue)
 				cdcacm_control_request);
 }
 
-void
-write_lcd(uint16_t dc, uint8_t value)
-{
-	if(dc > 0){
-		gpio_set(GPIOD, GPIO_PIN_DC);
-	}
-	else{
-		gpio_clear(GPIOD, GPIO_PIN_DC);
-	}
-	//DC = 1 DATA, DC=0 CONTROL
-        //cs 1=disable LCD, 0=enable LCD
-	//reset debe estar en bajo
-	gpio_clear(GPIOD, GPIO_PIN_SCE);
-	gpio_clear(GPIOD, GPIO_PIN_RST); 
-	spi_send(SPI1, value);
-	delay_ms(200);
-	gpio_set(GPIOD, GPIO_PIN_SCE); /* CS* deselect */
-	gpio_clear(GPIOD, GPIO_PIN_DC);
-	return;
-}
-
-/*void ST7735_setAddrWindow(uint16_t x0, uint16_t y0, 
-			  uint16_t x1, uint16_t y1, uint8_t madctl)
-{
-  madctl = MADVAL(madctl);
-  if (madctl != madctlcurrent){
-      write_Cmd(ST7735_MADCTL);
-      write_lcd(LCD_D, madctl);
-      madctlcurrent = madctl;
-  }
-  write_Cmd(ST7735_CASET);
-  write_lcd(LCD_D, x0);
-  write_lcd(LCD_D, x1);
-
-  write_Cmd(ST7735_RASET);
-  write_lcd(LCD_D, y0);
-  write_lcd(LCD_D, y1);
-
-  write_Cmd(ST7735_RAMWR);
-}*/
-
-void ST7735_pushColor(uint16_t color)
-{
-  write_lcd(LCD_D, color>>8);
-  write_lcd(LCD_D, color);
-}
-
-void ST7735_backLight(uint8_t on)
-{
-  if (on)
-    gpio_set(LCD_PORT_BKL, GPIO_PIN_BKL);
-  else
-    gpio_clear(LCD_PORT_BKL, GPIO_PIN_BKL);
-}
-
-void init_lcd(void)
-{
-	int i, d;
-        for(i=0; i<22; i++){
-           write_lcd(LCD_C, initializers[i].command);
-	   if (initializers[i].delay)
-		delay_ms(initializers[i].delay);
-           if (initializers[i].len){
-                for(d=0; d<initializers[i].len; d++){
-                  write_lcd(LCD_D, initializers[i].data[d]);
-		}
-           }
-	}
-	
-}
-
-
-void ST7735_setAddrWindow(uint8_t x0, uint8_t y0, uint8_t x1,
- uint8_t y1) {
-
-  write_lcd(LCD_C, ST7735_CASET); // Column addr set
-  delay_ms(1);
-  write_lcd(LCD_D, 0x00);
-  write_lcd(LCD_D, x0+colstart);     // XSTART 
-  write_lcd(LCD_D,0x00);
-  write_lcd(LCD_D, x1+colstart);     // XEND
-  delay_ms(10);
-  write_lcd(LCD_C, ST7735_RASET); // Row addr set
-  delay_ms(10);
-  write_lcd(LCD_D, 0x00);
-  write_lcd(LCD_D, y0+rowstart);     // YSTART
-  write_lcd(LCD_D, 0x00);
-  write_lcd(LCD_D, y1+rowstart);     // YEND
-  delay_ms(10);
-  write_lcd(LCD_C, ST7735_RAMWR); // write to RAM
-}
-
-void drawFastVLine(uint8_t x, uint8_t y, uint8_t h,
- uint16_t color) {
-
-  // Rudimentary clipping
-  if((x >= _width) || (y >= _height)) return;
-  if((y+h-1) >= _height) h = _height-y;
-  ST7735_setAddrWindow(x, y, x, y+h-1);
-
-  uint8_t hi = color >> 8, lo = color;
-  while (h--) {
-    write_lcd(LCD_D, color>>8);
-    write_lcd(LCD_D, color);
-    //spiwrite(hi);
-    //spiwrite(lo);
-  }
-}
-
-
-
-
-
 
 int main(void)
 {	
@@ -428,17 +292,16 @@ int main(void)
 /*El pin 3 del puerto A esta conectado
   al canal 4 del timer 5, esto cuando el pint esta
   configurado como AF2*/
-	tim_pwm_setup(TIM5, 4, PWM_PERIOD);
+	//tim_pwm_setup(TIM5, 4, PWM_PERIOD);
 	frequency_sel = 0;
-	pid_filter_t pid;
-	pid_init(&pid);
+	//pid_filter_t pid;
+	//pid_init(&pid);
 	
 	float temperatura;
 	float error;
 	uint32_t  Out_Compare;
-
 	/* PD controller. */
-	pid_set_gains(&pid, 1.0, 0, 0.5);
+	//pid_set_gains(&pid, 1.0, 0, 0.5);
 
 
 	usbd_dev = usbd_init(&otgfs_usb_driver, &dev, &config,
@@ -446,17 +309,16 @@ int main(void)
 			usbd_control_buffer, sizeof(usbd_control_buffer));
 
 	usbd_register_set_config_callback(usbd_dev, cdcacm_set_config);
-	//ST7735_setAddrWindow(0,0,127,159, 0);
+  	lcd_setAddrWindow(0,0,159,127);
+  	lcd_Clear(COLOR565_WHITE);
+	lcd_orientacion(scr_CCW);
+	lcd_backLight(10);
+	lcd_VLine(2,120,75,COLOR565_CHOCOLATE);
+	lcd_FillRect(0, 0, 50, 50, COLOR565_YELLOW);
 	while (1) {
-	         (buff[0] <= 50) ? (temperatura = buff[0]-50.0):(temperatura = (buff[0]/4046.0)*150);
-	         error = temperatura - set_point;
-    		 motor_pwm = pid_process(&pid, error);
-		 Out_Compare = (uint32_t) (motor_pwm * 10);//dos decimales despues del punto
-    		 timer_set_oc_value(TIM5, TIM_OC4, Out_Compare); 
+		 lcd_HLine(2,120,75,COLOR565_CHOCOLATE);
+		 	
 		 usbd_poll(usbd_dev);
-		if(gpio_get(GPIOA, GPIO0))
-			drawFastVLine(50,10,100, ST7735_MAGENTA);
-			//ST7735_backLight(10);
 		}
 	return 0;
 }
