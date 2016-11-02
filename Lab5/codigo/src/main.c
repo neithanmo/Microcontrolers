@@ -120,14 +120,14 @@ static void spi_setup(void)
 	spi_set_master_mode(SPI1);
         spi_send_msb_first(SPI1);
 	spi_set_baudrate_prescaler(SPI1, SPI_CR1_BR_FPCLK_DIV_2);
-	//spi_set_clock_polarity_0(SPI1);
 	spi_set_dff_8bit(SPI1);
 	//spi_set_unidirectional_mode(SPI1);
 	//spi_set_clock_phase_1(SPI1);
-	//spi_set_bidirectional_transmit_only_mode(SPI1);//???
-	//spi_set_nss_low(SPI1);// ???
-	spi_init_master(SPI1, SPI_CR1_BAUDRATE_FPCLK_DIV_2, SPI_CR1_CPOL_CLK_TO_0_WHEN_IDLE,
-SPI_CR1_CPHA_CLK_TRANSITION_1, SPI_CR1_DFF_8BIT, SPI_CR1_MSBFIRST);
+	spi_set_nss_low(SPI1);// ???
+	spi_enable_software_slave_management(SPI1);
+	spi_set_standard_mode(SPI1, 1);
+	/*spi_init_master(SPI1, SPI_CR1_BAUDRATE_FPCLK_DIV_4, SPI_CR1_CPOL_CLK_TO_0_WHEN_IDLE,
+SPI_CR1_CPHA_CLK_TRANSITION_1, SPI_CR1_DFF_8BIT, SPI_CR1_MSBFIRST);*/
 	/* Enable SPI1 periph. */
 	spi_enable(SPI1);
 }
