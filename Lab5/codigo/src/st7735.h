@@ -123,8 +123,9 @@ struct st7735_function {
 extern uint16_t scr_width;
 extern uint16_t scr_height;
 
-void init_lcd(void);
 
+void init_lcd(void);
+void spi_setup(uint32_t SPI);
 uint16_t RGB565(uint8_t R,uint8_t G,uint8_t B);
 
 void lcd_setAddrWindow(uint16_t XS, uint16_t YS, 

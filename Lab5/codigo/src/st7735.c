@@ -1,5 +1,6 @@
 #include "st7735.h"
 
+uint32_t spiPort;//puerto spi a utilizar para las transacciones de datos
 static struct st7735_function initializer[] = {
 	{ ST7735_START, ST7735_START},
 	{ ST7735_CMD, ST7735_SWRESET},
@@ -98,11 +99,96 @@ static struct st7735_function initializer[] = {
 	{ ST7735_END, ST7735_END},
 };
 
+void spi_setup(uint32_t SPI)
+{
+/*
+ * Chart of the various SPI ports (1 - 6) and where their pins can be:
+ *
+ *	 NSS		  SCK			MISO		MOSI
+ *	 --------------   -------------------   -------------   ---------------
+ * SPI1  PA4, PA15	  PA5, PB3		PA6, PB4	PA7, PB5
+ * SPI2  PB9, PB12, PI0   PB10, PB13, PD3, PI1  PB14, PC2, PI2  PB15, PC3, PI3
+ * SPI3  PA15*, PA4*	  PB3*, PC10*		PB4*, PC11*	PB5*, PD6, PC12*
+ * SPI4  PE4,PE11	  PE2, PE12		PE5, PE13	PE6, PE14
+ * SPI5  PF6, PH5	  PF7, PH6		PF8		PF9, PF11, PH7
+ * SPI6  PG8		  PG13			PG12		PG14
+ *
+ * Pin name with * is alternate function 6 otherwise use alternate function 5.
+*/
+	spiPort = SPI;
+	switch(SPI){
+	case SPI1:
+		{
+		gpio_mode_setup(GPIOA, GPIO_MODE_AF, GPIO_PUPD_NONE, GPIO5 | GPIO7);
+		gpio_set_af(GPIOA, GPIO_AF5, GPIO5 | GPIO7);
+		gpio_set_output_options(GPIOA, GPIO_OTYPE_PP, GPIO_OSPEED_25MHZ, GPIO7 | GPIO5);
+		CS_H();
+		RST_H();
+		rcc_periph_clock_enable(RCC_SPI1);
+		/* CLK=PA5 || MOSI=PA7 */
+		}
+		break;
+	case SPI2:
+		{
+		rcc_periph_clock_enable(RCC_GPIOB);
+		gpio_mode_setup(GPIOB, GPIO_MODE_AF, GPIO_PUPD_NONE, GPIO10 | GPIO15);
+		gpio_set_af(GPIOB, GPIO_AF5, GPIO10 | GPIO15);
+		gpio_set_output_options(GPIOB, GPIO_OTYPE_PP, GPIO_OSPEED_25MHZ, GPIO10 | GPIO15);
+		CS_H();
+		RST_H();
+		rcc_periph_clock_enable(RCC_SPI2);
+		}
+		  /* CLK=PB10 || MOSI=PB15 */
+		break;
+	case SPI3:
+		{
+		rcc_periph_clock_enable(RCC_GPIOC);
+		rcc_periph_clock_enable(RCC_GPIOB);
+		gpio_mode_setup(GPIOC, GPIO_MODE_AF, GPIO_PUPD_NONE, GPIO12);
+		gpio_set_af(GPIOC, GPIO_AF6, GPIO12);
+
+		gpio_mode_setup(GPIOB, GPIO_MODE_AF, GPIO_PUPD_NONE, GPIO3);
+		gpio_set_af(GPIOB, GPIO_AF6, GPIO3);
+		//gpio_set_output_options(GPIOC, GPIO_OTYPE_PP, GPIO_OSPEED_25MHZ, GPIO10 | GPIO12);
+		CS_H();
+		RST_H();
+		rcc_periph_clock_enable(RCC_SPI3);
+		}
+		   /* CLK=PC10 || MOSI=PC12 */
+		break;
+	}
+		spi_reset(SPI);
+		/*
+		uint32_t cr_tmp;
+		cr_tmp = SPI_CR1_BAUDRATE_FPCLK_DIV_8 |
+		 SPI_CR1_MSTR |
+		 SPI_CR1_SPE |
+		 SPI_CR1_CPHA | SPI_CR1_CPOL_CLK_TO_1_WHEN_IDLE;
+		SPI_CR2(spiPort) |= SPI_CR2_SSOE;
+		SPI_CR1(spiPort) = cr_tmp;
+		*/
+		spi_set_master_mode(SPI);
+		spi_send_msb_first(SPI);
+		//spi_set_baudrate_prescaler(SPI, SPI_CR1_BR_FPCLK_DIV_4);
+		spi_set_dff_8bit(SPI);
+		spi_set_unidirectional_mode(SPI);
+		spi_set_clock_phase_1(SPI);
+		spi_set_nss_high(SPI);// ???
+		spi_enable_software_slave_management(SPI);
+		spi_set_standard_mode(SPI, 2);
+		spi_init_master(SPI, SPI_CR1_BAUDRATE_FPCLK_DIV_2, SPI_CR1_CPOL_CLK_TO_0_WHEN_IDLE,
+	SPI_CR1_CPHA_CLK_TRANSITION_1, SPI_CR1_DFF_8BIT, SPI_CR1_MSBFIRST);
+		/* Enable SPI1 periph. */
+		spi_enable(SPI);
+}
+
+
+
 void
 write_data_lcd(uint8_t data)
 {
  	DC_H();
-	spi_send(SPI1, data);
+	spi_send(spiPort, data);
 	//delay_ms(5);//aseguramos se hallan enviado los 8 bits
 	//gpio_set(LCD_CONTROL_PORT, CS_PIN); /* CS* deselect */
 	//gpio_clear(LCD_CONTROL_PORT, DC_PIN);
@@ -119,7 +205,7 @@ void write_cmd_lcd(uint8_t cmd)
 	//DC = 1 datos, DC=0 comando
         //cs 1=disable LCD, 0=enable LCD
 	//reset debe estar en bajo?????
-	spi_send(SPI1, cmd);
+	spi_send(spiPort, cmd);
 	//delay_ms(5);//aseguramos se hallan enviado los 8 bits
 }	
 
@@ -151,6 +237,7 @@ void init_lcd(void)
 		}
 		i++;
 	} while (!end_script);
+	CS_H();
 	
 }
 
@@ -198,7 +285,7 @@ void lcd_orientacion(ScrOrientation_TypeDef orientation)
 
 
 void lcd_setAddrWindow(uint16_t XS, uint16_t YS, uint16_t XE, uint16_t YE) {
-
+  CS_L();
   write_cmd_lcd(0x2a); // Column address set
   write_data_lcd(XS >> 8);
   write_data_lcd(XS);
@@ -211,6 +298,7 @@ void lcd_setAddrWindow(uint16_t XS, uint16_t YS, uint16_t XE, uint16_t YE) {
   write_data_lcd(YE >> 8);
   write_data_lcd(YE);
   write_cmd_lcd(0x2c); // Memory write
+  CS_H();
 }
 
 void lcd_Clear(uint16_t color)
@@ -281,7 +369,7 @@ void lcd_Line(int16_t X1, int16_t Y1, int16_t X2, int16_t Y2, uint16_t color)
   int16_t dY = Y2-Y1;
   int16_t dXsym = (dX > 0) ? 1 : -1;
   int16_t dYsym = (dY > 0) ? 1 : -1;
-
+  CS_L();
   if (dX == 0)
   {
     if (Y2>Y1) lcd_VLine(X1,Y1,Y2,color); else lcd_VLine(X1,Y2,Y1,color);
@@ -336,14 +424,17 @@ void lcd_Line(int16_t X1, int16_t Y1, int16_t X2, int16_t Y2, uint16_t color)
     }
   }
   lcd_Pixel(X1,Y1,color);
+  CS_H();
 }
 
 void lcd_Rect(uint16_t X1, uint16_t Y1, uint16_t X2, uint16_t Y2, uint16_t color)
 {
+  CS_L();
   lcd_HLine(X1,X2,Y1,color);
   lcd_HLine(X1,X2,Y2,color);
   lcd_VLine(X1,Y1,Y2,color);
   lcd_VLine(X2,Y1,Y2,color);
+  CS_H();
 }
 
 void lcd_FillRect(uint16_t X1, uint16_t Y1, uint16_t X2, uint16_t Y2, uint16_t color)
