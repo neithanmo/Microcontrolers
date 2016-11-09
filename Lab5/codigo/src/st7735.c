@@ -165,7 +165,6 @@ void spi_setup(uint32_t SPI)
 		rcc_periph_clock_enable(RCC_GPIOB);
 		gpio_mode_setup(GPIOC, GPIO_MODE_AF, GPIO_PUPD_NONE, GPIO12);
 		gpio_set_af(GPIOC, GPIO_AF6, GPIO12);
-
 		gpio_mode_setup(GPIOB, GPIO_MODE_AF, GPIO_PUPD_NONE, GPIO3);
 		gpio_set_af(GPIOB, GPIO_AF6, GPIO3);
 		gpio_set_output_options(GPIOC, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, GPIO10 | GPIO12);
@@ -192,18 +191,17 @@ void spi_setup(uint32_t SPI)
 		*/
 		spi_set_master_mode(SPI);
 		spi_send_msb_first(SPI);
-		//spi_set_baudrate_prescaler(SPI, SPI_CR1_BR_FPCLK_DIV_4);
 		spi_set_dff_8bit(SPI);
 		spi_set_unidirectional_mode(SPI);
-		spi_set_clock_phase_1(SPI);
-		spi_set_clock_polarity_1(SPI);
+		spi_set_clock_phase_0(SPI);
+		spi_set_clock_polarity_0(SPI);
 		spi_set_nss_high(SPI);// no multiple masters
 		spi_enable_software_slave_management(SPI);
 		spi_set_standard_mode(SPI, 0);
-		spi_init_master(SPI, SPI_CR1_BAUDRATE_FPCLK_DIV_2, SPI_CR1_CPOL_CLK_TO_0_WHEN_IDLE,
-	SPI_CR1_CPHA_CLK_TRANSITION_1, SPI_CR1_DFF_8BIT, SPI_CR1_MSBFIRST);
+		spi_init_master(SPI, SPI_CR1_BAUDRATE_FPCLK_DIV_4, SPI_CR1_CPOL_CLK_TO_0_WHEN_IDLE,
+			SPI_CR1_CPHA_CLK_TRANSITION_1, SPI_CR1_DFF_8BIT, SPI_CR1_MSBFIRST);
 		/* Enable SPI1 periph. */
-		//spi_enable_ss_output(SPI);
+		spi_enable_ss_output(SPI);
 		spi_enable(SPI);
 }
 
@@ -213,8 +211,8 @@ void
 write_data_lcd(uint8_t data)
 {
  	DC_H();
-	uint8_t bit;
-	//spi_send(spiPort, data);
+ 	RST_H();
+	spi_send(spiPort, data);
 	//delay_ms(5);//aseguramos se hallan enviado los 8 bits
 	//gpio_set(LCD_CONTROL_PORT, CS_PIN); /* CS* deselect */
 	//gpio_clear(LCD_CONTROL_PORT, DC_PIN);
@@ -223,6 +221,7 @@ si DC esta en alto, se le indica que se ha enviado data a graficar
 caso contraio se le indica a la pantalla que se envia un comando 
 tambien hay que habilitar el dispositivo, CS en bajo activa la pantalla 
 y RST en alto resetea la pantalla, es decir ambas banderas deben estar en bajo*/
+     /*uint8_t bit;
     for(bit = 0x80; bit; bit >>= 1) {
       gpio_clear(GPIOD,GPIO6);
       if(data & bit) gpio_set(GPIOD,GPIO7);
@@ -230,7 +229,7 @@ y RST en alto resetea la pantalla, es decir ambas banderas deben estar en bajo*/
       gpio_set(GPIOD,GPIO6);
       gpio_toggle(GPIOD, GPIO12);
       gpio_toggle(GPIOD, GPIO14);
-    }
+    }*/
 }
 
 void write_cmd_lcd(uint8_t cmd)
@@ -240,16 +239,16 @@ void write_cmd_lcd(uint8_t cmd)
 	//DC = 1 datos, DC=0 comando
         //cs 1=disable LCD, 0=enable LCD
 	//reset debe estar en ALTO..
-	//spi_send(spiPort, cmd);
+	spi_send(spiPort, cmd);
 	//delay_ms(5);//aseguramos se hallan enviado los 8 bits
-    for(bit = 0x80; bit; bit >>= 1) {
+    /*for(bit = 0x80; bit; bit >>= 1) {
       gpio_clear(GPIOD,GPIO6);
       if(cmd & bit) gpio_set(GPIOD,GPIO7);
       else          gpio_clear(GPIOD,GPIO7);
       gpio_set(GPIOD,GPIO6);
       gpio_toggle(GPIOD, GPIO12);
       gpio_toggle(GPIOD, GPIO14);
-    }
+    }*/
 }	
 
 void init_lcd(void)
@@ -257,7 +256,7 @@ void init_lcd(void)
 	//DC = 1 datos, DC=0 comandos
         //cs 1=disable LCD, 0=enable LCD
 	//reset debe estar en bajo
-	
+	RST_L();
 	CS_L();// habilitar el dispositivo
 	st7735_reset();
 	uint8_t i = 0;
@@ -400,7 +399,6 @@ void lcd_VLine(uint16_t X, uint16_t Y1, uint16_t Y2, uint16_t color)
   uint8_t CL = (uint8_t)color;
 
   CS_L();
-  RST_H();
   lcd_setAddrWindow(X,Y1,X,Y1+Y2-1);
   //for (i = 0; i <= (Y2 - Y1); i++)
   //{
