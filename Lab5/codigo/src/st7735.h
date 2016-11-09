@@ -20,8 +20,6 @@
 #define scr_h 160
 
 #define SPI_PORT SPI //using SPI1
-#define CSK_PIN GPIO5
-#define MOSI_PIN GPIO7
 #define LCD_CONTROL_PORT  GPIOD ///puerto de control para reloj y data
 #define LCD_DATA_PORT GPIOA
 #define BLK_PIN GPIO3
@@ -36,31 +34,6 @@
 #define RST_L() gpio_clear(LCD_CONTROL_PORT, RST_PIN)
 #define RST_H() gpio_set(LCD_CONTROL_PORT, RST_PIN)
 
-/*
-#define ST7735_START 
-#define ST7735_SWRESET
-#define ST7735_SLPOUT
-#define ST7735_FRMCTR1
-#define ST7735_FRMCTR2
-#define ST7735_FRMCTR3
-#define ST7735_INVCTR
-#define ST7735_PWCTR1
-#define ST7735_PWCTR2
-#define ST7735_PWCTR3
-#define ST7735_PWCTR4
-#define ST7735_PWCTR5
-#define ST7735_VMCTR1
-#define ST7735_INVOFF
-#define ST7735_MADCTL
-#define ST7735_COLMOD
-#define ST7735_CASET
-#define ST7735_RASET
-#define ST7735_GMCTRP1
-#define ST7735_GMCTRN1
-#define ST7735_DISPON
-#define ST7735_NORON
-#define ST7735_END
-*/
 /* ST7735 Commands */
 #define ST7735_NOP	0x0
 #define ST7735_SWRESET	0x01
@@ -98,6 +71,9 @@
 #define ST7735_GMCTRP1	0xE0
 #define ST7735_GMCTRN1	0xE1
 #define ST7735_PWCTR6	0xFC
+
+#define WIDTH	128
+#define HEIGHT	160
 typedef enum
 {
   scr_normal = 0,
@@ -123,13 +99,13 @@ struct st7735_function {
 extern uint16_t scr_width;
 extern uint16_t scr_height;
 
-
+void delay_ms(const uint32_t delay);
 void init_lcd(void);
 void spi_setup(uint32_t SPI);
 uint16_t RGB565(uint8_t R,uint8_t G,uint8_t B);
 
-void lcd_setAddrWindow(uint16_t XS, uint16_t YS, 
-			uint16_t XE, uint16_t YE);
+void lcd_setAddrWindow(uint8_t XS, uint8_t YS, 
+			uint8_t XE, uint8_t YE);
 void lcd_Clear(uint16_t color);
 void lcd_Pixel(uint16_t X, uint16_t Y, uint16_t color);
 void lcd_HLine(uint16_t X1, uint16_t X2, uint16_t Y, uint16_t color);

@@ -25,15 +25,6 @@ uint8_t channel_array[16];
 uint16_t set_point;
 usbd_device *usbd_dev;
 
-void delay_ms(const uint32_t delay)
-{
-    uint32_t i, j;
-
-    for( i = 0; i < delay; i++ )
-        for( j = 0; j < 1000; j++)
-            __asm__("nop");
-}
-
 static void clock_setup(void)///
 {
         rcc_clock_setup_hse_3v3(&rcc_hse_8mhz_3v3[RCC_CLOCK_3V3_120MHZ]);
@@ -58,6 +49,8 @@ static void gpio_setup(void)
 
    	gpio_mode_setup(GPIOA, GPIO_MODE_AF, GPIO_PUPD_NONE, GPIO3);//pin de uso para el canal 4 del TIM5
    	gpio_set_af(GPIOA, GPIO_AF2, GPIO3);
+	gpio_set(LED_DISCO_GREEN_PORT, GPIO12);
+	gpio_clear(LED_DISCO_GREEN_PORT, GPIO14);
 
 	/* D/C =  conectado al pin 3 del puerto c
           D/C = 1; data
@@ -263,11 +256,12 @@ int main(void)
 	set_point = 10;
 	clock_setup();
 	gpio_setup();
-	adc_setup();
-        tim_setup();
+	//adc_setup();
+        //tim_setup();
         usb_setup();
-	spi_setup(SPI3);
+	spi_setup(SPI1);
 	init_lcd();
+	delay_ms(500);
 /*El pin 3 del puerto A esta conectado
   al canal 4 del timer 5, esto cuando el pint esta
   configurado como AF2*/
@@ -288,27 +282,31 @@ int main(void)
 			usbd_control_buffer, sizeof(usbd_control_buffer));
 
 	usbd_register_set_config_callback(usbd_dev, cdcacm_set_config);
-	
-  	lcd_setAddrWindow(0,0,159,127);
-  	lcd_Clear(COLOR565_WHITE);
-	lcd_orientacion(scr_CCW);
-	lcd_backLight(10);
+	lcd_backLight(1);
+  	lcd_setAddrWindow(0,0,127,159);
+        delay_ms(500);
+	//gpio_toggle(LED_DISCO_GREEN_PORT, GPIO12);
+  	//lcd_Clear(COLOR565_BLUE);
+	//lcd_orientacion(scr_CCW);
 	uint8_t dx,dy;
 	dx = 0;
 	//gpio_toggle(LED_DISCO_GREEN_PORT, GPIO13);
 	//lcd_VLine(2,120,75,COLOR565_CHOCOLATE);
-	lcd_FillRect(70,67,72,69,RGB565(177,211,190));
+	//lcd_FillRect(70,67,72,69,RGB565(177,211,190));
 	while (1) {
-		 lcd_HLine(0,dx,75,COLOR565_CHOCOLATE);
+		 //lcd_HLine(0,dx,100,COLOR565_CHOCOLATE);
+		 //spi_send(SPI1, 70);
 		 //dx++;
-		 dx>159 ? dx=0 : dx++;
+		 //dx>159 ? dx=0 : dx++;
 		 /*if(dx == 0){
-			gpio_toggle(LED_DISCO_GREEN_PORT, GPIO12);
+			//gpio_toggle(LED_DISCO_GREEN_PORT, GPIO12);
 		 }*/
-		 if(gpio_get(GPIOA, GPIO0)){
+		 /*if(gpio_get(GPIOA, GPIO0)){
 		 	lcd_FillRect(25, 0, 50, 50, COLOR565_YELLOW);
-		 }
+		 }*/
 		 //delay_ms(500);
+		 lcd_VLine(50,10,125,RGB565(125,85,225));
+		 delay_ms(500);
 		 usbd_poll(usbd_dev);
 		}
 	return 0;
