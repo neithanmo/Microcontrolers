@@ -75,7 +75,7 @@ static void adc_setup(void)
         adc_set_dma_continue(ADC1);
         adc_set_continuous_conversion_mode(ADC1);
         //adc_enable_eoc_interrupt(ADC1);
-	adc_power_on(ADC1);
+	//adc_power_on(ADC1);
         adc_start_conversion_regular(ADC1);
 /*
 ADC_SMPR_SMP_3CYC   0x0
