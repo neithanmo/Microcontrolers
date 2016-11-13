@@ -144,7 +144,7 @@ void spi_setup(uint32_t SPI)
 		{
 		gpio_mode_setup(GPIOA, GPIO_MODE_AF, GPIO_PUPD_NONE, GPIO5 | GPIO7);
 		gpio_set_af(GPIOA, GPIO_AF5, GPIO5 | GPIO7);
-		gpio_set_output_options(GPIOA, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, GPIO7 | GPIO5);
+		//gpio_set_output_options(GPIOA, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, GPIO7 | GPIO5);
 		rcc_periph_clock_enable(RCC_SPI1);
 		/* CLK=PA5 || MOSI=PA7 */
 		}
@@ -154,7 +154,7 @@ void spi_setup(uint32_t SPI)
 		rcc_periph_clock_enable(RCC_GPIOB);
 		gpio_mode_setup(GPIOB, GPIO_MODE_AF, GPIO_PUPD_NONE, GPIO10 | GPIO15);
 		gpio_set_af(GPIOB, GPIO_AF5, GPIO10 | GPIO15);
-		gpio_set_output_options(GPIOB, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, GPIO10 | GPIO15);
+		//gpio_set_output_options(GPIOB, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, GPIO10 | GPIO15);
 		rcc_periph_clock_enable(RCC_SPI2);
 		}
 		  /* CLK=PB10 || MOSI=PB15 */
@@ -165,10 +165,9 @@ void spi_setup(uint32_t SPI)
 		rcc_periph_clock_enable(RCC_GPIOB);
 		gpio_mode_setup(GPIOC, GPIO_MODE_AF, GPIO_PUPD_NONE, GPIO12);
 		gpio_set_af(GPIOC, GPIO_AF6, GPIO12);
-
 		gpio_mode_setup(GPIOB, GPIO_MODE_AF, GPIO_PUPD_NONE, GPIO3);
 		gpio_set_af(GPIOB, GPIO_AF6, GPIO3);
-		gpio_set_output_options(GPIOC, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, GPIO10 | GPIO12);
+		//gpio_set_output_options(GPIOC, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, GPIO10 | GPIO12);
 		rcc_periph_clock_enable(RCC_SPI3);
 		}
 		   /* CLK=PC10 || MOSI=PC12 */
@@ -191,19 +190,18 @@ void spi_setup(uint32_t SPI)
 		SPI_CR1(spiPort) = cr_tmp;
 		*/
 		spi_set_master_mode(SPI);
-		spi_send_msb_first(SPI);
-		//spi_set_baudrate_prescaler(SPI, SPI_CR1_BR_FPCLK_DIV_4);
-		spi_set_dff_8bit(SPI);
-		spi_set_unidirectional_mode(SPI);
-		spi_set_clock_phase_1(SPI);
-		spi_set_clock_polarity_1(SPI);
-		spi_set_nss_high(SPI);// no multiple masters
+		//spi_send_msb_first(SPI);
+		//spi_set_dff_8bit(SPI);
+		//spi_set_unidirectional_mode(SPI);
+		//spi_set_clock_phase_0(SPI);
+		//spi_set_clock_polarity_0(SPI);
 		spi_enable_software_slave_management(SPI);
-		spi_set_standard_mode(SPI, 0);
-		spi_init_master(SPI, SPI_CR1_BAUDRATE_FPCLK_DIV_2, SPI_CR1_CPOL_CLK_TO_0_WHEN_IDLE,
-	SPI_CR1_CPHA_CLK_TRANSITION_1, SPI_CR1_DFF_8BIT, SPI_CR1_MSBFIRST);
+		spi_set_nss_high(SPI);// no multiple masters
+		spi_enable_ss_output(SPI);
+		//spi_set_standard_mode(SPI, 0);
+		spi_init_master(SPI, SPI_CR1_BAUDRATE_FPCLK_DIV_4, SPI_CR1_CPOL_CLK_TO_0_WHEN_IDLE,
+			SPI_CR1_CPHA_CLK_TRANSITION_1, SPI_CR1_DFF_8BIT, SPI_CR1_MSBFIRST);
 		/* Enable SPI1 periph. */
-		//spi_enable_ss_output(SPI);
 		spi_enable(SPI);
 }
 
@@ -212,9 +210,18 @@ void spi_setup(uint32_t SPI)
 void
 write_data_lcd(uint8_t data)
 {
+	//DC = 1 datos, DC=0 comandos
+        //cs 1=disable LCD, 0=enable LCD
+	//reset debe estar en bajo
  	DC_H();
-	uint8_t bit;
-	//spi_send(spiPort, data);
+ 	//RST_H();
+	//spi_set_standard_mode(spiPort, 0);
+	spi_send(spiPort, data);
+	//delay_ms(1);
+	/*while (!(SPI_SR(spiPort) & SPI_SR_TXE)){
+		gpio_toggle(GPIOD, GPIO13);
+	}
+	CS_H();*/
 	//delay_ms(5);//aseguramos se hallan enviado los 8 bits
 	//gpio_set(LCD_CONTROL_PORT, CS_PIN); /* CS* deselect */
 	//gpio_clear(LCD_CONTROL_PORT, DC_PIN);
@@ -223,6 +230,7 @@ si DC esta en alto, se le indica que se ha enviado data a graficar
 caso contraio se le indica a la pantalla que se envia un comando 
 tambien hay que habilitar el dispositivo, CS en bajo activa la pantalla 
 y RST en alto resetea la pantalla, es decir ambas banderas deben estar en bajo*/
+     /*uint8_t bit;
     for(bit = 0x80; bit; bit >>= 1) {
       gpio_clear(GPIOD,GPIO6);
       if(data & bit) gpio_set(GPIOD,GPIO7);
@@ -230,35 +238,43 @@ y RST en alto resetea la pantalla, es decir ambas banderas deben estar en bajo*/
       gpio_set(GPIOD,GPIO6);
       gpio_toggle(GPIOD, GPIO12);
       gpio_toggle(GPIOD, GPIO14);
-    }
+    }*/
 }
 
 void write_cmd_lcd(uint8_t cmd)
 {
+	//DC = 1 datos, DC=0 comandos
+        //cs 1=disable LCD, 0=enable LCD
+	//reset debe estar en bajo
 	DC_L();
-	uint8_t bit;
+	//RST_H();
+	//spi_set_standard_mode(spiPort, 0);
 	//DC = 1 datos, DC=0 comando
         //cs 1=disable LCD, 0=enable LCD
 	//reset debe estar en ALTO..
-	//spi_send(spiPort, cmd);
+	spi_send(spiPort, cmd);
+
+	/*while (!(SPI_SR(spiPort) & SPI_SR_TXE)){
+		gpio_toggle(GPIOD, GPIO13);
+	}
+	CS_H();*/
+	//CS_H();
 	//delay_ms(5);//aseguramos se hallan enviado los 8 bits
-    for(bit = 0x80; bit; bit >>= 1) {
+    /*for(bit = 0x80; bit; bit >>= 1) {
       gpio_clear(GPIOD,GPIO6);
       if(cmd & bit) gpio_set(GPIOD,GPIO7);
       else          gpio_clear(GPIOD,GPIO7);
       gpio_set(GPIOD,GPIO6);
       gpio_toggle(GPIOD, GPIO12);
       gpio_toggle(GPIOD, GPIO14);
-    }
+    }*/
 }	
 
 void init_lcd(void)
 {
 	//DC = 1 datos, DC=0 comandos
         //cs 1=disable LCD, 0=enable LCD
-	//reset debe estar en bajo
-	
-	CS_L();// habilitar el dispositivo
+	CS_L();
 	st7735_reset();
 	uint8_t i = 0;
 	uint8_t end_script = 0;
@@ -282,9 +298,10 @@ void init_lcd(void)
 		}
 		i++;
 	} while (!end_script);
-	write_cmd_lcd(ST7735_MADCTL);
-	write_data_lcd(0xC0);
-	CS_H();//INHABILITAR TRANSMISIONES HASTA CUANDO SE SOLICITE
+	//write_cmd_lcd(ST7735_MADCTL);
+	//write_data_lcd(0xC0);
+	delay_ms(1);
+	CS_H();	
 }
 	
 
@@ -299,7 +316,7 @@ void lcd_backLight(uint8_t on)
 
 void lcd_orientacion(ScrOrientation_TypeDef orientation)
 {
-  CS_L();//seleccionamos el dispositivo
+  CS_L();
   write_cmd_lcd(0x36); // Memory data access control:
   switch (orientation)
   {
@@ -324,14 +341,15 @@ void lcd_orientacion(ScrOrientation_TypeDef orientation)
     write_data_lcd(0x00); // Normal: Top to Bottom; Left to Right; RGB
     break;
   }
-  CS_H();
+	delay_ms(1);
+	CS_H();
 }
 
 
 void lcd_setAddrWindow(uint8_t XS, uint8_t XE, uint8_t YS, uint8_t YE) 
 {
-  uint8_t colstart = 2;
-  uint8_t rowstart = 1;
+  uint8_t colstart = 0;
+  uint8_t rowstart = 0;
 
   CS_L();
   write_cmd_lcd(ST7735_CASET); // Column address set
@@ -346,34 +364,41 @@ void lcd_setAddrWindow(uint8_t XS, uint8_t XE, uint8_t YS, uint8_t YE)
   write_data_lcd(0x00);
   write_data_lcd(YE+rowstart);
   write_cmd_lcd(ST7735_RAMWR); // Memory write
-  CS_H();
-
+	delay_ms(1);
+	CS_H();
 }
 
 void lcd_Clear(uint16_t color)
 {
   uint16_t i;
   CS_L();
+  spi_set_dff_16bit(spiPort);
   lcd_setAddrWindow(0, 0, WIDTH - 1, HEIGHT - 1);
   for (i = 0; i < WIDTH * HEIGHT; i++)
   {
-    write_data_lcd(color >> 8);
+    //write_data_lcd(color >> 8);
     write_data_lcd(color);
   }
+  spi_set_dff_8bit(spiPort);
+	delay_ms(1);
+	CS_H();
   //write_cmd_lcd(ST7735_RAMWR);
-  CS_H();
+
 }
 
 void lcd_Pixel(uint16_t X, uint16_t Y, uint16_t color)
 {
   if((X < 0) ||(X >= WIDTH) || (Y < 0) || (Y >= HEIGHT)) return;
-  CS_L();
+
   RST_H();
+  CS_L();
   lcd_setAddrWindow(X,Y,X+1,Y+1);
   write_data_lcd(color >> 8);
   write_data_lcd((uint8_t)color);
   //write_cmd_lcd(ST7735_RAMWR); // LINEA 438 DE ADAFRUIT
-  CS_H();
+	delay_ms(1);
+	CS_H();
+
 }
 
 void lcd_HLine(uint16_t X1, uint16_t X2, uint16_t Y, uint16_t color)
@@ -381,16 +406,18 @@ void lcd_HLine(uint16_t X1, uint16_t X2, uint16_t Y, uint16_t color)
   uint16_t i;
   uint8_t CH = color >> 8;
   uint8_t CL = (uint8_t)color;
-
-  CS_L();
+  
   lcd_setAddrWindow(X1,Y,X2,Y);
+  CS_L();
   for (i = 0; i <= (X2 - X1); i++)
   {
     write_data_lcd(CH);
     write_data_lcd(CL);
   }
+	delay_ms(1);
+	CS_H();
   //write_cmd_lcd(ST7735_RAMWR);
-  CS_H();
+
 }
 
 void lcd_VLine(uint16_t X, uint16_t Y1, uint16_t Y2, uint16_t color)
@@ -399,16 +426,17 @@ void lcd_VLine(uint16_t X, uint16_t Y1, uint16_t Y2, uint16_t color)
   uint8_t CH = color >> 8;
   uint8_t CL = (uint8_t)color;
 
-  CS_L();
-  RST_H();
+
   lcd_setAddrWindow(X,Y1,X,Y1+Y2-1);
-  //for (i = 0; i <= (Y2 - Y1); i++)
-  //{
+  CS_L();
+  for (i = 0; i <= (Y2 - Y1); i++){
     write_data_lcd(CH);
     write_data_lcd(CL);
-  //}
-  //write_cmd_lcd(ST7735_RAMWR);
+  }
+  delay_ms(1);
   CS_H();
+  //write_cmd_lcd(ST7735_RAMWR);
+
 }
 
 void lcd_Line(int16_t X1, int16_t Y1, int16_t X2, int16_t Y2, uint16_t color)
@@ -417,7 +445,7 @@ void lcd_Line(int16_t X1, int16_t Y1, int16_t X2, int16_t Y2, uint16_t color)
   int16_t dY = Y2-Y1;
   int16_t dXsym = (dX > 0) ? 1 : -1;
   int16_t dYsym = (dY > 0) ? 1 : -1;
-  CS_L();
+
   if (dX == 0)
   {
     if (Y2>Y1) lcd_VLine(X1,Y1,Y2,color); else lcd_VLine(X1,Y2,Y1,color);
@@ -472,17 +500,17 @@ void lcd_Line(int16_t X1, int16_t Y1, int16_t X2, int16_t Y2, uint16_t color)
     }
   }
   lcd_Pixel(X1,Y1,color);
-  CS_H();
+
 }
 
 void lcd_Rect(uint16_t X1, uint16_t Y1, uint16_t X2, uint16_t Y2, uint16_t color)
 {
-  CS_L();
+
   lcd_HLine(X1,X2,Y1,color);
   lcd_HLine(X1,X2,Y2,color);
   lcd_VLine(X1,Y1,Y2,color);
   lcd_VLine(X2,Y1,Y2,color);
-  CS_H();
+
 }
 
 void lcd_FillRect(uint16_t X1, uint16_t Y1, uint16_t X2, uint16_t Y2, uint16_t color)
@@ -492,16 +520,18 @@ void lcd_FillRect(uint16_t X1, uint16_t Y1, uint16_t X2, uint16_t Y2, uint16_t c
   uint8_t CH = color >> 8;
   uint8_t CL = (uint8_t)color;
 
-  CS_L();
+
   lcd_setAddrWindow(X1,Y1,X2,Y2);
-  DC_H();
+  CS_L();
   for (i = 0; i < FS; i++)
   {
     write_data_lcd(CH);
     write_data_lcd(CL);
   }
+	delay_ms(1);
+	CS_H();
   //write_cmd_lcd(ST7735_RAMWR);
-  CS_H();
+
 }
 
 
@@ -512,3 +542,7 @@ uint16_t RGB565(uint8_t R,uint8_t G,uint8_t B)///color
   return ((R >> 3) << 11) | ((G >> 2) << 5) | (B >> 3);
 }
 
+uint16_t swapcolor(uint16_t x) 
+{ 
+  return (x << 11) | (x & 0x07E0) | (x >> 11);
+}
