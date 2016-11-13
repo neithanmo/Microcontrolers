@@ -125,6 +125,7 @@ uint16_t RGB565(uint8_t R,uint8_t G,uint8_t B);//
 uint16_t swapcolor(uint16_t x);//
 
 void delay_ms(const uint32_t delay);//
+void delay_us(const uint32_t delay);//
 void init_lcd(void);//
 void spi_setup(uint32_t SPI);//
 void lcd_setAddrWindow(uint8_t XS, uint8_t YS,uint8_t XE, uint8_t YE);//
