@@ -205,7 +205,7 @@ void spi_setup(uint32_t SPI)
 		spi_set_nss_high(SPI);// no multiple masters
 		spi_enable_ss_output(SPI);
 		//spi_set_standard_mode(SPI, 0);
-		spi_init_master(SPI, SPI_CR1_BAUDRATE_FPCLK_DIV_128, SPI_CR1_CPOL_CLK_TO_0_WHEN_IDLE,
+		spi_init_master(SPI, 8000000, SPI_CR1_CPOL_CLK_TO_0_WHEN_IDLE,
 			SPI_CR1_CPHA_CLK_TRANSITION_1, SPI_CR1_DFF_8BIT, SPI_CR1_MSBFIRST);
 		/* Enable SPI1 periph. */
 		spi_enable(SPI);
@@ -471,20 +471,18 @@ void lcd_Rect(uint16_t X1, uint16_t Y1, uint16_t X2, uint16_t Y2, uint16_t color
 
 void lcd_FillRect(uint8_t x, uint8_t y, uint8_t w, uint8_t h, uint16_t color)
 {
-  //uint8_t x=0;
+  uint16_t i;
   //uint8_t y=0;
   uint8_t CH = color >> 8;
   uint8_t CL = (uint8_t)color;
   if((x > WIDTH) || (y > HEIGHT)) return;
   if((x + w - 1) >= WIDTH)  w = WIDTH  - x;
   if((y + h - 1) >= HEIGHT) h = HEIGHT - y;
-
+  uint16_t FS = (w - x + 1) * (h - y + 1);
   lcd_setAddrWindow(x,x+w-1, y, y+h-1);
-  for(y=h; y>0; y--) {
-    for(x=w; x>0; x--) {
+  for(i=0; i<FS; i++) {
         write_data_lcd(CH);
         write_data_lcd(CL);
-    }
   }
 }
 

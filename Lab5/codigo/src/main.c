@@ -68,6 +68,12 @@ int main(void)
                  for(dy=0;dy<160;dy++){
   		     lcd_HLine(0, dy,128,COLOR565_CHOCOLATE);
 		 }
+		 for(dy=0;dy<80;dy++){
+		     for(dx=0;dx<64;dx++){
+                         lcd_Pixel(64+dx, 80+dy, COLOR565_GOLD);
+			 lcd_Pixel(64-dx, 80-dy, COLOR565_GOLD);
+ 		     }
+                  }
                  for(dx=0;dx<128;dx++){
 		     lcd_VLine(dx, 0, 160,RGB565(dx,255-dx,127+dx));
 		 }
@@ -80,7 +86,28 @@ int main(void)
                  for(dy=0;dy<160;dy++){
   		     lcd_HLine(0, dy,128,RGB565(dy,94+dy,255-dy));
 		 }
-
+		 lcd_FillRect(0, 0, 128, 160, COLOR565_BLACK);
+		  dy=0;
+                  while((80-dy)){
+			lcd_Pixel(64, 79+dy, COLOR565_GOLD);
+			dy++;
+		  }
+		  dx=0;
+                  while((64-dx)){
+			lcd_Pixel(63+dx, 80, COLOR565_GOLD);
+			dx++;
+		  }
+		  dy=0;
+                  while((80-dy)){
+			lcd_Pixel(64, 80-dy, COLOR565_GOLD);
+			dy++;
+		  }
+		  dx=0;
+                  while((64-dx)){
+			lcd_Pixel(64-dx, 80, COLOR565_GOLD);
+			dx++;
+		  }
+		  delay_ms(5000);
 		 //dy>160 ? dy=0 : dy++;
 		 //dx>128 ? dx=0 : dx++;
 		 //lcd_FillRect(25, 25, 100, 100, COLOR565_BLACK);
