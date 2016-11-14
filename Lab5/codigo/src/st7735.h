@@ -30,6 +30,10 @@
 #define CS_H() gpio_set(LCD_CONTROL_PORT, CS_PIN)
 #define RST_L() gpio_clear(LCD_CONTROL_PORT, RST_PIN)
 #define RST_H() gpio_set(LCD_CONTROL_PORT, RST_PIN)
+#ifndef _swap_uint8_t
+#define _swap_uint8_t(a, b) { uint8_t t = a; a = b; b = t; }
+#endif
+
 
 #define INITR_GREENTAB 0x0
 #define INITR_REDTAB   0x1
@@ -122,7 +126,7 @@ void lcd_setAddrWindow(uint8_t XS, uint8_t YS,uint8_t XE, uint8_t YE);//
 void lcd_orientacion(ScrOrientation_TypeDef orientation);//
 void lcd_Clear(uint16_t color);//
 void lcd_Pixel(uint16_t X, uint16_t Y, uint16_t color);//
-void lcd_HLine(uint8_t x, uint8_t w, uint8_t y, uint16_t color);//
+void lcd_HLine(uint8_t x, uint8_t y, uint8_t w, uint16_t color);//
 void lcd_VLine(uint8_t x, uint8_t y, uint8_t h, uint16_t color);//
 void lcd_Line(int16_t X1, int16_t Y1, int16_t X2, int16_t Y2, uint16_t color);//
 void lcd_Rect(uint16_t X1, uint16_t Y1, uint16_t X2, uint16_t Y2, uint16_t color);//
@@ -133,6 +137,12 @@ void write_data_lcd(uint8_t data);//
 void write_cmd_lcd(uint8_t cmd);//
 void lcd_PutChar7x11(uint16_t X, uint16_t Y, uint8_t chr, uint16_t color, uint16_t bgcolor);
 void lcd_PutStr7x11(uint8_t X, uint8_t Y, char *str, uint16_t color, uint16_t bgcolor);
-
+void drawCircle(uint8_t x0, uint8_t y0, uint8_t r,uint16_t color);
+void drawCircleHelper(uint8_t x0, uint8_t y0, uint8_t r, uint8_t cornername, uint16_t color);
+void fillCircle(uint8_t x0, uint8_t y0, uint8_t r,uint16_t color);
+void fillCircleHelper(uint8_t x0, uint8_t y0, uint8_t r,uint8_t cornername, uint8_t delta, uint16_t color);
+void drawTriangle(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1,uint8_t x2, uint8_t y2, uint16_t color);
+void drawRect(uint8_t x, uint8_t y, uint8_t w, uint8_t h,
+ uint16_t color) ;
 
 #endif

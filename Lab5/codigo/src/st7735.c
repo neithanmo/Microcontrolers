@@ -486,6 +486,133 @@ void lcd_FillRect(uint8_t x, uint8_t y, uint8_t w, uint8_t h, uint16_t color)
   }
 }
 
+void drawCircle(uint8_t x0, uint8_t y0, uint8_t r,
+ uint16_t color)
+{
+  int16_t f = 1 - r;
+  int16_t ddF_x = 1;
+  int16_t ddF_y = -2 * r;
+  int16_t x = 0;
+  int16_t y = r;
+
+  lcd_Pixel(x0  , y0+r, color);
+  lcd_Pixel(x0  , y0-r, color);
+  lcd_Pixel(x0+r, y0  , color);
+  lcd_Pixel(x0-r, y0  , color);
+
+  while (x<y) {
+    if (f >= 0) {
+      y--;
+      ddF_y += 2;
+      f += ddF_y;
+    }
+    x++;
+    ddF_x += 2;
+    f += ddF_x;
+
+    lcd_Pixel(x0 + x, y0 + y, color);
+    lcd_Pixel(x0 - x, y0 + y, color);
+    lcd_Pixel(x0 + x, y0 - y, color);
+    lcd_Pixel(x0 - x, y0 - y, color);
+    lcd_Pixel(x0 + y, y0 + x, color);
+    lcd_Pixel(x0 - y, y0 + x, color);
+    lcd_Pixel(x0 + y, y0 - x, color);
+    lcd_Pixel(x0 - y, y0 - x, color);
+  }
+}
+
+void drawCircleHelper(uint8_t x0, uint8_t y0,
+ uint8_t r, uint8_t cornername, uint16_t color) 
+{
+  int16_t f     = 1 - r;
+  int16_t ddF_x = 1;
+  int16_t ddF_y = -2 * r;
+  int16_t x     = 0;
+  int16_t y     = r;
+
+  while (x<y) {
+    if (f >= 0) {
+      y--;
+      ddF_y += 2;
+      f     += ddF_y;
+    }
+    x++;
+    ddF_x += 2;
+    f     += ddF_x;
+    if (cornername & 0x4) {
+      lcd_Pixel(x0 + x, y0 + y, color);
+      lcd_Pixel(x0 + y, y0 + x, color);
+    }
+    if (cornername & 0x2) {
+      lcd_Pixel(x0 + x, y0 - y, color);
+      lcd_Pixel(x0 + y, y0 - x, color);
+    }
+    if (cornername & 0x8) {
+      lcd_Pixel(x0 - y, y0 + x, color);
+      lcd_Pixel(x0 - x, y0 + y, color);
+    }
+    if (cornername & 0x1) {
+      lcd_Pixel(x0 - y, y0 - x, color);
+      lcd_Pixel(x0 - x, y0 - y, color);
+    }
+  }
+}
+
+void fillCircle(uint8_t x0, uint8_t y0, uint8_t r,
+ uint16_t color) 
+{
+  lcd_VLine(x0, y0-r, 2*r+1, color);
+  fillCircleHelper(x0, y0, r, 3, 0, color);
+}
+
+
+void fillCircleHelper(uint8_t x0, uint8_t y0, uint8_t r,
+ uint8_t cornername, uint8_t delta, uint16_t color) {
+
+  int16_t f     = 1 - r;
+  int16_t ddF_x = 1;
+  int16_t ddF_y = -2 * r;
+  int16_t x     = 0;
+  int16_t y     = r;
+
+  while (x<y) {
+    if (f >= 0) {
+      y--;
+      ddF_y += 2;
+      f     += ddF_y;
+    }
+    x++;
+    ddF_x += 2;
+    f     += ddF_x;
+
+    if (cornername & 0x1) {
+      lcd_VLine(x0+x, y0-y, 2*y+1+delta, color);
+      lcd_VLine(x0+y, y0-x, 2*x+1+delta, color);
+    }
+    if (cornername & 0x2) {
+      lcd_VLine(x0-x, y0-y, 2*y+1+delta, color);
+      lcd_VLine(x0-y, y0-x, 2*x+1+delta, color);
+    }
+  }
+}
+void drawTriangle(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1,
+      uint8_t x2, uint8_t y2, uint16_t color)
+{
+  lcd_Line(x0, y0, x1, y1, color);
+  lcd_Line(x1, y1, x2, y2, color);
+  lcd_Line(x2, y2, x0, y0, color);
+
+}
+
+void drawRect(uint8_t x, uint8_t y, uint8_t w, uint8_t h,
+ uint16_t color){
+
+  lcd_HLine(x, y, w, color);
+  lcd_HLine(x, y+h-1, w, color);
+  lcd_VLine(x, y, h, color);
+  lcd_VLine(x+w-1, y, h, color);
+}
+
 
 
 
