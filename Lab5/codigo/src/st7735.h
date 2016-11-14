@@ -144,5 +144,19 @@ void fillCircleHelper(uint8_t x0, uint8_t y0, uint8_t r,uint8_t cornername, uint
 void drawTriangle(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1,uint8_t x2, uint8_t y2, uint16_t color);
 void drawRect(uint8_t x, uint8_t y, uint8_t w, uint8_t h,
  uint16_t color) ;
+void drawLine(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1,
+ uint16_t color);
+void drawFastVLine(uint8_t x, uint8_t y,
+ uint8_t h, uint16_t color);
+void drawFastHLine(uint8_t x, uint8_t y,
+ uint8_t w, uint16_t color);
+void fillTriangle(uint8_t x0, uint8_t y0,
+ uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint16_t color);
+void fillRect(uint8_t x, uint8_t y, uint8_t w, uint8_t h,
+ uint16_t color);
+void drawRoundRect(uint8_t x, uint8_t y, uint8_t w,
+ uint8_t, uint8_t r, uint16_t color);
+void fillRoundRect(uint8_t x, uint8_t y, uint8_t w,
+ uint8_t h, uint8_t r, uint16_t color);
 
 #endif
