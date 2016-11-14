@@ -107,7 +107,23 @@ int main(void)
 			lcd_Pixel(64-dx, 80, COLOR565_GOLD);
 			dx++;
 		  }
+		  dx=0;
+                  while((64-dx)){
+			drawCircle(64, 80, dx, COLOR565_GOLD+dx);
+			dx++;
+		  }
 		  delay_ms(5000);
+		 lcd_FillRect(0, 0, 128, 160, COLOR565_BLACK);
+		 drawTriangle(50, 60, 5, 20,100, 160, COLOR565_GOLD);
+		 delay_ms(5000);
+		 drawTriangle(5, 100, 10, 80,2, 50, COLOR565_GOLDEN_ROD);
+		 delay_ms(5000);
+                 drawTriangle(90, 90, 50, 50,70, 160, COLOR565_GOLD);
+		 delay_ms(5000);
+		 delay_ms(5000);
+		 delay_ms(5000);
+	         drawRect(10,50,128,160, COLOR565_MEDIUM_TURQUOISE);
+		 delay_ms(20000);
 		 //dy>160 ? dy=0 : dy++;
 		 //dx>128 ? dx=0 : dx++;
 		 //lcd_FillRect(25, 25, 100, 100, COLOR565_BLACK);
