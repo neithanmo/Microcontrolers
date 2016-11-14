@@ -43,23 +43,36 @@ int main(void)
 	lcd_backLight(1);
 	init_lcd();
 	delay_ms(500);
-	lcd_FillRect(0,0,128,160, COLOR565_DARK_CYAN);
-	delay_ms(500);
-	lcd_VLine(110,0,155,COLOR565_MAROON);
-	delay_ms(500);
-	lcd_HLine(0,128,75, COLOR565_FUCHSIA);
+	//lcd_FillRect(0,0,128,160, COLOR565_DARK_CYAN);
+	//delay_ms(500);
+	//lcd_VLine(110,0,155,COLOR565_MAROON);
+	//delay_ms(500);
+	//lcd_HLine(0,128,75, COLOR565_FUCHSIA);
 	//lcd_FillRect(0, 0, 120, 100, COLOR565_RED);
 	uint8_t dx,dy;
 	dx = 0;
+        dy = 0;
 	while (1) {
-		 lcd_HLine(0,dx,100,COLOR565_CHOCOLATE);
-		 dx++;
-		 dx>=128 ? dx=0 : dx++;
-		 if(dx == 0){
-			gpio_toggle(LED_DISCO_GREEN_PORT, GPIO12);
+		 //lcd_HLine(0, 50,128,COLOR565_CHOCOLATE);
+                 //lcd_VLine(50, 0, 128, COLOR565_BLACK);
+		 
+                 for(dy=0;dy<160;dy++){
+		     for(dx=0;dx<128;dx++){
+			lcd_Pixel(dx,dy,COLOR565_DARK_RED);
+		     }
 		 }
+                 for(dy=160;dy>0;dy--){
+		     for(dx=128;dx>0;dx--){
+			lcd_Pixel(dx,dy,COLOR565_DARK_BLUE);
+		     }
+		 }
+		 //dy>160 ? dy=0 : dy++;
+		 //dx>128 ? dx=0 : dx++;
+		 //lcd_FillRect(25, 25, 100, 100, COLOR565_BLACK);
 		 /*if(gpio_get(GPIOA, GPIO0)){
-		 	lcd_FillRect(25, 0, 50, 50, COLOR565_YELLOW);
+		 	//lcd_FillRect(25, 0, 50, 50, COLOR565_YELLOW);
+			lcd_HLine(0,dx,100,COLOR565_CHOCOLATE);
+			delay_ms(500);
 		 }*/
 		 //delay_ms(500);
 		  

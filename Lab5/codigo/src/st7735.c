@@ -99,6 +99,9 @@ static struct st7735_function initializer[] = {
 	{ ST7735_END, ST7735_END},
 };
 
+uint8_t colstart;
+uint8_t rowstart;
+
 void delay_ms(const uint32_t delay)
 {
     uint32_t i, j;
@@ -155,7 +158,8 @@ void spi_setup(uint32_t SPI)
 		rcc_periph_clock_enable(RCC_GPIOA);
 		gpio_mode_setup(GPIOA, GPIO_MODE_AF, GPIO_PUPD_NONE, GPIO5 | GPIO7);
 		gpio_set_af(GPIOA, GPIO_AF5, GPIO5 | GPIO7);
-		//gpio_set_output_options(GPIOA, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, GPIO7 | GPIO5);
+		gpio_set_output_options(GPIOA, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, GPIO7 | GPIO5);
+		gpio_mode_setup(GPIOA, GPIO_MODE_INPUT, GPIO_PUPD_NONE, GPIO0); //para usar el boton
 		rcc_periph_clock_enable(RCC_SPI1);
 		/* CLK=PA5 || MOSI=PA7 */
 		}
@@ -191,15 +195,6 @@ void spi_setup(uint32_t SPI)
 		break;
 	}
 		spi_reset(SPI);
-		/*
-		uint32_t cr_tmp;
-		cr_tmp = SPI_CR1_BAUDRATE_FPCLK_DIV_8 |
-		 SPI_CR1_MSTR |
-		 SPI_CR1_SPE |
-		 SPI_CR1_CPHA | SPI_CR1_CPOL_CLK_TO_1_WHEN_IDLE;
-		SPI_CR2(spiPort) |= SPI_CR2_SSOE;
-		SPI_CR1(spiPort) = cr_tmp;
-		*/
 		spi_set_master_mode(SPI);
 		//spi_send_msb_first(SPI);
 		//spi_set_dff_8bit(SPI);
@@ -229,14 +224,6 @@ write_data_lcd(uint8_t data)
 	spi_send(spiPort, data);
 	delay_us(350);
 	CS_H();
-	//delay_ms(1);
-	/*while (!(SPI_SR(spiPort) & SPI_SR_TXE)){
-		gpio_toggle(GPIOD, GPIO13);
-	}
-	CS_H();*/
-	//delay_ms(5);//aseguramos se hallan enviado los 8 bits
-	//gpio_set(LCD_CONTROL_PORT, CS_PIN); /* CS* deselect */
-	//gpio_clear(LCD_CONTROL_PORT, DC_PIN);
 /*se ha de indicar a la pantalla el tipo de datos que se envia:
 si DC esta en alto, se le indica que se ha enviado data a graficar
 caso contraio se le indica a la pantalla que se envia un comando 
@@ -263,13 +250,6 @@ void write_cmd_lcd(uint8_t cmd)
 	spi_send(spiPort, cmd);
 	delay_us(350);
 	CS_H();
-
-	/*while (!(SPI_SR(spiPort) & SPI_SR_TXE)){
-		gpio_toggle(GPIOD, GPIO13);
-	}
-	CS_H();*/
-	//CS_H();
-	//delay_ms(5);//aseguramos se hallan enviado los 8 bits
     /*for(bit = 0x80; bit; bit >>= 1) {
       gpio_clear(GPIOD,GPIO6);
       if(cmd & bit) gpio_set(GPIOD,GPIO7);
@@ -284,11 +264,11 @@ void init_lcd(void)
 {
 	//DC = 1 datos, DC=0 comandos
         //cs 1=disable LCD, 0=enable LCD
-	//CS_L();
+        colstart = 2;
+        rowstart = 3;
 	st7735_reset();
 	uint8_t i = 0;
 	uint8_t end_script = 0;
-
 	do {
 		switch (initializer[i].cmd)
 		{
@@ -309,10 +289,7 @@ void init_lcd(void)
 		i++;
 	} while (!end_script);
 	write_cmd_lcd(ST7735_MADCTL);
-	write_data_lcd(0xC0);
-	//delay_ms(1);
-	//while (!(SPI_SR(spiPort) & SPI_SR_TXE));
-	//CS_H();	
+	write_data_lcd(0x00);	
 }
 	
 
@@ -325,15 +302,14 @@ void lcd_backLight(uint8_t on)
 }
 
 
-void lcd_orientacion(ScrOrientation_TypeDef orientation)
+/*void lcd_orientacion(ScrOrientation_TypeDef orientation)
 {
-  //CS_L();
   write_cmd_lcd(0x36); // Memory data access control:
   switch (orientation)
   {
   case scr_CW:
-    scr_width  = scr_h;
-    scr_height = scr_w;
+    _width  = scr_h;
+    _height = scr_w;
     write_data_lcd(0xA0); // X-Y Exchange,Y-Mirror
     break;
   case scr_CCW:
@@ -352,35 +328,30 @@ void lcd_orientacion(ScrOrientation_TypeDef orientation)
     write_data_lcd(0x00); // Normal: Top to Bottom; Left to Right; RGB
     break;
   }
-	//delay_ms(1);
-	//CS_H();
-}
+}*/
 
 
 void lcd_setAddrWindow(uint8_t XS, uint8_t XE, uint8_t YS, uint8_t YE) 
 {
 
-  //CS_L();
   write_cmd_lcd(ST7735_CASET); // Column address set
   write_data_lcd(0x00);
-  write_data_lcd(XS);
+  write_data_lcd(XS/*+colstart*/);
   write_data_lcd(0x00);
-  write_data_lcd(XE);
+  write_data_lcd(XE/*+colstart*/);
 
   write_cmd_lcd(ST7735_RASET); // Row address set
   write_data_lcd(0x00);
-  write_data_lcd(YS);
+  write_data_lcd(YS/*+rowstart*/);
   write_data_lcd(0x00);
-  write_data_lcd(YE);
+  write_data_lcd(YE/*+rowstart*/);
   write_cmd_lcd(ST7735_RAMWR); // Memory write
-	//delay_ms(1);
-	//CS_H();
 }
 
 void lcd_Clear(uint16_t color)
 {
   uint16_t i;
-  lcd_setAddrWindow(0, 0, WIDTH - 1, HEIGHT - 1);
+  lcd_setAddrWindow(0, WIDTH - 1, 0, HEIGHT - 1);
   for (i = 0; i < WIDTH * HEIGHT; i++)
   {
     write_data_lcd(color >> 8);
@@ -392,52 +363,36 @@ void lcd_Clear(uint16_t color)
 void lcd_Pixel(uint16_t X, uint16_t Y, uint16_t color)
 {
   if((X < 0) ||(X >= WIDTH) || (Y < 0) || (Y >= HEIGHT)) return;
-  //CS_L();
-  lcd_setAddrWindow(X,Y,X+1,Y+1);
+  lcd_setAddrWindow(X,X+1,Y, Y+1);
   write_data_lcd(color >> 8);
-  write_data_lcd((uint8_t)color);
-  //write_cmd_lcd(ST7735_RAMWR); // LINEA 438 DE ADAFRUIT
-	//delay_ms(1);
-	//CS_H();
-
+  write_data_lcd(color);
 }
 
-void lcd_HLine(uint16_t X1, uint16_t X2, uint16_t Y, uint16_t color)
+void lcd_HLine(uint8_t x, uint8_t y, uint8_t w, uint16_t color)
 {
   uint16_t i;
   uint8_t CH = color >> 8;
   uint8_t CL = (uint8_t)color;
   
-  lcd_setAddrWindow(X1,Y,X2,Y);
-  //CS_L();
-  for (i = 0; i <= (X2 - X1); i++)
-  {
+  lcd_setAddrWindow(x,x+w-1,y,y);
+   while(w--){
     write_data_lcd(CH);
     write_data_lcd(CL);
-  }
-	//delay_ms(1);
-	//CS_H();
-  //write_cmd_lcd(ST7735_RAMWR);
-
+   }
 }
 
-void lcd_VLine(uint16_t X, uint16_t Y1, uint16_t Y2, uint16_t color)
+void lcd_VLine(uint8_t x, uint8_t y, uint8_t h, uint16_t color)
 {
   uint16_t i;
   uint8_t CH = color >> 8;
   uint8_t CL = (uint8_t)color;
 
 
-  lcd_setAddrWindow(X,Y1,X,Y1+Y2-1);
-  //CS_L();
-  for (i = 0; i <= (Y2 - Y1); i++){
+  lcd_setAddrWindow(x,x,y,y+h-1);
+  while(h--){
     write_data_lcd(CH);
     write_data_lcd(CL);
   }
-  //delay_ms(1);
-  //CS_H();
-  //write_cmd_lcd(ST7735_RAMWR);
-
 }
 
 void lcd_Line(int16_t X1, int16_t Y1, int16_t X2, int16_t Y2, uint16_t color)
@@ -514,25 +469,23 @@ void lcd_Rect(uint16_t X1, uint16_t Y1, uint16_t X2, uint16_t Y2, uint16_t color
 
 }
 
-void lcd_FillRect(uint16_t X1, uint16_t Y1, uint16_t X2, uint16_t Y2, uint16_t color)
+void lcd_FillRect(uint8_t x, uint8_t y, uint8_t w, uint8_t h, uint16_t color)
 {
-  uint16_t i;
-  uint16_t FS = (X2 - X1 + 1) * (Y2 - Y1 + 1);
+  //uint8_t x=0;
+  //uint8_t y=0;
   uint8_t CH = color >> 8;
   uint8_t CL = (uint8_t)color;
+  if((x > WIDTH) || (y > HEIGHT)) return;
+  if((x + w - 1) >= WIDTH)  w = WIDTH  - x;
+  if((y + h - 1) >= HEIGHT) h = HEIGHT - y;
 
-
-  lcd_setAddrWindow(X1,Y1,X2,Y2);
-  //CS_L();
-  for (i = 0; i < FS; i++)
-  {
-    write_data_lcd(CH);
-    write_data_lcd(CL);
+  lcd_setAddrWindow(x,x+w-1, y, y+h-1);
+  for(y=h; y>0; y--) {
+    for(x=w; x>0; x--) {
+        write_data_lcd(CH);
+        write_data_lcd(CL);
+    }
   }
-	//delay_ms(1);
-	//CS_H();
-  //write_cmd_lcd(ST7735_RAMWR);
-
 }
 
 

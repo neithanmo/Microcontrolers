@@ -16,9 +16,6 @@
 #include "color.h"
 
 
-#define scr_w  128
-#define scr_h 160
-
 #define SPI_PORT SPI //using SPI1
 #define LCD_CONTROL_PORT  GPIOD ///puerto de control para reloj y data
 #define LCD_DATA_PORT GPIOA
@@ -43,8 +40,6 @@
 #define INITR_18BLACKTAB    INITR_BLACKTAB
 #define INITR_144GREENTAB   0x1
 
-#define ST7735_TFTWIDTH  128
-#define ST7735_TFTHEIGHT_18  160
 
 /* ST7735 Commands */
 #define ST7735_NOP     0x00
@@ -116,11 +111,6 @@ struct st7735_function {
 	uint16_t data;
 };
 
-
-extern uint16_t scr_width;
-extern uint16_t scr_height;
-
-
 uint16_t RGB565(uint8_t R,uint8_t G,uint8_t B);//
 uint16_t swapcolor(uint16_t x);//
 
@@ -132,11 +122,11 @@ void lcd_setAddrWindow(uint8_t XS, uint8_t YS,uint8_t XE, uint8_t YE);//
 void lcd_orientacion(ScrOrientation_TypeDef orientation);//
 void lcd_Clear(uint16_t color);//
 void lcd_Pixel(uint16_t X, uint16_t Y, uint16_t color);//
-void lcd_HLine(uint16_t X1, uint16_t X2, uint16_t Y, uint16_t color);//
-void lcd_VLine(uint16_t X, uint16_t Y1, uint16_t Y2, uint16_t color);//
+void lcd_HLine(uint8_t x, uint8_t w, uint8_t y, uint16_t color);//
+void lcd_VLine(uint8_t x, uint8_t y, uint8_t h, uint16_t color);//
 void lcd_Line(int16_t X1, int16_t Y1, int16_t X2, int16_t Y2, uint16_t color);//
 void lcd_Rect(uint16_t X1, uint16_t Y1, uint16_t X2, uint16_t Y2, uint16_t color);//
-void lcd_FillRect(uint16_t X1, uint16_t Y1, uint16_t X2, uint16_t Y2, uint16_t color);//
+void lcd_FillRect(uint8_t x, uint8_t y, uint8_t w, uint8_t h, uint16_t color);//
 void lcd_backLight(uint8_t on);
 void delay_ms(const uint32_t delay);
 void write_data_lcd(uint8_t data);//
