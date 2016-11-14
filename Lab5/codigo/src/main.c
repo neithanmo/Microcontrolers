@@ -65,7 +65,7 @@ int main(void)
                  for(dx=128;dx>0;dx--){
 		     lcd_VLine(dx, 0, 160,COLOR565_DARK_OLIVE_GREEN);
 		 }
-                 for(dy=0;dy>160;dy++){
+                 for(dy=0;dy<160;dy++){
   		     lcd_HLine(0, dy,128,COLOR565_CHOCOLATE);
 		 }
                  for(dx=0;dx<128;dx++){
@@ -77,7 +77,7 @@ int main(void)
                  for(dx=128;dx>0;dx--){
 		     lcd_VLine(dx, 0, 160,RGB565(255-dx,127+dx,dx));
 		 }
-                 for(dy=0;dy>160;dy++){
+                 for(dy=0;dy<160;dy++){
   		     lcd_HLine(0, dy,128,RGB565(dy,94+dy,255-dy));
 		 }
 
