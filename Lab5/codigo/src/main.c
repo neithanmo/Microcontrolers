@@ -43,28 +43,11 @@ int main(void)
 	lcd_backLight(1);
 	init_lcd();
 	delay_ms(500);
-	//lcd_FillRect(0,0,128,160, COLOR565_DARK_CYAN);
-	//delay_ms(500);
-	//lcd_VLine(110,0,155,COLOR565_MAROON);
-	//delay_ms(500);
-	//lcd_HLine(0,128,75, COLOR565_FUCHSIA);
-	//lcd_FillRect(0, 0, 120, 100, COLOR565_RED);
 	uint8_t dx,dy;
 	dx = 0;
         dy = 0;
 	while (1) {
-		 //lcd_HLine(0, 50,128,COLOR565_CHOCOLATE);
-                 //lcd_VLine(50, 0, 128, COLOR565_BLACK);
-		 
-                 for(dx=0;dx<128;dx++){
-		     lcd_VLine(dx, 0, 160,COLOR565_DARK_RED);
-		 }
-                 for(dy=160;dy>0;dy--){
-		     lcd_HLine(0, dy,128,COLOR565_DARK_BLUE);
-		 }
-                 for(dx=128;dx>0;dx--){
-		     lcd_VLine(dx, 0, 160,COLOR565_DARK_OLIVE_GREEN);
-		 }
+
                  for(dy=0;dy<160;dy++){
   		     lcd_HLine(0, dy,128,COLOR565_CHOCOLATE);
 		 }
@@ -114,26 +97,20 @@ int main(void)
 		  }
 		  delay_ms(5000);
 		 lcd_FillRect(0, 0, 128, 160, COLOR565_BLACK);
-		 drawTriangle(50, 60, 5, 20,100, 160, COLOR565_GOLD);
-		 delay_ms(5000);
-		 drawTriangle(5, 100, 10, 80,2, 50, COLOR565_GOLDEN_ROD);
-		 delay_ms(5000);
-                 drawTriangle(90, 90, 50, 50,70, 160, COLOR565_GOLD);
-		 delay_ms(5000);
-		 delay_ms(5000);
-		 delay_ms(5000);
-	         drawRect(10,50,128,160, COLOR565_MEDIUM_TURQUOISE);
+	         drawRect(20,40,75,95, COLOR565_MEDIUM_TURQUOISE);
 		 delay_ms(20000);
-		 //dy>160 ? dy=0 : dy++;
-		 //dx>128 ? dx=0 : dx++;
-		 //lcd_FillRect(25, 25, 100, 100, COLOR565_BLACK);
-		 /*if(gpio_get(GPIOA, GPIO0)){
-		 	//lcd_FillRect(25, 0, 50, 50, COLOR565_YELLOW);
-			lcd_HLine(0,dx,100,COLOR565_CHOCOLATE);
-			delay_ms(500);
-		 }*/
-		 //delay_ms(500);
-		  
+		 fillRect(20,40,75,95, COLOR565_TEAL);
+		 delay_ms(9000);
+		 lcd_Clear(COLOR565_DEEP_PINK);
+		 delay_ms(5000);
+		 fillTriangle(45, 40, 105, 40, 75, 150, COLOR565_DARK_OLIVE_GREEN);
+		 delay_ms(10000);
+		 fillRect(0, 0, 128, 160,COLOR565_TEAL);
+		 drawRoundRect(10, 20, 110,110, 50, COLOR565_MEDIUM_TURQUOISE);
+		 delay_ms(10000);
+		 fillRoundRect(10, 20, 110,110, 50, COLOR565_SANDY_BROWN);
+		 delay_ms(50000);
+
 		}
 	return 0;
 }
