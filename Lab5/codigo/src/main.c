@@ -1,3 +1,5 @@
+#include <libopencm3/usb/usbd.h>
+#include <libopencm3/usb/cdc.h>
 #include "usb.h"
 #include "pid.h"
 #include "st7735.h"
@@ -7,7 +9,7 @@
 #define PWM_PERIOD 2999
 #define LED_DISCO_GREEN_PORT GPIOD
 #define LED_DISCO_GREEN_PIN GPIO12
-//usbd_ep_write_packet(usbd_dev, 0x82, buf, len)
+usbd_ep_write_packet(usbd_dev, 0x82, buf, len)
 
 static void clock_setup(void)///
 {
@@ -33,6 +35,68 @@ static void gpio_setup(void)
 	*/
 }
 
+static void usb_setup(void){
+
+        rcc_periph_clock_enable(RCC_OTGFS);
+	gpio_mode_setup(GPIOA, GPIO_MODE_AF, GPIO_PUPD_NONE,
+		GPIO9 | GPIO11 | GPIO12);
+	gpio_set_af(GPIOA, GPIO_AF10, GPIO9 | GPIO11 | GPIO12);
+}
+
+static int cdcacm_control_request(usbd_device *usbd,
+	struct usb_setup_data *req, uint8_t **buf, uint16_t *len,
+        void (**complete)(usbd_device *usbd_dev1, struct usb_setup_data *req))
+{
+	(void)complete;
+	(void)buf;
+        (void)usbd;
+	switch (req->bRequest) {
+	case USB_CDC_REQ_SET_CONTROL_LINE_STATE: {
+		gpio_toggle(LED_DISCO_GREEN_PORT, GPIO15);
+                timer_enable_irq(TIM2, TIM_DIER_CC1IE);
+		return 1;
+		}
+	case USB_CDC_REQ_SET_LINE_CODING:
+		if (*len < sizeof(struct usb_cdc_line_coding)) {
+			return 0;
+		}
+
+		return 1;
+	}
+	return 0;
+}
+
+static void cdcacm_data_rx_cb(usbd_device *usbd_read, uint8_t ep)///leer el setpoint enviado por el usuario
+{
+	(void)ep;
+
+	char buf[1];
+	int len = usbd_ep_read_packet(usbd_read, 0x01, buf, sizeof(char));
+        set_point = buf[0];
+
+	if (len) {
+		//while (usbd_ep_write_packet(usbd_dev, 0x82, buf, len) == 0);
+                buff[1] = set_point;
+                gpio_toggle(LED_DISCO_GREEN_PORT, GPIO14);
+	}
+}
+
+
+
+static void cdcacm_set_config(usbd_device *usbd, uint16_t wValue)
+{
+	(void)wValue;
+	usbd_ep_setup(usbd_dev, 0x01, USB_ENDPOINT_ATTR_BULK, 64, cdcacm_data_rx_cb);///lectura
+        usbd_ep_setup(usbd, 0x82, USB_ENDPOINT_ATTR_BULK, 64, NULL);
+        usbd_ep_setup(usbd, 0x83, USB_ENDPOINT_ATTR_INTERRUPT, 16, NULL);
+
+	usbd_register_control_callback(
+                                usbd,
+				USB_REQ_TYPE_CLASS | USB_REQ_TYPE_INTERFACE,
+				USB_REQ_TYPE_TYPE | USB_REQ_TYPE_RECIPIENT,
+				cdcacm_control_request);
+}
+
 
 
 int main(void)
@@ -41,8 +105,14 @@ int main(void)
 	gpio_setup();
 	spi_setup(SPI1);
 	lcd_backLight(1);
+        usb_setup();
 	init_lcd();
 	delay_ms(500);
+	usbd_dev = usbd_init(&otgfs_usb_driver, &dev, &config,
+			usb_strings, 3,
+			usbd_control_buffer, sizeof(usbd_control_buffer));
+
+	usbd_register_set_config_callback(usbd_dev, cdcacm_set_config);
 	uint8_t dx,dy;
 	dx = 0;
         dy = 0;
