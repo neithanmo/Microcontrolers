@@ -97,19 +97,25 @@ int main(void)
 		  }
 		  delay_ms(5000);
 		 lcd_FillRect(0, 0, 128, 160, COLOR565_BLACK);
-	         drawRect(20,40,75,95, COLOR565_MEDIUM_TURQUOISE);
-		 delay_ms(20000);
-		 fillRect(20,40,75,95, COLOR565_TEAL);
-		 delay_ms(9000);
 		 lcd_Clear(COLOR565_DEEP_PINK);
 		 delay_ms(5000);
 		 fillTriangle(45, 40, 105, 40, 75, 150, COLOR565_DARK_OLIVE_GREEN);
 		 delay_ms(10000);
-		 fillRect(0, 0, 128, 160,COLOR565_TEAL);
+		 lcd_Clear(COLOR565_TEAL);
 		 drawRoundRect(10, 20, 110,110, 50, COLOR565_MEDIUM_TURQUOISE);
 		 delay_ms(10000);
 		 fillRoundRect(10, 20, 110,110, 50, COLOR565_SANDY_BROWN);
 		 delay_ms(50000);
+		 st_PutStr5x7(1, 5, 10, "NATANAEL", COLOR565_RED, COLOR565_LIME);
+		 st_PutStr5x7(1, 5, 20, "MOJICA", COLOR565_RED, COLOR565_LIME);
+		 st_PutStr5x7(1, 5, 30, "JIMENEZ", COLOR565_RED, COLOR565_LIME);
+		 st_PutStr5x7(1, 60, 40, "LAB", COLOR565_RED, COLOR565_LIME);
+		 st_PutStr5x7(1, 20, 50, "MICROCONTROLADORES", COLOR565_RED, COLOR565_LIME);
+		 st_PutStr5x7(1, 5, 60, "<------------------>", COLOR565_RED, COLOR565_LIME);
+	         st_PutStr5x7(1, 2, 75, "hOlÑñ:...://**ASIasi", COLOR565_RED, COLOR565_LIME);
+	         st_PutStr5x7(1, 2, 85, "123456789~~~~~", COLOR565_RED, COLOR565_LIME);
+		 st_PutStr5x7(1, 2, 95, "~~~~~~~~~~~~", COLOR565_RED, COLOR565_LIME);	 
+		 delay_ms(800000);
 
 		}
 	return 0;
