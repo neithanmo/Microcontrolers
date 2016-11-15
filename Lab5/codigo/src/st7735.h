@@ -2,6 +2,7 @@
 #define ST7335_H
 #include <stdlib.h>
 #include <assert.h>
+#include <string.h>
 #include <libopencm3/stm32/rcc.h>
 #include <libopencm3/stm32/gpio.h>
 #include <libopencm3/stm32/timer.h>
@@ -14,6 +15,8 @@
 #include <libopencm3/cm3/scb.h>
 #include <libopencm3/stm32/spi.h>
 #include "color.h"
+#include "font5x7.h"
+
 
 
 #define SPI_PORT SPI //using SPI1
@@ -120,6 +123,8 @@ uint16_t swapcolor(uint16_t x);//
 
 void delay_ms(const uint32_t delay);//
 void delay_us(const uint32_t delay);//
+void write_data_lcd(uint8_t data);//
+void write_cmd_lcd(uint8_t cmd);//
 void init_lcd(void);//
 void spi_setup(uint32_t SPI);//
 void lcd_setAddrWindow(uint8_t XS, uint8_t YS,uint8_t XE, uint8_t YE);//
@@ -133,8 +138,6 @@ void lcd_Rect(uint16_t X1, uint16_t Y1, uint16_t X2, uint16_t Y2, uint16_t color
 void lcd_FillRect(uint8_t x, uint8_t y, uint8_t w, uint8_t h, uint16_t color);//
 void lcd_backLight(uint8_t on);
 void delay_ms(const uint32_t delay);
-void write_data_lcd(uint8_t data);//
-void write_cmd_lcd(uint8_t cmd);//
 void lcd_PutChar7x11(uint16_t X, uint16_t Y, uint8_t chr, uint16_t color, uint16_t bgcolor);
 void lcd_PutStr7x11(uint8_t X, uint8_t Y, char *str, uint16_t color, uint16_t bgcolor);
 void drawCircle(uint8_t x0, uint8_t y0, uint8_t r,uint16_t color);
@@ -159,4 +162,8 @@ void drawRoundRect(uint8_t x, uint8_t y, uint8_t w,
 void fillRoundRect(uint8_t x, uint8_t y, uint8_t w,
  uint8_t h, uint8_t r, uint16_t color);
 
+void st_PutChar5x7(uint8_t scale, uint8_t X, uint8_t Y, uint8_t chr, uint16_t color, uint16_t bgcolor);
+void st_PutStr5x7(uint8_t scale, uint8_t X, uint8_t Y, char *str, uint16_t color, uint16_t bgcolor);
+void drawChar(uint8_t x, uint8_t y, unsigned char c,
+ uint16_t color, uint16_t bg, uint8_t size);
 #endif

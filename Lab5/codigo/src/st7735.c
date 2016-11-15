@@ -101,7 +101,8 @@ static struct st7735_function initializer[] = {
 
 uint8_t colstart;
 uint8_t rowstart;
-
+uint8_t scr_width;
+uint8_t scr_height;
 void delay_ms(const uint32_t delay)
 {
     uint32_t i, j;
@@ -266,6 +267,8 @@ void init_lcd(void)
         //cs 1=disable LCD, 0=enable LCD
         colstart = 2;
         rowstart = 3;
+	scr_height = HEIGHT;
+	scr_width = WIDTH;
 	st7735_reset();
 	uint8_t i = 0;
 	uint8_t end_script = 0;
@@ -787,3 +790,132 @@ uint16_t swapcolor(uint16_t x)
 { 
   return (x << 11) | (x & 0x07E0) | (x >> 11);
 }
+
+void st_PutChar5x7(uint8_t scale, uint8_t X, uint8_t Y, uint8_t chr, uint16_t color, uint16_t bgcolor)
+{
+  uint16_t i,j;
+  uint8_t buffer[5];
+  uint8_t CH = color >> 8;
+  uint8_t CL = (uint8_t)color;
+  uint8_t BCH = bgcolor >> 8;
+  uint8_t BCL = (uint8_t)bgcolor;
+
+  if ((chr >= 0x20) && (chr <= 0x7F))
+  {
+    // ASCII[0x20-0x7F]
+    memcpy(buffer,&Font5x7[(chr - 32) * 5], 5);
+  }
+  else if (chr >= 0xA0)
+  {
+    // CP1251[0xA0-0xFF]
+    memcpy(buffer,&Font5x7[(chr - 64) * 5], 5);
+  }
+  else
+  {
+    // unsupported symbol
+    memcpy(buffer,&Font5x7[160], 5);
+  }
+
+
+  // scale equals 1 drawing faster
+  if (scale == 1)
+  {
+    lcd_setAddrWindow(X, Y, X + 5, Y + 7);
+    for (j = 0; j < 7; j++)
+    {
+      for (i = 0; i < 5; i++)
+      {
+        if ((buffer[i] >> j) & 0x01)
+        {
+          write_data_lcd(CH);
+          write_data_lcd(CL);
+        }
+        else
+        {
+          write_data_lcd(BCH);
+          write_data_lcd(BCL);
+        }
+      }
+      // vertical spacing
+      write_data_lcd(BCH);
+      write_data_lcd(BCL);
+    }
+
+    // horizontal spacing
+    for (i = 0; i < 6; i++)
+    {
+      write_data_lcd(BCH);
+      write_data_lcd(BCL);
+    }
+  }
+  else
+  {
+    for (j = 0; j < 7; j++)
+    {
+      for (i = 0; i < 5; i++)
+      {
+        // pixel group
+        lcd_FillRect(X + (i * scale), Y + (j * scale), X + (i * scale) + scale - 1, Y + (j * scale) + scale - 1, ((buffer[i] >> j) & 0x01) ? color : bgcolor);
+      }
+      // vertical spacing
+//      ST7735_FillRect(X + (i * scale), Y + (j * scale), X + (i * scale) + scale - 1, Y + (j * scale) + scale - 1, V_SEP);
+      lcd_FillRect(X + (i * scale), Y + (j * scale), X + (i * scale) + scale - 1, Y + (j * scale) + scale - 1, bgcolor);
+    }
+    // horizontal spacing
+//    ST7735_FillRect(X, Y + (j * scale), X + (i * scale) + scale - 1, Y + (j * scale) + scale - 1, H_SEP);
+    lcd_FillRect(X, Y + (j * scale), X + (i * scale) + scale - 1, Y + (j * scale) + scale - 1, bgcolor);
+  }
+}
+
+void drawChar(uint8_t x, uint8_t y, unsigned char c,
+ uint16_t color, uint16_t bg, uint8_t size) {
+
+  if(1) { // 'Classic' built-in font
+
+    if((x >= scr_width)            || // Clip right
+       (y >= scr_height)           || // Clip bottom
+       ((x + 6 * size - 1) < 0) || // Clip left
+       ((y + 8 * size - 1) < 0))   // Clip top
+      return;
+
+    //if((c >= 176)) c++; // Handle 'classic' charset behavior
+    int8_t i,j;
+    for(i=0; i<6; i++ ) {
+      uint8_t line;
+      if(i < 5) line = ((c >= 0x20) && (c <= 0x7F)) ? Font5x7[(c-32)*5+i] : Font5x7[(c-64)*5+i];
+      else      line = 0x0;
+      for(j=0; j<8; j++, line >>= 1) {
+        if(line & 0x1) {
+          if(size == 1) lcd_Pixel(x+i, y+j, color);
+          else          lcd_FillRect(x+(i*size), y+(j*size), size, size, color);
+        } else if(bg != color) {
+          if(size == 1) lcd_Pixel(x+i, y+j, bg);
+          else          lcd_FillRect(x+i*size, y+j*size, size, size, bg);
+        }
+      }
+    }
+
+  }
+}
+
+void st_PutStr5x7(uint8_t scale, uint8_t X, uint8_t Y, char *str, uint16_t color, uint16_t bgcolor)
+{
+  // scale equals 1 drawing faster
+  if (scale == 1)
+  {
+    while (*str)
+    {
+      drawChar(X,Y,*str++,color,bgcolor,scale);
+      if (X < scr_width - 6) { X += 6; } else if (Y < scr_height - 8) { X = 0; Y += 8; } else { X = 0; Y = 0; }
+    };
+  }
+  else
+  {
+    while (*str)
+    {
+      drawChar(X,Y,*str++,color,bgcolor,scale);
+      if (X < scr_width - (scale*5) + scale) { X += (scale * 5) + scale; } else if (Y < scr_height - (scale * 7) + scale) { X = 0; Y += (scale * 7) + scale; } else { X = 0; Y = 0; }
+    };
+  }
+}
+
