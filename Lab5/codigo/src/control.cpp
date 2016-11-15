@@ -8,11 +8,12 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <cmath>
+#include "linux.bitmap"
 
 using namespace std;
 
 int serial_fd;
-
+bool new_image;
 int serial_open(char *serial_name, speed_t baud)
 {
       struct termios newtermios;
@@ -33,7 +34,7 @@ int serial_open(char *serial_name, speed_t baud)
 }    
 
 
-void nuevo_set_point( void ) 
+void nueva_imagen( void ) 
 {
   char ch = '\0';
   int set_point;
@@ -44,13 +45,27 @@ void nuevo_set_point( void )
   while(ch != 'c')
   {
 	if(ch == 'n'){
-           printf("ingrese el valor deseado de temperatura en C°\n");
-           scanf("%d",&set_point);
-           printf("valor deseado es %dC° \n", set_point);
+           printf("Desea enviar un nuevo mapa de bits a la tarjeta?(esto sobreescribira la imagen actual)\n");
+	   new_image = true; 
+	   if(sizeof(linux_bits)){
+		printf("Imagen en buffer, presione s para iniciar la transferencia \n");
+	   }
+	    else{
+		printf("Imagen nula, puede no existir o esta en un formato de bits desconocido\n");
+		new_image = false;
+	 }
         }
 	else if(ch == 's'){
-           printf("enviando nuevo valor deseado de %d C° al controlador ttyACM0\n", set_point);
-           write(serial_fd, &set_point, 1);
+           printf("Inicio de la transferencia de datos\n", set_point);
+	   int i;
+           if(new_image){
+           	char inicio = 'i';
+	   	write(serial_fd, &inicio, 1);//indicamos a la tarjeta que los siguientes bits los guarde en el buffer de imagen
+	   	for(i=0;i<(128*160);i++){
+           		write(serial_fd, &linux_bits[i], 1);
+	   	}
+	   	printf("se han enviado %u bytes \n", sizeof(linux_bits));
+	   }
         }
         else if(ch == 'c'){
            printf("Hasta luego \n");
@@ -62,6 +77,7 @@ void nuevo_set_point( void )
 
 int main(int argc, char *argv[])
 {
+   new_image = false;
     
    int n, longitud;
    char *device="/dev/ttyACM0";
@@ -71,7 +87,7 @@ int main(int argc, char *argv[])
             perror("OPEN");
             return -1;
     }
-    nuevo_set_point();
+    nueva_imagen();
     printf("Bye.\n");
     close(serial_fd);
     return 0;
