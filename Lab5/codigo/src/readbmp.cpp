@@ -6,6 +6,34 @@
 #include <iterator>
 #include<cstdio>
 
+/*unsigned int RGB565(unsigned char R,unsigned char G, unsigned char B)///color
+{                                              
+  int prueba = ((R << 11) | (G << 5) | B);
+  //printf("%u,\n",prueba);
+  return ((R >> 3) << 11) | ((G >> 2) << 5) | (B >> 3);
+  
+}*/
+
+/*unsigned short int RGB565(unsigned char R,unsigned char G, unsigned char B)
+{
+    unsigned short int r = (R & 0xF8) << 11;
+    unsigned short int g = (G & 0xFC) << 5;
+    unsigned short int b = (B & 0xF8);
+    
+
+    int prueba = (unsigned short int) (r | g | b);
+    //printf("%u,\n",prueba);	
+    return (unsigned short int) (r | g | b);
+}*/
+
+unsigned short int RGB565(unsigned char R,unsigned char G, unsigned char B)///color
+{                                              
+  int prueba = ((R << 11) | (G << 5) | B);
+  //printf("%u,\n",prueba);
+  return (unsigned short int)((R << 11) | (G << 5) | B);
+  
+}
+
 std::vector<char> readBMP(const std::string &file)
 {
     static constexpr size_t HEADER_SIZE = 54;
@@ -37,24 +65,32 @@ std::vector<char> readBMP(const std::string &file)
 
     char temp = 0;
     int i;
-    printf("static uint8_t imagen_tabla[]={\n");
-    for(i = 0; i < img.size(); i++)
+    printf("static uint16_t imagen_tabla[]={\n");
+   /* for(i = 0; i < img.size(); i++)
     {
 	printf("%u, \n", (unsigned char)img.at(i));
-    }
-    printf("};");
-/*
-    for (auto i = dataSize - 4; i >= 0; i -= 3)
+    }*/
+    //printf("};");
+    //printf("%u\n", dataSize);
+    for (auto i = dataSize; i > 0; i -= 3)
     {
         temp = img[i];
         img[i] = img[i+2];
         img[i+2] = temp;
-
-        std::cout << "R: " << int(img[i] & 0xff) << " G: " << int(img[i+1] & 0xff) << " B: " << int(img[i+2] & 0xff) << std::endl;
-    }*/
+	//RGB565(255,0,0);
+        /*std::cout <<int(img[i] & 0xff) << ",\n";
+        std::cout << int(img[i+1] & 0xff) << ",\n";
+        std::cout << int(img[i+2] & 0xff) << ",\n";*/
+        printf("%u,\n",RGB565(img[i] & 0xff,img[i+1] & 0xff, img[i+2] & 0xff));
+        //printf("%u\t", i);
+        
+    }
+    printf("};");
 
     return img;
 }
+
+
 
 int main(void)
 {

@@ -122,7 +122,7 @@ int main(void)
         dy = 0;
 	while (1) {
 
-                 for(dy=0;dy<160;dy++){
+                 /*for(dy=0;dy<160;dy++){
   		     lcd_HLine(0, dy,128,COLOR565_CHOCOLATE);
 		 }
 		 for(dy=0;dy<80;dy++){
@@ -192,20 +192,20 @@ int main(void)
 		 delay_ms(10000);
 		 lcd_Clear(COLOR565_BLACK);  
 		 drawBitmap(0, 0,linux_bits, 128, 160, COLOR565_GRAY, COLOR565_BLACK);
-		 delay_ms(100000);
+		 delay_ms(100000);*/
 		 lcd_Clear(COLOR565_WHITE);
 		 lcd_setAddrWindow(0,128,0,159);
 	         uint16_t i,j;
-		 /*for(j=20480;j > 0;j-=3){
-			push_color(RGB565(imagen_tabla[j+2]& 0xff,imagen_tabla[j]& 0xff,imagen_tabla[j+1]& 0xff));
+		 for(j=0;j<20480;j++){
+			push_color(imagen_tabla[j]);
+		 }
+		 delay_ms(1000000);
+		 for(j=204804;j >0;j--){
+		 	push_color(imagen_tabla[j]);
+			//push_color(RGB565(imagen_tabla[j+2]& 0xff,imagen_tabla[j]& 0xff,imagen_tabla[j+1]& 0xff));
 			//push_color(RGB565(imagen_tabla[j]& 0xff,imagen_tabla[j+1]& 0xff,imagen_tabla[j+2]& 0xff));
 		 }
-		 delay_ms(800000);*/
-		 for(j=20480-4;j >= 0;j-=3){
-			push_color(RGB565(imagen_tabla[j+2]& 0xff,imagen_tabla[j]& 0xff,imagen_tabla[j+1]& 0xff));
-			//push_color(RGB565(imagen_tabla[j]& 0xff,imagen_tabla[j+1]& 0xff,imagen_tabla[j+2]& 0xff));
-		 }
-		 delay_ms(500000);
+		 //delay_ms(500000);
 		}
 	return 0;
 }
