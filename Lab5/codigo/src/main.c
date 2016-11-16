@@ -9,7 +9,11 @@
 #define PWM_PERIOD 2999
 #define LED_DISCO_GREEN_PORT GPIOD
 #define LED_DISCO_GREEN_PIN GPIO12
-usbd_ep_write_packet(usbd_dev, 0x82, buf, len)
+//usbd_ep_write_packet(usbd_dev, 0x82, buf, len)
+uint16_t image_buffer[128*160];
+bool new_image;
+usbd_device *usbd_dev;
+
 
 static void clock_setup(void)///
 {
@@ -69,16 +73,15 @@ static int cdcacm_control_request(usbd_device *usbd,
 static void cdcacm_data_rx_cb(usbd_device *usbd_read, uint8_t ep)///leer el setpoint enviado por el usuario
 {
 	(void)ep;
-
 	char buf[1];
 	int len = usbd_ep_read_packet(usbd_read, 0x01, buf, sizeof(char));
-        set_point = buf[0];
-
-	if (len) {
+	//(buf[0]='i') ? (new_image=true) : (new_image=false);
+	/*if (len) {
+		if(buf[0] != )
 		//while (usbd_ep_write_packet(usbd_dev, 0x82, buf, len) == 0);
-                buff[1] = set_point;
+                image_buffer[i++] = buf[0];;
                 gpio_toggle(LED_DISCO_GREEN_PORT, GPIO14);
-	}
+	}*/
 }
 
 
@@ -108,6 +111,7 @@ int main(void)
         usb_setup();
 	init_lcd();
 	delay_ms(500);
+	new_image=false;
 	usbd_dev = usbd_init(&otgfs_usb_driver, &dev, &config,
 			usb_strings, 3,
 			usbd_control_buffer, sizeof(usbd_control_buffer));
@@ -182,11 +186,22 @@ int main(void)
 		 st_PutStr5x7(1, 60, 40, "LAB", COLOR565_RED, COLOR565_LIME);
 		 st_PutStr5x7(1, 20, 50, "MICROCONTROLADORES", COLOR565_RED, COLOR565_LIME);
 		 st_PutStr5x7(1, 5, 60, "<------------------>", COLOR565_RED, COLOR565_LIME);
-	         st_PutStr5x7(1, 2, 75, "hOlÑñ:...://**ASIasi", COLOR565_RED, COLOR565_LIME);
-	         st_PutStr5x7(1, 2, 85, "123456789~~~~~", COLOR565_RED, COLOR565_LIME);
+	         st_PutStr5x7(1, 2, 75, "##$$?¡[]{}°!ñññÑÑ", COLOR565_RED, COLOR565_LIME);
+	         st_PutStr5x7(1, 2, 85, "123456789", COLOR565_RED, COLOR565_LIME);
 		 st_PutStr5x7(1, 2, 95, "~~~~~~~~~~~~", COLOR565_RED, COLOR565_LIME);	 
-		 delay_ms(800000);
-
+		 delay_ms(10000);
+		 lcd_Clear(COLOR565_BLACK);  
+		 drawBitmap(0, 0,linux_bits, 128, 160, COLOR565_GRAY, COLOR565_BLACK);
+		 delay_ms(100000);
+		 lcd_Clear(COLOR565_WHITE);
+		 lcd_setAddrWindow(0,128,0,159);
+	         uint16_t i,j;
+		 for(j=0;j<160;j++){
+			for(i=0;i<128;i++){
+			  push_color(RGB565(imagen_tabla[j*160+i],imagen_tabla[j+128+1+i],imagen_tabla[j*128+i+2]));
+			}
+		 }
+		 delay_ms(500000);
 		}
 	return 0;
 }

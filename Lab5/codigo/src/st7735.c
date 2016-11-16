@@ -103,6 +103,7 @@ uint8_t colstart;
 uint8_t rowstart;
 uint8_t scr_width;
 uint8_t scr_height;
+//bufer para imagenes BMP
 void delay_ms(const uint32_t delay)
 {
     uint32_t i, j;
@@ -383,6 +384,14 @@ void lcd_HLine(uint8_t x, uint8_t y, uint8_t w, uint16_t color)
     write_data_lcd(CL);
    }
 }
+void push_color(uint16_t color)
+{
+  uint8_t CH = color >> 8;
+  uint8_t CL = (uint8_t)color;
+    write_data_lcd(CH);
+    write_data_lcd(CL);
+}
+	
 
 void lcd_VLine(uint8_t x, uint8_t y, uint8_t h, uint16_t color)
 {
@@ -791,82 +800,6 @@ uint16_t swapcolor(uint16_t x)
   return (x << 11) | (x & 0x07E0) | (x >> 11);
 }
 
-void st_PutChar5x7(uint8_t scale, uint8_t X, uint8_t Y, uint8_t chr, uint16_t color, uint16_t bgcolor)
-{
-  uint16_t i,j;
-  uint8_t buffer[5];
-  uint8_t CH = color >> 8;
-  uint8_t CL = (uint8_t)color;
-  uint8_t BCH = bgcolor >> 8;
-  uint8_t BCL = (uint8_t)bgcolor;
-
-  if ((chr >= 0x20) && (chr <= 0x7F))
-  {
-    // ASCII[0x20-0x7F]
-    memcpy(buffer,&Font5x7[(chr - 32) * 5], 5);
-  }
-  else if (chr >= 0xA0)
-  {
-    // CP1251[0xA0-0xFF]
-    memcpy(buffer,&Font5x7[(chr - 64) * 5], 5);
-  }
-  else
-  {
-    // unsupported symbol
-    memcpy(buffer,&Font5x7[160], 5);
-  }
-
-
-  // scale equals 1 drawing faster
-  if (scale == 1)
-  {
-    lcd_setAddrWindow(X, Y, X + 5, Y + 7);
-    for (j = 0; j < 7; j++)
-    {
-      for (i = 0; i < 5; i++)
-      {
-        if ((buffer[i] >> j) & 0x01)
-        {
-          write_data_lcd(CH);
-          write_data_lcd(CL);
-        }
-        else
-        {
-          write_data_lcd(BCH);
-          write_data_lcd(BCL);
-        }
-      }
-      // vertical spacing
-      write_data_lcd(BCH);
-      write_data_lcd(BCL);
-    }
-
-    // horizontal spacing
-    for (i = 0; i < 6; i++)
-    {
-      write_data_lcd(BCH);
-      write_data_lcd(BCL);
-    }
-  }
-  else
-  {
-    for (j = 0; j < 7; j++)
-    {
-      for (i = 0; i < 5; i++)
-      {
-        // pixel group
-        lcd_FillRect(X + (i * scale), Y + (j * scale), X + (i * scale) + scale - 1, Y + (j * scale) + scale - 1, ((buffer[i] >> j) & 0x01) ? color : bgcolor);
-      }
-      // vertical spacing
-//      ST7735_FillRect(X + (i * scale), Y + (j * scale), X + (i * scale) + scale - 1, Y + (j * scale) + scale - 1, V_SEP);
-      lcd_FillRect(X + (i * scale), Y + (j * scale), X + (i * scale) + scale - 1, Y + (j * scale) + scale - 1, bgcolor);
-    }
-    // horizontal spacing
-//    ST7735_FillRect(X, Y + (j * scale), X + (i * scale) + scale - 1, Y + (j * scale) + scale - 1, H_SEP);
-    lcd_FillRect(X, Y + (j * scale), X + (i * scale) + scale - 1, Y + (j * scale) + scale - 1, bgcolor);
-  }
-}
-
 void drawChar(uint8_t x, uint8_t y, unsigned char c,
  uint16_t color, uint16_t bg, uint8_t size) {
 
@@ -916,6 +849,22 @@ void st_PutStr5x7(uint8_t scale, uint8_t X, uint8_t Y, char *str, uint16_t color
       drawChar(X,Y,*str++,color,bgcolor,scale);
       if (X < scr_width - (scale*5) + scale) { X += (scale * 5) + scale; } else if (Y < scr_height - (scale * 7) + scale) { X = 0; Y += (scale * 7) + scale; } else { X = 0; Y = 0; }
     };
+  }
+}
+
+void drawBitmap(uint8_t x, uint8_t y,
+ uint8_t *bitmap, uint8_t w, uint8_t h, uint16_t color, uint16_t bg)
+{
+
+  int16_t i, j, byteWidth = (w + 7) / 8;
+  uint8_t byte;
+
+  for(j=0; j<h; j++) {
+    for(i=0; i<w; i++ ) {
+      if(i & 7) byte >>= 1;
+      else      byte   = bitmap[j * byteWidth + i / 8];
+      if(byte & 0x01) lcd_Pixel(x+i, y+j, color);
+    }
   }
 }
 
