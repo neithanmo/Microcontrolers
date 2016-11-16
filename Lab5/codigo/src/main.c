@@ -196,10 +196,14 @@ int main(void)
 		 lcd_Clear(COLOR565_WHITE);
 		 lcd_setAddrWindow(0,128,0,159);
 	         uint16_t i,j;
-		 for(j=0;j<160;j++){
-			for(i=0;i<128;i++){
-			  push_color(RGB565(imagen_tabla[j*160+i],imagen_tabla[j+128+1+i],imagen_tabla[j*128+i+2]));
-			}
+		 /*for(j=20480;j > 0;j-=3){
+			push_color(RGB565(imagen_tabla[j+2]& 0xff,imagen_tabla[j]& 0xff,imagen_tabla[j+1]& 0xff));
+			//push_color(RGB565(imagen_tabla[j]& 0xff,imagen_tabla[j+1]& 0xff,imagen_tabla[j+2]& 0xff));
+		 }
+		 delay_ms(800000);*/
+		 for(j=20480-4;j >= 0;j-=3){
+			push_color(RGB565(imagen_tabla[j+2]& 0xff,imagen_tabla[j]& 0xff,imagen_tabla[j+1]& 0xff));
+			//push_color(RGB565(imagen_tabla[j]& 0xff,imagen_tabla[j+1]& 0xff,imagen_tabla[j+2]& 0xff));
 		 }
 		 delay_ms(500000);
 		}

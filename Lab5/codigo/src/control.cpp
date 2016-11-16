@@ -55,7 +55,7 @@ void nueva_imagen( void )
 		new_image = false;
 	 }
         }
-	else if(ch == 's'){
+	else if(ch == 's'){//send data
            printf("Inicio de la transferencia de datos\n", set_point);
 	   int i;
            if(new_image){
@@ -64,8 +64,12 @@ void nueva_imagen( void )
 	   	for(i=0;i<(128*160);i++){
            		write(serial_fd, &linux_bits[i], 1);
 	   	}
+		new_image = false;
+		inicio = 'f';
+		write(serial_fd, &inicio, 1);//indica a la tarjeta que se han enviado todos los bits de la imagen
 	   	printf("se han enviado %u bytes \n", sizeof(linux_bits));
 	   }
+	   
         }
         else if(ch == 'c'){
            printf("Hasta luego \n");
