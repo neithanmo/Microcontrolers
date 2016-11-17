@@ -1,7 +1,6 @@
 #include <libopencm3/usb/usbd.h>
 #include <libopencm3/usb/cdc.h>
 #include "usb.h"
-#include "pid.h"
 #include "st7735.h"
 
 
@@ -120,6 +119,7 @@ int main(void)
 	uint8_t dx,dy;
 	dx = 0;
         dy = 0;
+        lcd_setAddrWindow(0,128,0,159);
 	while (1) {
 
                  /*for(dy=0;dy<160;dy++){
@@ -193,18 +193,46 @@ int main(void)
 		 lcd_Clear(COLOR565_BLACK);  
 		 drawBitmap(0, 0,linux_bits, 128, 160, COLOR565_GRAY, COLOR565_BLACK);
 		 delay_ms(100000);*/
-		 lcd_Clear(COLOR565_WHITE);
-		 lcd_setAddrWindow(0,128,0,159);
+		 lcd_Clear(COLOR565_BLACK);
 	         uint16_t i,j;
-		 for(j=0;j<20480;j++){
-			push_color(imagen_tabla[j]);
+
+		 for(j=0;j<61440;j+=3){
+			push_color(RGB565(imagen_tabla[j],imagen_tabla[j+1],imagen_tabla[j+2]));
 		 }
-		 delay_ms(1000000);
-		 for(j=204804;j >0;j--){
+		 delay_ms(100000);
+
+		 for(j=0;j<61440;j+=3){
+			push_color(RGB565(imagen2_tabla[j],imagen2_tabla[j+1],imagen2_tabla[j+2]));
+		 }
+		 delay_ms(100000);
+		  dy=0;
+                  while((80-dy)){
+			lcd_Pixel(64, 79+dy, COLOR565_GOLD);
+			dy++;
+		  }
+		  dx=0;
+                  while((64-dx)){
+			lcd_Pixel(63+dx, 80, COLOR565_GOLD);
+			dx++;
+		  }
+		  dy=0;
+                  while((80-dy)){
+			lcd_Pixel(64, 80-dy, COLOR565_GOLD);
+			dy++;
+		  }
+		  dx=0;
+                  while((64-dx)){
+			lcd_Pixel(64-dx, 80, COLOR565_GOLD);
+			dx++;
+		  }
+		  dx=0;
+		  drawRoundRect(10, 20, 110,110, 50, COLOR565_MEDIUM_TURQUOISE);
+		 delay_ms(8000);
+		 /*for(j=204804;j >0;j--){
 		 	push_color(imagen_tabla[j]);
 			//push_color(RGB565(imagen_tabla[j+2]& 0xff,imagen_tabla[j]& 0xff,imagen_tabla[j+1]& 0xff));
 			//push_color(RGB565(imagen_tabla[j]& 0xff,imagen_tabla[j+1]& 0xff,imagen_tabla[j+2]& 0xff));
-		 }
+		 }*/
 		 //delay_ms(500000);
 		}
 	return 0;

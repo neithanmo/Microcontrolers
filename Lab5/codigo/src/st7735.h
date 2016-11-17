@@ -17,6 +17,7 @@
 #include "color.h"
 #include "font5x7.h"
 #include "tabla.h"
+#include "tabla2.h"
 
 
 
