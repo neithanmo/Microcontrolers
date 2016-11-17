@@ -30,6 +30,7 @@ static void gpio_setup(void)
         gpio_mode_setup(LED_DISCO_GREEN_PORT, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE,
 		LED_DISCO_GREEN_PIN | GPIO15 | GPIO12 | GPIO13 | GPIO14 | GPIO3 | GPIO4 | GPIO5 | GPIO1);
 	gpio_set(LED_DISCO_GREEN_PORT, GPIO12);
+	gpio_mode_setup(GPIOA, GPIO_MODE_INPUT, GPIO_PUPD_NONE, GPIO0); //para usar el boton
 	gpio_clear(LED_DISCO_GREEN_PORT, GPIO14);
 
 	/* D/C =  conectado al pin 3 del puerto c
@@ -72,8 +73,8 @@ static int cdcacm_control_request(usbd_device *usbd,
 static void cdcacm_data_rx_cb(usbd_device *usbd_read, uint8_t ep)///leer el setpoint enviado por el usuario
 {
 	(void)ep;
-	char buf[1];
-	int len = usbd_ep_read_packet(usbd_read, 0x01, buf, sizeof(char));
+	int len = usbd_ep_read_packet(usbd_read, 0x01, image_buffer, sizeof(image_buffer));
+	gpio_toggle(GPIOD,GPIO14);
 	//(buf[0]='i') ? (new_image=true) : (new_image=false);
 	/*if (len) {
 		if(buf[0] != )
@@ -107,21 +108,29 @@ int main(void)
 	gpio_setup();
 	spi_setup(SPI1);
 	lcd_backLight(1);
-        usb_setup();
 	init_lcd();
 	delay_ms(500);
 	new_image=false;
+	usb_setup();
+
 	usbd_dev = usbd_init(&otgfs_usb_driver, &dev, &config,
 			usb_strings, 3,
 			usbd_control_buffer, sizeof(usbd_control_buffer));
 
 	usbd_register_set_config_callback(usbd_dev, cdcacm_set_config);
+
 	uint8_t dx,dy;
 	dx = 0;
         dy = 0;
         lcd_setAddrWindow(0,128,0,159);
+	usbd_poll(usbd_dev);
 	while (1) {
-
+		usbd_poll(usbd_dev);
+        	lcd_setAddrWindow(0,128,0,159);
+		if(gpio_get(GPIOA,GPIO0)){
+			new_image=true;
+			gpio_toggle(GPIOD,GPIO14);
+		}
                  /*for(dy=0;dy<160;dy++){
   		     lcd_HLine(0, dy,128,COLOR565_CHOCOLATE);
 		 }
@@ -195,45 +204,35 @@ int main(void)
 		 delay_ms(100000);*/
 		 lcd_Clear(COLOR565_BLACK);
 	         uint16_t i,j;
-
-		 for(j=0;j<61440;j+=3){
-			push_color(RGB565(imagen_tabla[j],imagen_tabla[j+1],imagen_tabla[j+2]));
+		 for(j=0;j<20480;j++){
+			push_color(imagen_tabla[j]);
 		 }
-		 delay_ms(100000);
-
-		 for(j=0;j<61440;j+=3){
-			push_color(RGB565(imagen2_tabla[j],imagen2_tabla[j+1],imagen2_tabla[j+2]));
+		 delay_ms(50000);
+		 for(j=0;j<20480;j++){
+			push_color(imagen2_tabla[j]);
 		 }
-		 delay_ms(100000);
-		  dy=0;
-                  while((80-dy)){
-			lcd_Pixel(64, 79+dy, COLOR565_GOLD);
-			dy++;
-		  }
-		  dx=0;
-                  while((64-dx)){
-			lcd_Pixel(63+dx, 80, COLOR565_GOLD);
-			dx++;
-		  }
-		  dy=0;
-                  while((80-dy)){
-			lcd_Pixel(64, 80-dy, COLOR565_GOLD);
-			dy++;
-		  }
-		  dx=0;
-                  while((64-dx)){
-			lcd_Pixel(64-dx, 80, COLOR565_GOLD);
-			dx++;
-		  }
-		  dx=0;
-		  drawRoundRect(10, 20, 110,110, 50, COLOR565_MEDIUM_TURQUOISE);
-		 delay_ms(8000);
-		 /*for(j=204804;j >0;j--){
-		 	push_color(imagen_tabla[j]);
-			//push_color(RGB565(imagen_tabla[j+2]& 0xff,imagen_tabla[j]& 0xff,imagen_tabla[j+1]& 0xff));
-			//push_color(RGB565(imagen_tabla[j]& 0xff,imagen_tabla[j+1]& 0xff,imagen_tabla[j+2]& 0xff));
-		 }*/
-		 //delay_ms(500000);
-		}
+		 delay_ms(50000);
+		 for(j=20480;j>0;j--){
+			push_color(imagen2_tabla[j]);
+		 }
+		 delay_ms(50000);
+		 for(j=0;j<20480;j++){
+			push_color(imagen_tabla[j]);
+		 }
+		 delay_ms(50000);
+		usbd_poll(usbd_dev);
+		 for(j=0;j<20480;j++){
+			push_color(RGB565(getBlue(imagen_tabla[j]), getGreen(imagen_tabla[j]), getRed(imagen_tabla[j])));
+		 }
+		 for(j=0;j<20480;j++){
+			push_color(RGB565(getGreen(imagen_tabla[j]), getBlue(imagen_tabla[j]), getRed(imagen_tabla[j])));
+		 }
+		 for(j=0;j<20480;j++){
+			push_color(RGB565(getGreen(imagen_tabla[j]), getRed(imagen_tabla[j]), getBlue(imagen_tabla[j])));
+		 }
+		 delay_ms(50000);
+		gpio_toggle(GPIOD,GPIO14);
+		usbd_poll(usbd_dev);
+	}
 	return 0;
 }

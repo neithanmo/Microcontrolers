@@ -161,7 +161,6 @@ void spi_setup(uint32_t SPI)
 		gpio_mode_setup(GPIOA, GPIO_MODE_AF, GPIO_PUPD_NONE, GPIO5 | GPIO7);
 		gpio_set_af(GPIOA, GPIO_AF5, GPIO5 | GPIO7);
 		gpio_set_output_options(GPIOA, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, GPIO7 | GPIO5);
-		gpio_mode_setup(GPIOA, GPIO_MODE_INPUT, GPIO_PUPD_NONE, GPIO0); //para usar el boton
 		rcc_periph_clock_enable(RCC_SPI1);
 		/* CLK=PA5 || MOSI=PA7 */
 		}
@@ -793,6 +792,18 @@ void fillRoundRect(uint8_t x, uint8_t y, uint8_t w,
 uint16_t RGB565(uint8_t R,uint8_t G,uint8_t B)///color
 {                                              
   return ((R >> 3) << 11) | ((G >> 2) << 5) | (B >> 3);
+}
+
+uint8_t getRed(uint16_t rgbPixel){
+	return ((rgbPixel>>11)<<3)&0xFF;
+}
+
+uint8_t getBlue(uint16_t rgbPixel){
+	return ((rgbPixel>>5)<<2)&0xFF;
+}
+
+uint8_t getGreen(uint16_t rgbPixel){
+	return (rgbPixel<<3)&0xFF;
 }
 
 uint16_t swapcolor(uint16_t x) 

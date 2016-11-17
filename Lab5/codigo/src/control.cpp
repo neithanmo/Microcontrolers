@@ -8,12 +8,41 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <cmath>
-#include "linux.bitmap"
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+#include <iostream>
 
 using namespace std;
+using namespace cv;
 
 int serial_fd;
 bool new_image;
+unsigned short int image_buffer[128*160];
+const string filename;
+
+
+unsigned int RGB565(int R,int G,int B)///color
+{                                              
+  return ((R >> 3) << 11) | ((G >> 2) << 5) | (B >> 3);
+}
+
+
+void open_image(const string filename){
+    cout<<"abriendo imagen:"<<filename<<endl;
+    Mat src1;
+    src1 = imread(filename, CV_LOAD_IMAGE_COLOR); 
+    for(int j = 0;j<src1.rows;j++){
+    	for(int i = 0; i<src1.cols;i++){
+    		Vec3b intensity2 = src1.at<Vec3b>(j,i);    
+    		int blue = intensity2.val[0];
+    		int green = intensity2.val[1];
+    		int red = intensity2.val[2];
+    		image_buffer[j*i]=RGB565(red,green,blue);
+    	}
+    }
+    imshow( "Original image", src1 );
+}
 int serial_open(char *serial_name, speed_t baud)
 {
       struct termios newtermios;
@@ -38,36 +67,34 @@ void nueva_imagen( void )
 {
   char ch = '\0';
   int set_point;
-  printf("para configurar un nuevo valor presione n \n");
-  printf("una vez ingresado el nuevo valor y desea enviarlo a la tarjeta presione s \n");
+  printf("ingrese el path de la nueva imagen\n");
+  getline (std::cin, filename);
+  cout<<"el path a la imagenb ingresado es:"<<filename<<endl;
+  open_image("girl.bmp");
+  cout<<"Si desea enviar una nueva imagen presione: n"<<endl;
+  printf("Para enviar la tabla de pixeles a la tarjeta presione: s \n");
   printf("para salir presione c \n");
+  
   scanf("%c",&ch);
   while(ch != 'c')
   {
 	if(ch == 'n'){
-           printf("Desea enviar un nuevo mapa de bits a la tarjeta?(esto sobreescribira la imagen actual)\n");
+           printf("ingrese el path de la nueva imagen\n");
+	   getline (std::cin, filename);
 	   new_image = true; 
-	   if(sizeof(linux_bits)){
-		printf("Imagen en buffer, presione s para iniciar la transferencia \n");
-	   }
-	    else{
-		printf("Imagen nula, puede no existir o esta en un formato de bits desconocido\n");
-		new_image = false;
-	 }
+	   open_image(filename);
         }
-	else if(ch == 's'){//send data
-           printf("Inicio de la transferencia de datos\n", set_point);
+	if(ch == 's'){//send data
+           printf("Inicio de la transferencia de datos, imagen %s\n", filename);
 	   int i;
            if(new_image){
            	char inicio = 'i';
 	   	write(serial_fd, &inicio, 1);//indicamos a la tarjeta que los siguientes bits los guarde en el buffer de imagen
-	   	for(i=0;i<(128*160);i++){
-           		write(serial_fd, &linux_bits[i], 1);
-	   	}
+           	write(serial_fd, &image_buffer, sizeof(image_buffer));
 		new_image = false;
 		inicio = 'f';
 		write(serial_fd, &inicio, 1);//indica a la tarjeta que se han enviado todos los bits de la imagen
-	   	printf("se han enviado %u bytes \n", sizeof(linux_bits));
+	   	printf("se han enviado %u bytes \n", sizeof(image_buffer));
 	   }
 	   
         }
@@ -89,7 +116,7 @@ int main(int argc, char *argv[])
     if (serial_fd == -1) {
             printf ("Error opening the serial device: %s\n",argv[1]);
             perror("OPEN");
-            return -1;
+           // return -1;
     }
     nueva_imagen();
     printf("Bye.\n");
