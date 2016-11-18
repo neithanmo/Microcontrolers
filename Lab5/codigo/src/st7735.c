@@ -103,7 +103,6 @@ uint8_t colstart;
 uint8_t rowstart;
 uint8_t scr_width;
 uint8_t scr_height;
-//bufer para imagenes BMP
 void delay_ms(const uint32_t delay)
 {
     uint32_t i, j;
@@ -160,6 +159,7 @@ void spi_setup(uint32_t SPI)
 		rcc_periph_clock_enable(RCC_GPIOA);
 		gpio_mode_setup(GPIOA, GPIO_MODE_AF, GPIO_PUPD_NONE, GPIO5 | GPIO7);
 		gpio_set_af(GPIOA, GPIO_AF5, GPIO5 | GPIO7);
+		gpio_mode_setup(GPIOA, GPIO_MODE_INPUT, GPIO_PUPD_NONE, GPIO0); //para usar el boton
 		gpio_set_output_options(GPIOA, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, GPIO7 | GPIO5);
 		rcc_periph_clock_enable(RCC_SPI1);
 		/* CLK=PA5 || MOSI=PA7 */

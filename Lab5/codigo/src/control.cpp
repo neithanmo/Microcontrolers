@@ -39,10 +39,19 @@ void open_image(const string filename){
     		int green = intensity2.val[1];
     		int red = intensity2.val[2];
     		image_buffer[j*i]=RGB565(red,green,blue);
+		//cout<<"image_buffer"<<image_buffer[i*j]<<endl;
     	}
     }
+    namedWindow( "Original image", CV_WINDOW_AUTOSIZE );
     imshow( "Original image", src1 );
+
 }
+
+void image_send()
+{
+	 write(serial_fd, &image_buffer, sizeof(image_buffer));
+}
+
 int serial_open(char *serial_name, speed_t baud)
 {
       struct termios newtermios;
@@ -63,48 +72,6 @@ int serial_open(char *serial_name, speed_t baud)
 }    
 
 
-void nueva_imagen( void ) 
-{
-  char ch = '\0';
-  int set_point;
-  printf("ingrese el path de la nueva imagen\n");
-  getline (std::cin, filename);
-  cout<<"el path a la imagenb ingresado es:"<<filename<<endl;
-  open_image("girl.bmp");
-  cout<<"Si desea enviar una nueva imagen presione: n"<<endl;
-  printf("Para enviar la tabla de pixeles a la tarjeta presione: s \n");
-  printf("para salir presione c \n");
-  
-  scanf("%c",&ch);
-  while(ch != 'c')
-  {
-	if(ch == 'n'){
-           printf("ingrese el path de la nueva imagen\n");
-	   getline (std::cin, filename);
-	   new_image = true; 
-	   open_image(filename);
-        }
-	if(ch == 's'){//send data
-           printf("Inicio de la transferencia de datos, imagen %s\n", filename);
-	   int i;
-           if(new_image){
-           	char inicio = 'i';
-	   	write(serial_fd, &inicio, 1);//indicamos a la tarjeta que los siguientes bits los guarde en el buffer de imagen
-           	write(serial_fd, &image_buffer, sizeof(image_buffer));
-		new_image = false;
-		inicio = 'f';
-		write(serial_fd, &inicio, 1);//indica a la tarjeta que se han enviado todos los bits de la imagen
-	   	printf("se han enviado %u bytes \n", sizeof(image_buffer));
-	   }
-	   
-        }
-        else if(ch == 'c'){
-           printf("Hasta luego \n");
-        }
-        ch = getchar();
-  }
-}
-
 
 int main(int argc, char *argv[])
 {
@@ -116,9 +83,11 @@ int main(int argc, char *argv[])
     if (serial_fd == -1) {
             printf ("Error opening the serial device: %s\n",argv[1]);
             perror("OPEN");
-           // return -1;
+           return -1;
     }
-    nueva_imagen();
+    open_image(argv[1]);
+    image_send();
+    waitKey(0);
     printf("Bye.\n");
     close(serial_fd);
     return 0;

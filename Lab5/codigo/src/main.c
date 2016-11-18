@@ -26,11 +26,10 @@ static void clock_setup(void)///
 static void gpio_setup(void)
 {
 	rcc_periph_clock_enable(RCC_GPIOD);
-	//rcc_peripheral_enable_clock(&RCC_AHB1ENR, RCC_AHB1ENR_IOPCEN);
+	rcc_peripheral_enable_clock(&RCC_AHB1ENR, RCC_AHB1ENR_IOPCEN);
         gpio_mode_setup(LED_DISCO_GREEN_PORT, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE,
 		LED_DISCO_GREEN_PIN | GPIO15 | GPIO12 | GPIO13 | GPIO14 | GPIO3 | GPIO4 | GPIO5 | GPIO1);
 	gpio_set(LED_DISCO_GREEN_PORT, GPIO12);
-	gpio_mode_setup(GPIOA, GPIO_MODE_INPUT, GPIO_PUPD_NONE, GPIO0); //para usar el boton
 	gpio_clear(LED_DISCO_GREEN_PORT, GPIO14);
 
 	/* D/C =  conectado al pin 3 del puerto c
@@ -39,7 +38,8 @@ static void gpio_setup(void)
 	*/
 }
 
-static void usb_setup(void){
+static void usb_setup(void)
+{
 
         rcc_periph_clock_enable(RCC_OTGFS);
 	gpio_mode_setup(GPIOA, GPIO_MODE_AF, GPIO_PUPD_NONE,
@@ -105,8 +105,8 @@ static void cdcacm_set_config(usbd_device *usbd, uint16_t wValue)
 int main(void)
 {	
 	clock_setup();
-	gpio_setup();
 	spi_setup(SPI1);
+	gpio_setup();
 	lcd_backLight(1);
 	init_lcd();
 	delay_ms(500);
@@ -123,14 +123,8 @@ int main(void)
 	dx = 0;
         dy = 0;
         lcd_setAddrWindow(0,128,0,159);
-	usbd_poll(usbd_dev);
 	while (1) {
 		usbd_poll(usbd_dev);
-        	lcd_setAddrWindow(0,128,0,159);
-		if(gpio_get(GPIOA,GPIO0)){
-			new_image=true;
-			gpio_toggle(GPIOD,GPIO14);
-		}
                  /*for(dy=0;dy<160;dy++){
   		     lcd_HLine(0, dy,128,COLOR565_CHOCOLATE);
 		 }
@@ -202,6 +196,7 @@ int main(void)
 		 lcd_Clear(COLOR565_BLACK);  
 		 drawBitmap(0, 0,linux_bits, 128, 160, COLOR565_GRAY, COLOR565_BLACK);
 		 delay_ms(100000);*/
+
 		 lcd_Clear(COLOR565_BLACK);
 	         uint16_t i,j;
 		 for(j=0;j<20480;j++){
@@ -220,19 +215,25 @@ int main(void)
 			push_color(imagen_tabla[j]);
 		 }
 		 delay_ms(50000);
-		usbd_poll(usbd_dev);
+
 		 for(j=0;j<20480;j++){
 			push_color(RGB565(getBlue(imagen_tabla[j]), getGreen(imagen_tabla[j]), getRed(imagen_tabla[j])));
 		 }
 		 for(j=0;j<20480;j++){
 			push_color(RGB565(getGreen(imagen_tabla[j]), getBlue(imagen_tabla[j]), getRed(imagen_tabla[j])));
 		 }
+			st_PutStr5x7(1, 5, 10, "NATANAEL", COLOR565_RED, COLOR565_WHITE);
+		 	st_PutStr5x7(1, 5, 20, "MOJICA", COLOR565_RED, COLOR565_WHITE);
+		 	st_PutStr5x7(1, 5, 30, "JIMENEZ", COLOR565_RED, COLOR565_WHITE);
+		 	st_PutStr5x7(1, 60, 40, "LAB", COLOR565_RED, COLOR565_WHITE);
+		        st_PutStr5x7(1, 10, 50, "MICROCONTROLADORES", COLOR565_RED, COLOR565_WHITE);
+		 delay_ms(10000);
 		 for(j=0;j<20480;j++){
 			push_color(RGB565(getGreen(imagen_tabla[j]), getRed(imagen_tabla[j]), getBlue(imagen_tabla[j])));
 		 }
 		 delay_ms(50000);
-		gpio_toggle(GPIOD,GPIO14);
-		usbd_poll(usbd_dev);
+
+
 	}
 	return 0;
 }
