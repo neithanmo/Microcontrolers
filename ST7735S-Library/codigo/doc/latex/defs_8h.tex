@@ -1,0 +1,53 @@
+\hypertarget{defs_8h}{}\section{Referencia del Archivo /home/neithan/\+Microcontrolers/\+Lab5/codigo/src/defs.h}
+\label{defs_8h}\index{/home/neithan/\+Microcontrolers/\+Lab5/codigo/src/defs.\+h@{/home/neithan/\+Microcontrolers/\+Lab5/codigo/src/defs.\+h}}
+
+
+General definitions and macros.  
+
+
+\subsection*{\textquotesingle{}defines\textquotesingle{}}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{defs_8h_a23b3554ef263c7a5955e4d616e01a6f4}{S\+Y\+S\+F\+R\+EQ}~168000000
+\item 
+\#define \hyperlink{defs_8h_a46a5db7eabcf6fd80169e8ab0e08f37c}{P\+W\+M\+F\+R\+EQ}~2000
+\item 
+\#define \hyperlink{defs_8h_a560dbbe87f48811e7ee10f13a1e326e6}{P\+W\+M\+F\+R\+E\+Q\+\_\+F}~((float )(\hyperlink{defs_8h_a46a5db7eabcf6fd80169e8ab0e08f37c}{P\+W\+M\+F\+R\+EQ}))
+\item 
+\#define \hyperlink{defs_8h_a7d558f2ac31dc32020563f6be24d7217}{P\+W\+M\+F\+R\+E\+Q\+\_\+\+C\+E\+N\+T\+E\+R\+\_\+\+A\+L\+I\+G\+N\+E\+D\+\_\+F}~(\hyperlink{defs_8h_a560dbbe87f48811e7ee10f13a1e326e6}{P\+W\+M\+F\+R\+E\+Q\+\_\+F}/2.\+0f)
+\item 
+\#define \hyperlink{defs_8h_ab27d12aac1a3a46aed25604d4c00cc18}{P\+R\+E\+S\+C\+A\+LE}~1
+\item 
+\#define \hyperlink{defs_8h_a4c67dd0c6dfe1bc5bf438a4d87579c7c}{P\+W\+M\+\_\+\+P\+E\+R\+I\+O\+D\+\_\+\+A\+RR}~\hyperlink{defs_8h_a23b3554ef263c7a5955e4d616e01a6f4}{S\+Y\+S\+F\+R\+EQ}/( \hyperlink{defs_8h_a46a5db7eabcf6fd80169e8ab0e08f37c}{P\+W\+M\+F\+R\+EQ}$\ast$(\hyperlink{defs_8h_ab27d12aac1a3a46aed25604d4c00cc18}{P\+R\+E\+S\+C\+A\+LE}+1))
+\item 
+\#define \hyperlink{defs_8h_ad643c4d0267b346dafb2cd345d5d952d}{I\+N\+I\+T\+\_\+\+D\+U\+TY}
+\end{DoxyCompactItemize}
+
+
+\subsection{Descripción detallada}
+General definitions and macros. 
+
+This file contains the definition of general macros for S\+T\+M32\+F4xx programs. 
+
+\subsection{Documentación de los \textquotesingle{}defines\textquotesingle{}}
+\index{defs.\+h@{defs.\+h}!I\+N\+I\+T\+\_\+\+D\+U\+TY@{I\+N\+I\+T\+\_\+\+D\+U\+TY}}
+\index{I\+N\+I\+T\+\_\+\+D\+U\+TY@{I\+N\+I\+T\+\_\+\+D\+U\+TY}!defs.\+h@{defs.\+h}}
+\subsubsection[{\texorpdfstring{I\+N\+I\+T\+\_\+\+D\+U\+TY}{INIT_DUTY}}]{\setlength{\rightskip}{0pt plus 5cm}\#define I\+N\+I\+T\+\_\+\+D\+U\+TY}\hypertarget{defs_8h_ad643c4d0267b346dafb2cd345d5d952d}{}\label{defs_8h_ad643c4d0267b346dafb2cd345d5d952d}
+\index{defs.\+h@{defs.\+h}!P\+R\+E\+S\+C\+A\+LE@{P\+R\+E\+S\+C\+A\+LE}}
+\index{P\+R\+E\+S\+C\+A\+LE@{P\+R\+E\+S\+C\+A\+LE}!defs.\+h@{defs.\+h}}
+\subsubsection[{\texorpdfstring{P\+R\+E\+S\+C\+A\+LE}{PRESCALE}}]{\setlength{\rightskip}{0pt plus 5cm}\#define P\+R\+E\+S\+C\+A\+LE~1}\hypertarget{defs_8h_ab27d12aac1a3a46aed25604d4c00cc18}{}\label{defs_8h_ab27d12aac1a3a46aed25604d4c00cc18}
+\index{defs.\+h@{defs.\+h}!P\+W\+M\+\_\+\+P\+E\+R\+I\+O\+D\+\_\+\+A\+RR@{P\+W\+M\+\_\+\+P\+E\+R\+I\+O\+D\+\_\+\+A\+RR}}
+\index{P\+W\+M\+\_\+\+P\+E\+R\+I\+O\+D\+\_\+\+A\+RR@{P\+W\+M\+\_\+\+P\+E\+R\+I\+O\+D\+\_\+\+A\+RR}!defs.\+h@{defs.\+h}}
+\subsubsection[{\texorpdfstring{P\+W\+M\+\_\+\+P\+E\+R\+I\+O\+D\+\_\+\+A\+RR}{PWM_PERIOD_ARR}}]{\setlength{\rightskip}{0pt plus 5cm}\#define P\+W\+M\+\_\+\+P\+E\+R\+I\+O\+D\+\_\+\+A\+RR~{\bf S\+Y\+S\+F\+R\+EQ}/( {\bf P\+W\+M\+F\+R\+EQ}$\ast$({\bf P\+R\+E\+S\+C\+A\+LE}+1))}\hypertarget{defs_8h_a4c67dd0c6dfe1bc5bf438a4d87579c7c}{}\label{defs_8h_a4c67dd0c6dfe1bc5bf438a4d87579c7c}
+\index{defs.\+h@{defs.\+h}!P\+W\+M\+F\+R\+EQ@{P\+W\+M\+F\+R\+EQ}}
+\index{P\+W\+M\+F\+R\+EQ@{P\+W\+M\+F\+R\+EQ}!defs.\+h@{defs.\+h}}
+\subsubsection[{\texorpdfstring{P\+W\+M\+F\+R\+EQ}{PWMFREQ}}]{\setlength{\rightskip}{0pt plus 5cm}\#define P\+W\+M\+F\+R\+EQ~2000}\hypertarget{defs_8h_a46a5db7eabcf6fd80169e8ab0e08f37c}{}\label{defs_8h_a46a5db7eabcf6fd80169e8ab0e08f37c}
+\index{defs.\+h@{defs.\+h}!P\+W\+M\+F\+R\+E\+Q\+\_\+\+C\+E\+N\+T\+E\+R\+\_\+\+A\+L\+I\+G\+N\+E\+D\+\_\+F@{P\+W\+M\+F\+R\+E\+Q\+\_\+\+C\+E\+N\+T\+E\+R\+\_\+\+A\+L\+I\+G\+N\+E\+D\+\_\+F}}
+\index{P\+W\+M\+F\+R\+E\+Q\+\_\+\+C\+E\+N\+T\+E\+R\+\_\+\+A\+L\+I\+G\+N\+E\+D\+\_\+F@{P\+W\+M\+F\+R\+E\+Q\+\_\+\+C\+E\+N\+T\+E\+R\+\_\+\+A\+L\+I\+G\+N\+E\+D\+\_\+F}!defs.\+h@{defs.\+h}}
+\subsubsection[{\texorpdfstring{P\+W\+M\+F\+R\+E\+Q\+\_\+\+C\+E\+N\+T\+E\+R\+\_\+\+A\+L\+I\+G\+N\+E\+D\+\_\+F}{PWMFREQ_CENTER_ALIGNED_F}}]{\setlength{\rightskip}{0pt plus 5cm}\#define P\+W\+M\+F\+R\+E\+Q\+\_\+\+C\+E\+N\+T\+E\+R\+\_\+\+A\+L\+I\+G\+N\+E\+D\+\_\+F~({\bf P\+W\+M\+F\+R\+E\+Q\+\_\+F}/2.\+0f)}\hypertarget{defs_8h_a7d558f2ac31dc32020563f6be24d7217}{}\label{defs_8h_a7d558f2ac31dc32020563f6be24d7217}
+\index{defs.\+h@{defs.\+h}!P\+W\+M\+F\+R\+E\+Q\+\_\+F@{P\+W\+M\+F\+R\+E\+Q\+\_\+F}}
+\index{P\+W\+M\+F\+R\+E\+Q\+\_\+F@{P\+W\+M\+F\+R\+E\+Q\+\_\+F}!defs.\+h@{defs.\+h}}
+\subsubsection[{\texorpdfstring{P\+W\+M\+F\+R\+E\+Q\+\_\+F}{PWMFREQ_F}}]{\setlength{\rightskip}{0pt plus 5cm}\#define P\+W\+M\+F\+R\+E\+Q\+\_\+F~((float )({\bf P\+W\+M\+F\+R\+EQ}))}\hypertarget{defs_8h_a560dbbe87f48811e7ee10f13a1e326e6}{}\label{defs_8h_a560dbbe87f48811e7ee10f13a1e326e6}
+\index{defs.\+h@{defs.\+h}!S\+Y\+S\+F\+R\+EQ@{S\+Y\+S\+F\+R\+EQ}}
+\index{S\+Y\+S\+F\+R\+EQ@{S\+Y\+S\+F\+R\+EQ}!defs.\+h@{defs.\+h}}
+\subsubsection[{\texorpdfstring{S\+Y\+S\+F\+R\+EQ}{SYSFREQ}}]{\setlength{\rightskip}{0pt plus 5cm}\#define S\+Y\+S\+F\+R\+EQ~168000000}\hypertarget{defs_8h_a23b3554ef263c7a5955e4d616e01a6f4}{}\label{defs_8h_a23b3554ef263c7a5955e4d616e01a6f4}

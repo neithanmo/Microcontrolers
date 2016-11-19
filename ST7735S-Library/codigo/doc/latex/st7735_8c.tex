@@ -1,0 +1,861 @@
+\hypertarget{st7735_8c}{}\section{Referencia del Archivo /home/neithan/\+Microcontrolers/\+Lab5/codigo/src/st7735.c}
+\label{st7735_8c}\index{/home/neithan/\+Microcontrolers/\+Lab5/codigo/src/st7735.\+c@{/home/neithan/\+Microcontrolers/\+Lab5/codigo/src/st7735.\+c}}
+{\ttfamily \#include \char`\"{}st7735.\+h\char`\"{}}\\*
+\subsection*{Funciones}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{st7735_8c_a25a7a26b441d259e596301aa69abbb03}{delay\+\_\+ms} (const uint32\+\_\+t delay)
+\begin{DoxyCompactList}\small\item\em retardo en milisegundos \end{DoxyCompactList}\item 
+void \hyperlink{st7735_8c_aa08019f10d06c82d85327ef646f44435}{delay\+\_\+us} (const uint32\+\_\+t delay)
+\begin{DoxyCompactList}\small\item\em retardo en microsegundos \end{DoxyCompactList}\item 
+void \hyperlink{st7735_8c_acb5db9fda33cb42e565461d17593bcf6}{spi\+\_\+setup} (uint32\+\_\+t S\+PI)
+\begin{DoxyCompactList}\small\item\em Inicializa el periférico S\+PI a utilizar. \end{DoxyCompactList}\item 
+void \hyperlink{st7735_8c_a0e3c78d312f9ea8019c006a74e524dda}{write\+\_\+data\+\_\+lcd} (uint8\+\_\+t data)
+\begin{DoxyCompactList}\small\item\em envia datos al S\+PI, es decir a la tarjeta S\+T7735S, internamente pone en alto la bandera DC, para indicar a la tarjeta que se envian datos \end{DoxyCompactList}\item 
+void \hyperlink{st7735_8c_a4a28c3534d2f2074fe50367f1b199e7b}{write\+\_\+cmd\+\_\+lcd} (uint8\+\_\+t cmd)
+\begin{DoxyCompactList}\small\item\em envia datos al S\+PI, es decir a la tarjeta S\+T7735S, internamente pone en bajo la bandera DC, para indicar a la tarjeta que se envian comandos de configuracion \end{DoxyCompactList}\item 
+void \hyperlink{st7735_8c_aafed2ade168a085630c2fe8d776432f2}{init\+\_\+lcd} (void)
+\begin{DoxyCompactList}\small\item\em inicializa la pantalla,aqui se ajusta el formato y bits de color, etc. \end{DoxyCompactList}\item 
+void \hyperlink{st7735_8c_a4f074060e0dabe0ad6ffc2ba58afdf44}{lcd\+\_\+back\+Light} (uint8\+\_\+t on)
+\begin{DoxyCompactList}\small\item\em enciende o apaga la luz de fondo de la pantalla \end{DoxyCompactList}\item 
+void \hyperlink{st7735_8c_ac90f40c3638d0b88fe1874c6451f7c1a}{lcd\+\_\+set\+Addr\+Window} (uint8\+\_\+t XS, uint8\+\_\+t XE, uint8\+\_\+t YS, uint8\+\_\+t YE)
+\begin{DoxyCompactList}\small\item\em activa la parte de la pantalla que se va a colorear. En cordenadas X-\/Y(2D), por defecto X=0-\/128 y Y=0-\/160, es posible cambiar la orientación. \end{DoxyCompactList}\item 
+void \hyperlink{st7735_8c_a819f1bad3cfc54b2bc29accf027fbe97}{lcd\+\_\+\+Clear} (uint16\+\_\+t color)
+\begin{DoxyCompactList}\small\item\em Llenar la pantalla de un solo color. \end{DoxyCompactList}\item 
+void \hyperlink{st7735_8c_a52199fd74db51ad05720fb77b3dd1a2a}{lcd\+\_\+\+Pixel} (uint16\+\_\+t X, uint16\+\_\+t Y, uint16\+\_\+t color)
+\begin{DoxyCompactList}\small\item\em colorear un pixel en específico \end{DoxyCompactList}\item 
+void \hyperlink{st7735_8c_a51ad2be435bd72bc5597072999b304bd}{lcd\+\_\+\+H\+Line} (uint8\+\_\+t x, uint8\+\_\+t y, uint8\+\_\+t w, uint16\+\_\+t color)
+\begin{DoxyCompactList}\small\item\em Dibuja una linea horizontal que iniciará en el punto xy. \end{DoxyCompactList}\item 
+void \hyperlink{st7735_8c_a27dc4be7d8c6a50f7898c207e9d359de}{push\+\_\+color} (uint16\+\_\+t color)
+\item 
+void \hyperlink{st7735_8c_ac155886cbd46bcb85b1cdad90def7e44}{lcd\+\_\+\+V\+Line} (uint8\+\_\+t x, uint8\+\_\+t y, uint8\+\_\+t h, uint16\+\_\+t color)
+\begin{DoxyCompactList}\small\item\em Dibuja una linea vertical que iniciará en el punto xy. \end{DoxyCompactList}\item 
+void \hyperlink{st7735_8c_a6e8b3154e014fb073bee6a563109428f}{lcd\+\_\+\+Line} (int16\+\_\+t X1, int16\+\_\+t Y1, int16\+\_\+t X2, int16\+\_\+t Y2, uint16\+\_\+t color)
+\begin{DoxyCompactList}\small\item\em Dibuja una linea que une los puntos X1\+Y1 a X2\+Y2. \end{DoxyCompactList}\item 
+void \hyperlink{st7735_8c_ac94e780143f8f852ca9e1712bb7c4af5}{lcd\+\_\+\+Rect} (uint16\+\_\+t X1, uint16\+\_\+t Y1, uint16\+\_\+t X2, uint16\+\_\+t Y2, uint16\+\_\+t color)
+\begin{DoxyCompactList}\small\item\em Funcion para dibujar un rectangulo. \end{DoxyCompactList}\item 
+void \hyperlink{st7735_8c_aeba6ba7c6ce32b47c5437325d57dd2c3}{lcd\+\_\+\+Fill\+Rect} (uint8\+\_\+t x, uint8\+\_\+t y, uint8\+\_\+t w, uint8\+\_\+t h, uint16\+\_\+t color)
+\begin{DoxyCompactList}\small\item\em Rellena un rectangulo con un determinado color. \end{DoxyCompactList}\item 
+void \hyperlink{st7735_8c_a61fdb9fe606c8ecab09cd33dbf315a6a}{draw\+Circle} (uint8\+\_\+t x0, uint8\+\_\+t y0, uint8\+\_\+t r, uint16\+\_\+t color)
+\begin{DoxyCompactList}\small\item\em Dibujar un circulo. \end{DoxyCompactList}\item 
+void \hyperlink{st7735_8c_ab1e9920baf8bd7cb0dc9abe0581c4dfe}{draw\+Circle\+Helper} (uint8\+\_\+t x0, uint8\+\_\+t y0, uint8\+\_\+t r, uint8\+\_\+t cornername, uint16\+\_\+t color)
+\begin{DoxyCompactList}\small\item\em Funcion auxiliar utilizada por draw\+Circle y dibujar aun mas rapidamente el circulo. \end{DoxyCompactList}\item 
+void \hyperlink{st7735_8c_afd58757c44d467755bf5f951221de7d0}{fill\+Circle} (uint8\+\_\+t x0, uint8\+\_\+t y0, uint8\+\_\+t r, uint16\+\_\+t color)
+\begin{DoxyCompactList}\small\item\em Dibujar y rellenar un circulo. \end{DoxyCompactList}\item 
+void \hyperlink{st7735_8c_a49edfd7dd64ca3d741800c0f29eb7f97}{fill\+Circle\+Helper} (uint8\+\_\+t x0, uint8\+\_\+t y0, uint8\+\_\+t r, uint8\+\_\+t cornername, uint8\+\_\+t delta, uint16\+\_\+t color)
+\begin{DoxyCompactList}\small\item\em Funcion auxiliar utilizada por fill\+Circle y dibujar/rellenar el circulo. \end{DoxyCompactList}\item 
+void \hyperlink{st7735_8c_a5b5d124d653e3fca7f0a4da92a59d99c}{draw\+Triangle} (uint8\+\_\+t x0, uint8\+\_\+t y0, uint8\+\_\+t x1, uint8\+\_\+t y1, uint8\+\_\+t x2, uint8\+\_\+t y2, uint16\+\_\+t color)
+\begin{DoxyCompactList}\small\item\em Dibujar un triangulo, dibuja tres lineas que unen los tres vertices del triangulo, cada vertice con coordenadas x0y0, x1y1,x2y2. \end{DoxyCompactList}\item 
+void \hyperlink{st7735_8c_af864fedf3dd0b022ce4df8e5472f2d80}{draw\+Rect} (uint8\+\_\+t x, uint8\+\_\+t y, uint8\+\_\+t w, uint8\+\_\+t h, uint16\+\_\+t color)
+\begin{DoxyCompactList}\small\item\em Dibuja un rectangulo utilizando un algoritmo diferente al usado en lcd\+\_\+\+Rect. \end{DoxyCompactList}\item 
+void \hyperlink{st7735_8c_ae3f81d88c3bba11537fb3edfda8b8f44}{draw\+Line} (uint8\+\_\+t x0, uint8\+\_\+t y0, uint8\+\_\+t x1, uint8\+\_\+t y1, uint16\+\_\+t color)
+\begin{DoxyCompactList}\small\item\em Dibuja una linea,utiliza otro algoritmo al empleado por lcd\+\_\+\+Line. \end{DoxyCompactList}\item 
+void \hyperlink{st7735_8c_a7b780581fab62fff9338d0b0a8fb4c45}{draw\+Fast\+V\+Line} (uint8\+\_\+t x, uint8\+\_\+t y, uint8\+\_\+t h, uint16\+\_\+t color)
+\begin{DoxyCompactList}\small\item\em Dibuja una linea horizontal ,utilizando \hyperlink{st7735_8h_ae3f81d88c3bba11537fb3edfda8b8f44}{draw\+Line()} \end{DoxyCompactList}\item 
+void \hyperlink{st7735_8c_afc7507ca222d325daf1c0a8ef912d068}{draw\+Fast\+H\+Line} (uint8\+\_\+t x, uint8\+\_\+t y, uint8\+\_\+t w, uint16\+\_\+t color)
+\begin{DoxyCompactList}\small\item\em Dibuja una linea horizontal ,utilizando \hyperlink{st7735_8h_ae3f81d88c3bba11537fb3edfda8b8f44}{draw\+Line()} \end{DoxyCompactList}\item 
+void \hyperlink{st7735_8c_a9a16d7c88a1ea94262311f59722cba6b}{fill\+Triangle} (uint8\+\_\+t x0, uint8\+\_\+t y0, uint8\+\_\+t x1, uint8\+\_\+t y1, uint8\+\_\+t x2, uint8\+\_\+t y2, uint16\+\_\+t color)
+\begin{DoxyCompactList}\small\item\em Dibuja/rellena un triangulo, utilizando tres lineas que unen los tres vertices del triangulo, cada vertice con coordenadas x0y0, x1y1,x2y2. \end{DoxyCompactList}\item 
+void \hyperlink{st7735_8c_aaf9d9500299437b02e25004c97e916ed}{fill\+Rect} (uint8\+\_\+t x, uint8\+\_\+t y, uint8\+\_\+t w, uint8\+\_\+t h, uint16\+\_\+t color)
+\begin{DoxyCompactList}\small\item\em Rellena un rectangulo con un determinado color, utiliza un algoritmo diferente al utilizado en lcd\+\_\+\+Fill\+Rect, el cual es utili para dibujo de pequeños rectangulos. \end{DoxyCompactList}\item 
+void \hyperlink{st7735_8c_a26f4e03291701784cf70de18dc51b8f7}{draw\+Round\+Rect} (uint8\+\_\+t x, uint8\+\_\+t y, uint8\+\_\+t w, uint8\+\_\+t h, uint8\+\_\+t r, uint16\+\_\+t color)
+\begin{DoxyCompactList}\small\item\em Dibuja un Round rectangulo con un determinado color. \end{DoxyCompactList}\item 
+void \hyperlink{st7735_8c_adf0786e14e204ca2740d7c1aef27a0a0}{fill\+Round\+Rect} (uint8\+\_\+t x, uint8\+\_\+t y, uint8\+\_\+t w, uint8\+\_\+t h, uint8\+\_\+t r, uint16\+\_\+t color)
+\begin{DoxyCompactList}\small\item\em Rellena un Round rectangulo con un determinado color. \end{DoxyCompactList}\item 
+uint16\+\_\+t \hyperlink{st7735_8c_ac181762e52db968673396efbf0e825fe}{R\+G\+B565} (uint8\+\_\+t R, uint8\+\_\+t G, uint8\+\_\+t B)
+\begin{DoxyCompactList}\small\item\em color \end{DoxyCompactList}\item 
+uint8\+\_\+t \hyperlink{st7735_8c_a9e0759026ca579899f965cfc956412df}{get\+Red} (uint16\+\_\+t rgb\+Pixel)
+\begin{DoxyCompactList}\small\item\em retorna el nivel de rojo de un pixel \end{DoxyCompactList}\item 
+uint8\+\_\+t \hyperlink{st7735_8c_af775caa54b75571bdb757362d3e8de3c}{get\+Blue} (uint16\+\_\+t rgb\+Pixel)
+\begin{DoxyCompactList}\small\item\em retorna el nivel de azul de un pixel \end{DoxyCompactList}\item 
+uint8\+\_\+t \hyperlink{st7735_8c_a3f60030b79f293f90d6a4fc7d2986d73}{get\+Green} (uint16\+\_\+t rgb\+Pixel)
+\begin{DoxyCompactList}\small\item\em retorna el nivel de verde de un pixel \end{DoxyCompactList}\item 
+uint16\+\_\+t \hyperlink{st7735_8c_ac7770e102c0ce9b4f7833f646ab5c6c6}{swapcolor} (uint16\+\_\+t x)
+\begin{DoxyCompactList}\small\item\em Intercambia el orden de los componentes de color en un pixel, de R\+GB a B\+GR. \end{DoxyCompactList}\item 
+void \hyperlink{st7735_8c_af77d21781d7f3f0aef16e2e19950867c}{draw\+Char} (uint8\+\_\+t x, uint8\+\_\+t y, unsigned char c, uint16\+\_\+t color, uint16\+\_\+t bg, uint8\+\_\+t size)
+\begin{DoxyCompactList}\small\item\em escribe un solo char en la pantalla, el fond utilizado se encuentra en \hyperlink{font5x7_8h}{font5x7.\+h} \end{DoxyCompactList}\item 
+void \hyperlink{st7735_8c_ac44b1142c890d76d774741669962728a}{st\+\_\+\+Put\+Str5x7} (uint8\+\_\+t scale, uint8\+\_\+t X, uint8\+\_\+t Y, char $\ast$str, uint16\+\_\+t color, uint16\+\_\+t bgcolor)
+\begin{DoxyCompactList}\small\item\em escribe un arreglo de chars (strings) \end{DoxyCompactList}\item 
+void \hyperlink{st7735_8c_a65a6ff575ed87440bde00a9c1b0a0457}{draw\+Bitmap} (uint8\+\_\+t x, uint8\+\_\+t y, uint8\+\_\+t $\ast$bitmap, uint8\+\_\+t w, uint8\+\_\+t h, uint16\+\_\+t color, uint16\+\_\+t bg)
+\begin{DoxyCompactList}\small\item\em Dibuja un mapa de bits extraido de una imagen, esta función es obsoleta, ya que es posible utilizando funciones como \hyperlink{st7735_8c_a27dc4be7d8c6a50f7898c207e9d359de}{push\+\_\+color()}, \hyperlink{st7735_8h_a52199fd74db51ad05720fb77b3dd1a2a}{lcd\+\_\+\+Pixel()}, \hyperlink{st7735_8h_ab12791310beed0a32afc8df3f42cf642}{lcd\+\_\+set\+Addr\+Window()} dibujar imagenes a color y en blanco y negro a partir de una tabla de pixeles, esta ultima se obtiene con las funciones encontradas en el archivo \hyperlink{make_color_table_8cpp}{make\+Color\+Table.\+cpp} ver el demo en \hyperlink{main_8c}{main.\+c} para entender su uso. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+uint32\+\_\+t \hyperlink{st7735_8c_a351c436f5cae92ffb1220aafdefa6cc9}{spi\+Port}
+\item 
+uint8\+\_\+t \hyperlink{st7735_8c_aece82502489a4d20dab38fad9460c902}{colstart}
+\item 
+uint8\+\_\+t \hyperlink{st7735_8c_af4427372d2c9fadec9e4d29702f7833b}{rowstart}
+\item 
+uint8\+\_\+t \hyperlink{st7735_8c_a05ab2cd3381c6d222366afe03062360b}{scr\+\_\+width}
+\item 
+uint8\+\_\+t \hyperlink{st7735_8c_a3ecc6bdbb12d18b378678c4886c888c3}{scr\+\_\+height}
+\end{DoxyCompactItemize}
+
+
+\subsection{Documentación de las funciones}
+\index{st7735.\+c@{st7735.\+c}!delay\+\_\+ms@{delay\+\_\+ms}}
+\index{delay\+\_\+ms@{delay\+\_\+ms}!st7735.\+c@{st7735.\+c}}
+\subsubsection[{\texorpdfstring{delay\+\_\+ms(const uint32\+\_\+t delay)}{delay_ms(const uint32_t delay)}}]{\setlength{\rightskip}{0pt plus 5cm}void delay\+\_\+ms (
+\begin{DoxyParamCaption}
+\item[{const uint32\+\_\+t}]{delay}
+\end{DoxyParamCaption}
+)}\hypertarget{st7735_8c_a25a7a26b441d259e596301aa69abbb03}{}\label{st7735_8c_a25a7a26b441d259e596301aa69abbb03}
+
+
+retardo en milisegundos 
+
+\index{st7735.\+c@{st7735.\+c}!delay\+\_\+us@{delay\+\_\+us}}
+\index{delay\+\_\+us@{delay\+\_\+us}!st7735.\+c@{st7735.\+c}}
+\subsubsection[{\texorpdfstring{delay\+\_\+us(const uint32\+\_\+t delay)}{delay_us(const uint32_t delay)}}]{\setlength{\rightskip}{0pt plus 5cm}void delay\+\_\+us (
+\begin{DoxyParamCaption}
+\item[{const uint32\+\_\+t}]{delay}
+\end{DoxyParamCaption}
+)}\hypertarget{st7735_8c_aa08019f10d06c82d85327ef646f44435}{}\label{st7735_8c_aa08019f10d06c82d85327ef646f44435}
+
+
+retardo en microsegundos 
+
+\index{st7735.\+c@{st7735.\+c}!draw\+Bitmap@{draw\+Bitmap}}
+\index{draw\+Bitmap@{draw\+Bitmap}!st7735.\+c@{st7735.\+c}}
+\subsubsection[{\texorpdfstring{draw\+Bitmap(uint8\+\_\+t x, uint8\+\_\+t y, uint8\+\_\+t $\ast$bitmap, uint8\+\_\+t w, uint8\+\_\+t h, uint16\+\_\+t color, uint16\+\_\+t bg)}{drawBitmap(uint8_t x, uint8_t y, uint8_t *bitmap, uint8_t w, uint8_t h, uint16_t color, uint16_t bg)}}]{\setlength{\rightskip}{0pt plus 5cm}void draw\+Bitmap (
+\begin{DoxyParamCaption}
+\item[{uint8\+\_\+t}]{x, }
+\item[{uint8\+\_\+t}]{y, }
+\item[{uint8\+\_\+t $\ast$}]{bitmap, }
+\item[{uint8\+\_\+t}]{w, }
+\item[{uint8\+\_\+t}]{h, }
+\item[{uint16\+\_\+t}]{color, }
+\item[{uint16\+\_\+t}]{bg}
+\end{DoxyParamCaption}
+)}\hypertarget{st7735_8c_a65a6ff575ed87440bde00a9c1b0a0457}{}\label{st7735_8c_a65a6ff575ed87440bde00a9c1b0a0457}
+
+
+Dibuja un mapa de bits extraido de una imagen, esta función es obsoleta, ya que es posible utilizando funciones como \hyperlink{st7735_8c_a27dc4be7d8c6a50f7898c207e9d359de}{push\+\_\+color()}, \hyperlink{st7735_8h_a52199fd74db51ad05720fb77b3dd1a2a}{lcd\+\_\+\+Pixel()}, \hyperlink{st7735_8h_ab12791310beed0a32afc8df3f42cf642}{lcd\+\_\+set\+Addr\+Window()} dibujar imagenes a color y en blanco y negro a partir de una tabla de pixeles, esta ultima se obtiene con las funciones encontradas en el archivo \hyperlink{make_color_table_8cpp}{make\+Color\+Table.\+cpp} ver el demo en \hyperlink{main_8c}{main.\+c} para entender su uso. 
+
+
+\begin{DoxyParams}{Parámetros}
+{\em x} & punto inicial en X \\
+\hline
+{\em y} & punto inicial en y \\
+\hline
+{\em w} & ancho de la imagen \\
+\hline
+{\em h} & alto de la imagen \\
+\hline
+{\em color} & del pixel en alto \\
+\hline
+{\em bg} & del pixel en bajo \\
+\hline
+\end{DoxyParams}
+\index{st7735.\+c@{st7735.\+c}!draw\+Char@{draw\+Char}}
+\index{draw\+Char@{draw\+Char}!st7735.\+c@{st7735.\+c}}
+\subsubsection[{\texorpdfstring{draw\+Char(uint8\+\_\+t x, uint8\+\_\+t y, unsigned char c, uint16\+\_\+t color, uint16\+\_\+t bg, uint8\+\_\+t size)}{drawChar(uint8_t x, uint8_t y, unsigned char c, uint16_t color, uint16_t bg, uint8_t size)}}]{\setlength{\rightskip}{0pt plus 5cm}void draw\+Char (
+\begin{DoxyParamCaption}
+\item[{uint8\+\_\+t}]{x, }
+\item[{uint8\+\_\+t}]{y, }
+\item[{unsigned char}]{c, }
+\item[{uint16\+\_\+t}]{color, }
+\item[{uint16\+\_\+t}]{bg, }
+\item[{uint8\+\_\+t}]{size}
+\end{DoxyParamCaption}
+)}\hypertarget{st7735_8c_af77d21781d7f3f0aef16e2e19950867c}{}\label{st7735_8c_af77d21781d7f3f0aef16e2e19950867c}
+
+
+escribe un solo char en la pantalla, el fond utilizado se encuentra en \hyperlink{font5x7_8h}{font5x7.\+h} 
+
+
+\begin{DoxyParams}{Parámetros}
+{\em x} & coordenada en X \\
+\hline
+{\em y} & coordenada en y \\
+\hline
+{\em c} & char a escribir \\
+\hline
+{\em bg} & color de fondo del char \\
+\hline
+{\em color} & color del char \\
+\hline
+{\em size} & tamaño del char en pantalla \\
+\hline
+\end{DoxyParams}
+\begin{DoxyWarning}{Atención}
+size \+: cuanto mas grande sea mas tarda en dibujarse en la pantalla 
+\end{DoxyWarning}
+\index{st7735.\+c@{st7735.\+c}!draw\+Circle@{draw\+Circle}}
+\index{draw\+Circle@{draw\+Circle}!st7735.\+c@{st7735.\+c}}
+\subsubsection[{\texorpdfstring{draw\+Circle(uint8\+\_\+t x0, uint8\+\_\+t y0, uint8\+\_\+t r, uint16\+\_\+t color)}{drawCircle(uint8_t x0, uint8_t y0, uint8_t r, uint16_t color)}}]{\setlength{\rightskip}{0pt plus 5cm}void draw\+Circle (
+\begin{DoxyParamCaption}
+\item[{uint8\+\_\+t}]{x0, }
+\item[{uint8\+\_\+t}]{y0, }
+\item[{uint8\+\_\+t}]{r, }
+\item[{uint16\+\_\+t}]{color}
+\end{DoxyParamCaption}
+)}\hypertarget{st7735_8c_a61fdb9fe606c8ecab09cd33dbf315a6a}{}\label{st7735_8c_a61fdb9fe606c8ecab09cd33dbf315a6a}
+
+
+Dibujar un circulo. 
+
+
+\begin{DoxyParams}{Parámetros}
+{\em x0} & coordenada en X del centro del circulo \\
+\hline
+{\em y0} & coordenada en ydel centro del circulo \\
+\hline
+{\em r} & radio del circulo \\
+\hline
+{\em color} & color del circulo \\
+\hline
+\end{DoxyParams}
+\begin{DoxyWarning}{Atención}
+\+: cuanto mas grande sea  mas tarda en dibujarse en la pantalla 
+\end{DoxyWarning}
+\index{st7735.\+c@{st7735.\+c}!draw\+Circle\+Helper@{draw\+Circle\+Helper}}
+\index{draw\+Circle\+Helper@{draw\+Circle\+Helper}!st7735.\+c@{st7735.\+c}}
+\subsubsection[{\texorpdfstring{draw\+Circle\+Helper(uint8\+\_\+t x0, uint8\+\_\+t y0, uint8\+\_\+t r, uint8\+\_\+t cornername, uint16\+\_\+t color)}{drawCircleHelper(uint8_t x0, uint8_t y0, uint8_t r, uint8_t cornername, uint16_t color)}}]{\setlength{\rightskip}{0pt plus 5cm}void draw\+Circle\+Helper (
+\begin{DoxyParamCaption}
+\item[{uint8\+\_\+t}]{x0, }
+\item[{uint8\+\_\+t}]{y0, }
+\item[{uint8\+\_\+t}]{r, }
+\item[{uint8\+\_\+t}]{cornername, }
+\item[{uint16\+\_\+t}]{color}
+\end{DoxyParamCaption}
+)}\hypertarget{st7735_8c_ab1e9920baf8bd7cb0dc9abe0581c4dfe}{}\label{st7735_8c_ab1e9920baf8bd7cb0dc9abe0581c4dfe}
+
+
+Funcion auxiliar utilizada por draw\+Circle y dibujar aun mas rapidamente el circulo. 
+
+\index{st7735.\+c@{st7735.\+c}!draw\+Fast\+H\+Line@{draw\+Fast\+H\+Line}}
+\index{draw\+Fast\+H\+Line@{draw\+Fast\+H\+Line}!st7735.\+c@{st7735.\+c}}
+\subsubsection[{\texorpdfstring{draw\+Fast\+H\+Line(uint8\+\_\+t x, uint8\+\_\+t y, uint8\+\_\+t w, uint16\+\_\+t color)}{drawFastHLine(uint8_t x, uint8_t y, uint8_t w, uint16_t color)}}]{\setlength{\rightskip}{0pt plus 5cm}void draw\+Fast\+H\+Line (
+\begin{DoxyParamCaption}
+\item[{uint8\+\_\+t}]{x, }
+\item[{uint8\+\_\+t}]{y, }
+\item[{uint8\+\_\+t}]{w, }
+\item[{uint16\+\_\+t}]{color}
+\end{DoxyParamCaption}
+)}\hypertarget{st7735_8c_afc7507ca222d325daf1c0a8ef912d068}{}\label{st7735_8c_afc7507ca222d325daf1c0a8ef912d068}
+
+
+Dibuja una linea horizontal ,utilizando \hyperlink{st7735_8h_ae3f81d88c3bba11537fb3edfda8b8f44}{draw\+Line()} 
+
+\index{st7735.\+c@{st7735.\+c}!draw\+Fast\+V\+Line@{draw\+Fast\+V\+Line}}
+\index{draw\+Fast\+V\+Line@{draw\+Fast\+V\+Line}!st7735.\+c@{st7735.\+c}}
+\subsubsection[{\texorpdfstring{draw\+Fast\+V\+Line(uint8\+\_\+t x, uint8\+\_\+t y, uint8\+\_\+t h, uint16\+\_\+t color)}{drawFastVLine(uint8_t x, uint8_t y, uint8_t h, uint16_t color)}}]{\setlength{\rightskip}{0pt plus 5cm}void draw\+Fast\+V\+Line (
+\begin{DoxyParamCaption}
+\item[{uint8\+\_\+t}]{x, }
+\item[{uint8\+\_\+t}]{y, }
+\item[{uint8\+\_\+t}]{h, }
+\item[{uint16\+\_\+t}]{color}
+\end{DoxyParamCaption}
+)}\hypertarget{st7735_8c_a7b780581fab62fff9338d0b0a8fb4c45}{}\label{st7735_8c_a7b780581fab62fff9338d0b0a8fb4c45}
+
+
+Dibuja una linea horizontal ,utilizando \hyperlink{st7735_8h_ae3f81d88c3bba11537fb3edfda8b8f44}{draw\+Line()} 
+
+\index{st7735.\+c@{st7735.\+c}!draw\+Line@{draw\+Line}}
+\index{draw\+Line@{draw\+Line}!st7735.\+c@{st7735.\+c}}
+\subsubsection[{\texorpdfstring{draw\+Line(uint8\+\_\+t x0, uint8\+\_\+t y0, uint8\+\_\+t x1, uint8\+\_\+t y1, uint16\+\_\+t color)}{drawLine(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, uint16_t color)}}]{\setlength{\rightskip}{0pt plus 5cm}void draw\+Line (
+\begin{DoxyParamCaption}
+\item[{uint8\+\_\+t}]{x0, }
+\item[{uint8\+\_\+t}]{y0, }
+\item[{uint8\+\_\+t}]{x1, }
+\item[{uint8\+\_\+t}]{y1, }
+\item[{uint16\+\_\+t}]{color}
+\end{DoxyParamCaption}
+)}\hypertarget{st7735_8c_ae3f81d88c3bba11537fb3edfda8b8f44}{}\label{st7735_8c_ae3f81d88c3bba11537fb3edfda8b8f44}
+
+
+Dibuja una linea,utiliza otro algoritmo al empleado por lcd\+\_\+\+Line. 
+
+\index{st7735.\+c@{st7735.\+c}!draw\+Rect@{draw\+Rect}}
+\index{draw\+Rect@{draw\+Rect}!st7735.\+c@{st7735.\+c}}
+\subsubsection[{\texorpdfstring{draw\+Rect(uint8\+\_\+t x, uint8\+\_\+t y, uint8\+\_\+t w, uint8\+\_\+t h, uint16\+\_\+t color)}{drawRect(uint8_t x, uint8_t y, uint8_t w, uint8_t h, uint16_t color)}}]{\setlength{\rightskip}{0pt plus 5cm}void draw\+Rect (
+\begin{DoxyParamCaption}
+\item[{uint8\+\_\+t}]{x, }
+\item[{uint8\+\_\+t}]{y, }
+\item[{uint8\+\_\+t}]{w, }
+\item[{uint8\+\_\+t}]{h, }
+\item[{uint16\+\_\+t}]{color}
+\end{DoxyParamCaption}
+)}\hypertarget{st7735_8c_af864fedf3dd0b022ce4df8e5472f2d80}{}\label{st7735_8c_af864fedf3dd0b022ce4df8e5472f2d80}
+
+
+Dibuja un rectangulo utilizando un algoritmo diferente al usado en lcd\+\_\+\+Rect. 
+
+
+\begin{DoxyParams}{Parámetros}
+{\em x} & punto inicial en X \\
+\hline
+{\em y} & punto inicial en y \\
+\hline
+{\em w} & ancho del rectangulo en X a partir de X1 \\
+\hline
+{\em h} & alto del rectangulo a partir del punto Y2 \\
+\hline
+{\em color} & utilizado para rellenar el rectangulo \\
+\hline
+\end{DoxyParams}
+\begin{DoxyWarning}{Atención}
+el alto y ancho del rectangulo no deben sobrepasar las dimensiones de la pantalla 
+\end{DoxyWarning}
+\index{st7735.\+c@{st7735.\+c}!draw\+Round\+Rect@{draw\+Round\+Rect}}
+\index{draw\+Round\+Rect@{draw\+Round\+Rect}!st7735.\+c@{st7735.\+c}}
+\subsubsection[{\texorpdfstring{draw\+Round\+Rect(uint8\+\_\+t x, uint8\+\_\+t y, uint8\+\_\+t w, uint8\+\_\+t h, uint8\+\_\+t r, uint16\+\_\+t color)}{drawRoundRect(uint8_t x, uint8_t y, uint8_t w, uint8_t h, uint8_t r, uint16_t color)}}]{\setlength{\rightskip}{0pt plus 5cm}void draw\+Round\+Rect (
+\begin{DoxyParamCaption}
+\item[{uint8\+\_\+t}]{x, }
+\item[{uint8\+\_\+t}]{y, }
+\item[{uint8\+\_\+t}]{w, }
+\item[{uint8\+\_\+t}]{, }
+\item[{uint8\+\_\+t}]{r, }
+\item[{uint16\+\_\+t}]{color}
+\end{DoxyParamCaption}
+)}\hypertarget{st7735_8c_a26f4e03291701784cf70de18dc51b8f7}{}\label{st7735_8c_a26f4e03291701784cf70de18dc51b8f7}
+
+
+Dibuja un Round rectangulo con un determinado color. 
+
+
+\begin{DoxyParams}{Parámetros}
+{\em x} & punto inicial en X \\
+\hline
+{\em y} & punto inicial en y \\
+\hline
+{\em w} & ancho del rectangulo en X a partir de X1 \\
+\hline
+{\em r} & radio del circulo interno \\
+\hline
+{\em color} & utilizado para rellenar el rectangulo \\
+\hline
+\end{DoxyParams}
+\index{st7735.\+c@{st7735.\+c}!draw\+Triangle@{draw\+Triangle}}
+\index{draw\+Triangle@{draw\+Triangle}!st7735.\+c@{st7735.\+c}}
+\subsubsection[{\texorpdfstring{draw\+Triangle(uint8\+\_\+t x0, uint8\+\_\+t y0, uint8\+\_\+t x1, uint8\+\_\+t y1, uint8\+\_\+t x2, uint8\+\_\+t y2, uint16\+\_\+t color)}{drawTriangle(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint16_t color)}}]{\setlength{\rightskip}{0pt plus 5cm}void draw\+Triangle (
+\begin{DoxyParamCaption}
+\item[{uint8\+\_\+t}]{x0, }
+\item[{uint8\+\_\+t}]{y0, }
+\item[{uint8\+\_\+t}]{x1, }
+\item[{uint8\+\_\+t}]{y1, }
+\item[{uint8\+\_\+t}]{x2, }
+\item[{uint8\+\_\+t}]{y2, }
+\item[{uint16\+\_\+t}]{color}
+\end{DoxyParamCaption}
+)}\hypertarget{st7735_8c_a5b5d124d653e3fca7f0a4da92a59d99c}{}\label{st7735_8c_a5b5d124d653e3fca7f0a4da92a59d99c}
+
+
+Dibujar un triangulo, dibuja tres lineas que unen los tres vertices del triangulo, cada vertice con coordenadas x0y0, x1y1,x2y2. 
+
+
+\begin{DoxyParams}{Parámetros}
+{\em color} & color de las lineas \\
+\hline
+\end{DoxyParams}
+\index{st7735.\+c@{st7735.\+c}!fill\+Circle@{fill\+Circle}}
+\index{fill\+Circle@{fill\+Circle}!st7735.\+c@{st7735.\+c}}
+\subsubsection[{\texorpdfstring{fill\+Circle(uint8\+\_\+t x0, uint8\+\_\+t y0, uint8\+\_\+t r, uint16\+\_\+t color)}{fillCircle(uint8_t x0, uint8_t y0, uint8_t r, uint16_t color)}}]{\setlength{\rightskip}{0pt plus 5cm}void fill\+Circle (
+\begin{DoxyParamCaption}
+\item[{uint8\+\_\+t}]{x0, }
+\item[{uint8\+\_\+t}]{y0, }
+\item[{uint8\+\_\+t}]{r, }
+\item[{uint16\+\_\+t}]{color}
+\end{DoxyParamCaption}
+)}\hypertarget{st7735_8c_afd58757c44d467755bf5f951221de7d0}{}\label{st7735_8c_afd58757c44d467755bf5f951221de7d0}
+
+
+Dibujar y rellenar un circulo. 
+
+
+\begin{DoxyParams}{Parámetros}
+{\em x0} & coordenada en X del centro del circulo \\
+\hline
+{\em y0} & coordenada en ydel centro del circulo \\
+\hline
+{\em r} & radio del circulo \\
+\hline
+{\em color} & color del relleno \\
+\hline
+\end{DoxyParams}
+\index{st7735.\+c@{st7735.\+c}!fill\+Circle\+Helper@{fill\+Circle\+Helper}}
+\index{fill\+Circle\+Helper@{fill\+Circle\+Helper}!st7735.\+c@{st7735.\+c}}
+\subsubsection[{\texorpdfstring{fill\+Circle\+Helper(uint8\+\_\+t x0, uint8\+\_\+t y0, uint8\+\_\+t r, uint8\+\_\+t cornername, uint8\+\_\+t delta, uint16\+\_\+t color)}{fillCircleHelper(uint8_t x0, uint8_t y0, uint8_t r, uint8_t cornername, uint8_t delta, uint16_t color)}}]{\setlength{\rightskip}{0pt plus 5cm}void fill\+Circle\+Helper (
+\begin{DoxyParamCaption}
+\item[{uint8\+\_\+t}]{x0, }
+\item[{uint8\+\_\+t}]{y0, }
+\item[{uint8\+\_\+t}]{r, }
+\item[{uint8\+\_\+t}]{cornername, }
+\item[{uint8\+\_\+t}]{delta, }
+\item[{uint16\+\_\+t}]{color}
+\end{DoxyParamCaption}
+)}\hypertarget{st7735_8c_a49edfd7dd64ca3d741800c0f29eb7f97}{}\label{st7735_8c_a49edfd7dd64ca3d741800c0f29eb7f97}
+
+
+Funcion auxiliar utilizada por fill\+Circle y dibujar/rellenar el circulo. 
+
+\index{st7735.\+c@{st7735.\+c}!fill\+Rect@{fill\+Rect}}
+\index{fill\+Rect@{fill\+Rect}!st7735.\+c@{st7735.\+c}}
+\subsubsection[{\texorpdfstring{fill\+Rect(uint8\+\_\+t x, uint8\+\_\+t y, uint8\+\_\+t w, uint8\+\_\+t h, uint16\+\_\+t color)}{fillRect(uint8_t x, uint8_t y, uint8_t w, uint8_t h, uint16_t color)}}]{\setlength{\rightskip}{0pt plus 5cm}void fill\+Rect (
+\begin{DoxyParamCaption}
+\item[{uint8\+\_\+t}]{x, }
+\item[{uint8\+\_\+t}]{y, }
+\item[{uint8\+\_\+t}]{w, }
+\item[{uint8\+\_\+t}]{h, }
+\item[{uint16\+\_\+t}]{color}
+\end{DoxyParamCaption}
+)}\hypertarget{st7735_8c_aaf9d9500299437b02e25004c97e916ed}{}\label{st7735_8c_aaf9d9500299437b02e25004c97e916ed}
+
+
+Rellena un rectangulo con un determinado color, utiliza un algoritmo diferente al utilizado en lcd\+\_\+\+Fill\+Rect, el cual es utili para dibujo de pequeños rectangulos. 
+
+
+\begin{DoxyParams}{Parámetros}
+{\em x} & punto inicial en X \\
+\hline
+{\em y} & punto inicial en y \\
+\hline
+{\em w} & ancho del rectangulo en X a partir de X1 \\
+\hline
+{\em h} & alto del rectangulo a partir del punto Y2 \\
+\hline
+{\em color} & utilizado para rellenar el rectangulo \\
+\hline
+\end{DoxyParams}
+\begin{DoxyWarning}{Atención}
+Esta funcion es mucho más lenta que lcd\+\_\+\+Fill\+Rect, pero más preciso 
+\end{DoxyWarning}
+\index{st7735.\+c@{st7735.\+c}!fill\+Round\+Rect@{fill\+Round\+Rect}}
+\index{fill\+Round\+Rect@{fill\+Round\+Rect}!st7735.\+c@{st7735.\+c}}
+\subsubsection[{\texorpdfstring{fill\+Round\+Rect(uint8\+\_\+t x, uint8\+\_\+t y, uint8\+\_\+t w, uint8\+\_\+t h, uint8\+\_\+t r, uint16\+\_\+t color)}{fillRoundRect(uint8_t x, uint8_t y, uint8_t w, uint8_t h, uint8_t r, uint16_t color)}}]{\setlength{\rightskip}{0pt plus 5cm}void fill\+Round\+Rect (
+\begin{DoxyParamCaption}
+\item[{uint8\+\_\+t}]{x, }
+\item[{uint8\+\_\+t}]{y, }
+\item[{uint8\+\_\+t}]{w, }
+\item[{uint8\+\_\+t}]{h, }
+\item[{uint8\+\_\+t}]{r, }
+\item[{uint16\+\_\+t}]{color}
+\end{DoxyParamCaption}
+)}\hypertarget{st7735_8c_adf0786e14e204ca2740d7c1aef27a0a0}{}\label{st7735_8c_adf0786e14e204ca2740d7c1aef27a0a0}
+
+
+Rellena un Round rectangulo con un determinado color. 
+
+
+\begin{DoxyParams}{Parámetros}
+{\em x} & punto inicial en X \\
+\hline
+{\em y} & punto inicial en y \\
+\hline
+{\em w} & ancho del rectangulo en X a partir de X1 \\
+\hline
+{\em r} & radio del circulo interno \\
+\hline
+{\em color} & utilizado para rellenar el rectangulo \\
+\hline
+\end{DoxyParams}
+\index{st7735.\+c@{st7735.\+c}!fill\+Triangle@{fill\+Triangle}}
+\index{fill\+Triangle@{fill\+Triangle}!st7735.\+c@{st7735.\+c}}
+\subsubsection[{\texorpdfstring{fill\+Triangle(uint8\+\_\+t x0, uint8\+\_\+t y0, uint8\+\_\+t x1, uint8\+\_\+t y1, uint8\+\_\+t x2, uint8\+\_\+t y2, uint16\+\_\+t color)}{fillTriangle(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint16_t color)}}]{\setlength{\rightskip}{0pt plus 5cm}void fill\+Triangle (
+\begin{DoxyParamCaption}
+\item[{uint8\+\_\+t}]{x0, }
+\item[{uint8\+\_\+t}]{y0, }
+\item[{uint8\+\_\+t}]{x1, }
+\item[{uint8\+\_\+t}]{y1, }
+\item[{uint8\+\_\+t}]{x2, }
+\item[{uint8\+\_\+t}]{y2, }
+\item[{uint16\+\_\+t}]{color}
+\end{DoxyParamCaption}
+)}\hypertarget{st7735_8c_a9a16d7c88a1ea94262311f59722cba6b}{}\label{st7735_8c_a9a16d7c88a1ea94262311f59722cba6b}
+
+
+Dibuja/rellena un triangulo, utilizando tres lineas que unen los tres vertices del triangulo, cada vertice con coordenadas x0y0, x1y1,x2y2. 
+
+
+\begin{DoxyParams}{Parámetros}
+{\em color} & color del relleno \\
+\hline
+\end{DoxyParams}
+\index{st7735.\+c@{st7735.\+c}!get\+Blue@{get\+Blue}}
+\index{get\+Blue@{get\+Blue}!st7735.\+c@{st7735.\+c}}
+\subsubsection[{\texorpdfstring{get\+Blue(uint16\+\_\+t rgb\+Pixel)}{getBlue(uint16_t rgbPixel)}}]{\setlength{\rightskip}{0pt plus 5cm}uint8\+\_\+t get\+Blue (
+\begin{DoxyParamCaption}
+\item[{uint16\+\_\+t}]{rgb\+Pixel}
+\end{DoxyParamCaption}
+)}\hypertarget{st7735_8c_af775caa54b75571bdb757362d3e8de3c}{}\label{st7735_8c_af775caa54b75571bdb757362d3e8de3c}
+
+
+retorna el nivel de azul de un pixel 
+
+
+\begin{DoxyParams}{Parámetros}
+{\em rgb\+Pixel} & color actual del pixel en 16 bits. \\
+\hline
+\end{DoxyParams}
+\index{st7735.\+c@{st7735.\+c}!get\+Green@{get\+Green}}
+\index{get\+Green@{get\+Green}!st7735.\+c@{st7735.\+c}}
+\subsubsection[{\texorpdfstring{get\+Green(uint16\+\_\+t rgb\+Pixel)}{getGreen(uint16_t rgbPixel)}}]{\setlength{\rightskip}{0pt plus 5cm}uint8\+\_\+t get\+Green (
+\begin{DoxyParamCaption}
+\item[{uint16\+\_\+t}]{rgb\+Pixel}
+\end{DoxyParamCaption}
+)}\hypertarget{st7735_8c_a3f60030b79f293f90d6a4fc7d2986d73}{}\label{st7735_8c_a3f60030b79f293f90d6a4fc7d2986d73}
+
+
+retorna el nivel de verde de un pixel 
+
+
+\begin{DoxyParams}{Parámetros}
+{\em rgb\+Pixel} & color actual del pixel en 16 bits. \\
+\hline
+\end{DoxyParams}
+\index{st7735.\+c@{st7735.\+c}!get\+Red@{get\+Red}}
+\index{get\+Red@{get\+Red}!st7735.\+c@{st7735.\+c}}
+\subsubsection[{\texorpdfstring{get\+Red(uint16\+\_\+t rgb\+Pixel)}{getRed(uint16_t rgbPixel)}}]{\setlength{\rightskip}{0pt plus 5cm}uint8\+\_\+t get\+Red (
+\begin{DoxyParamCaption}
+\item[{uint16\+\_\+t}]{rgb\+Pixel}
+\end{DoxyParamCaption}
+)}\hypertarget{st7735_8c_a9e0759026ca579899f965cfc956412df}{}\label{st7735_8c_a9e0759026ca579899f965cfc956412df}
+
+
+retorna el nivel de rojo de un pixel 
+
+
+\begin{DoxyParams}{Parámetros}
+{\em rgb\+Pixel} & color actual del pixel en 16 bits. \\
+\hline
+\end{DoxyParams}
+\index{st7735.\+c@{st7735.\+c}!init\+\_\+lcd@{init\+\_\+lcd}}
+\index{init\+\_\+lcd@{init\+\_\+lcd}!st7735.\+c@{st7735.\+c}}
+\subsubsection[{\texorpdfstring{init\+\_\+lcd(void)}{init_lcd(void)}}]{\setlength{\rightskip}{0pt plus 5cm}void init\+\_\+lcd (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{st7735_8c_aafed2ade168a085630c2fe8d776432f2}{}\label{st7735_8c_aafed2ade168a085630c2fe8d776432f2}
+
+
+inicializa la pantalla,aqui se ajusta el formato y bits de color, etc. 
+
+\index{st7735.\+c@{st7735.\+c}!lcd\+\_\+back\+Light@{lcd\+\_\+back\+Light}}
+\index{lcd\+\_\+back\+Light@{lcd\+\_\+back\+Light}!st7735.\+c@{st7735.\+c}}
+\subsubsection[{\texorpdfstring{lcd\+\_\+back\+Light(uint8\+\_\+t on)}{lcd_backLight(uint8_t on)}}]{\setlength{\rightskip}{0pt plus 5cm}void lcd\+\_\+back\+Light (
+\begin{DoxyParamCaption}
+\item[{uint8\+\_\+t}]{on}
+\end{DoxyParamCaption}
+)}\hypertarget{st7735_8c_a4f074060e0dabe0ad6ffc2ba58afdf44}{}\label{st7735_8c_a4f074060e0dabe0ad6ffc2ba58afdf44}
+
+
+enciende o apaga la luz de fondo de la pantalla 
+
+
+\begin{DoxyParams}{Parámetros}
+{\em on} & cero=apaga, on$>$0, la enciende \\
+\hline
+\end{DoxyParams}
+\index{st7735.\+c@{st7735.\+c}!lcd\+\_\+\+Clear@{lcd\+\_\+\+Clear}}
+\index{lcd\+\_\+\+Clear@{lcd\+\_\+\+Clear}!st7735.\+c@{st7735.\+c}}
+\subsubsection[{\texorpdfstring{lcd\+\_\+\+Clear(uint16\+\_\+t color)}{lcd_Clear(uint16_t color)}}]{\setlength{\rightskip}{0pt plus 5cm}void lcd\+\_\+\+Clear (
+\begin{DoxyParamCaption}
+\item[{uint16\+\_\+t}]{color}
+\end{DoxyParamCaption}
+)}\hypertarget{st7735_8c_a819f1bad3cfc54b2bc29accf027fbe97}{}\label{st7735_8c_a819f1bad3cfc54b2bc29accf027fbe97}
+
+
+Llenar la pantalla de un solo color. 
+
+
+\begin{DoxyParams}{Parámetros}
+{\em color} & \+: color R\+G\+B565, alguno de los ya definidos en \hyperlink{color_8h}{color.\+h} \\
+\hline
+\end{DoxyParams}
+\index{st7735.\+c@{st7735.\+c}!lcd\+\_\+\+Fill\+Rect@{lcd\+\_\+\+Fill\+Rect}}
+\index{lcd\+\_\+\+Fill\+Rect@{lcd\+\_\+\+Fill\+Rect}!st7735.\+c@{st7735.\+c}}
+\subsubsection[{\texorpdfstring{lcd\+\_\+\+Fill\+Rect(uint8\+\_\+t x, uint8\+\_\+t y, uint8\+\_\+t w, uint8\+\_\+t h, uint16\+\_\+t color)}{lcd_FillRect(uint8_t x, uint8_t y, uint8_t w, uint8_t h, uint16_t color)}}]{\setlength{\rightskip}{0pt plus 5cm}void lcd\+\_\+\+Fill\+Rect (
+\begin{DoxyParamCaption}
+\item[{uint8\+\_\+t}]{x, }
+\item[{uint8\+\_\+t}]{y, }
+\item[{uint8\+\_\+t}]{w, }
+\item[{uint8\+\_\+t}]{h, }
+\item[{uint16\+\_\+t}]{color}
+\end{DoxyParamCaption}
+)}\hypertarget{st7735_8c_aeba6ba7c6ce32b47c5437325d57dd2c3}{}\label{st7735_8c_aeba6ba7c6ce32b47c5437325d57dd2c3}
+
+
+Rellena un rectangulo con un determinado color. 
+
+
+\begin{DoxyParams}{Parámetros}
+{\em x} & punto inicial en X \\
+\hline
+{\em y} & punto inicial en y \\
+\hline
+{\em w} & ancho del rectangulo en X a partir de X1 \\
+\hline
+{\em h} & alto del rectangulo a partir del punto Y2 \\
+\hline
+{\em color} & utilizado para rellenar el rectangulo \\
+\hline
+\end{DoxyParams}
+\begin{DoxyWarning}{Atención}
+\+: el alto y ancho del rectangulo no deben sobrepasar las dimensiones de la pantalla 
+\end{DoxyWarning}
+\index{st7735.\+c@{st7735.\+c}!lcd\+\_\+\+H\+Line@{lcd\+\_\+\+H\+Line}}
+\index{lcd\+\_\+\+H\+Line@{lcd\+\_\+\+H\+Line}!st7735.\+c@{st7735.\+c}}
+\subsubsection[{\texorpdfstring{lcd\+\_\+\+H\+Line(uint8\+\_\+t x, uint8\+\_\+t y, uint8\+\_\+t w, uint16\+\_\+t color)}{lcd_HLine(uint8_t x, uint8_t y, uint8_t w, uint16_t color)}}]{\setlength{\rightskip}{0pt plus 5cm}void lcd\+\_\+\+H\+Line (
+\begin{DoxyParamCaption}
+\item[{uint8\+\_\+t}]{x, }
+\item[{uint8\+\_\+t}]{y, }
+\item[{uint8\+\_\+t}]{w, }
+\item[{uint16\+\_\+t}]{color}
+\end{DoxyParamCaption}
+)}\hypertarget{st7735_8c_a51ad2be435bd72bc5597072999b304bd}{}\label{st7735_8c_a51ad2be435bd72bc5597072999b304bd}
+
+
+Dibuja una linea horizontal que iniciará en el punto xy. 
+
+
+\begin{DoxyParams}{Parámetros}
+{\em w} & \+: ancho de la linea \\
+\hline
+{\em color} & \+: color de la linea \\
+\hline
+\end{DoxyParams}
+\index{st7735.\+c@{st7735.\+c}!lcd\+\_\+\+Line@{lcd\+\_\+\+Line}}
+\index{lcd\+\_\+\+Line@{lcd\+\_\+\+Line}!st7735.\+c@{st7735.\+c}}
+\subsubsection[{\texorpdfstring{lcd\+\_\+\+Line(int16\+\_\+t X1, int16\+\_\+t Y1, int16\+\_\+t X2, int16\+\_\+t Y2, uint16\+\_\+t color)}{lcd_Line(int16_t X1, int16_t Y1, int16_t X2, int16_t Y2, uint16_t color)}}]{\setlength{\rightskip}{0pt plus 5cm}void lcd\+\_\+\+Line (
+\begin{DoxyParamCaption}
+\item[{int16\+\_\+t}]{X1, }
+\item[{int16\+\_\+t}]{Y1, }
+\item[{int16\+\_\+t}]{X2, }
+\item[{int16\+\_\+t}]{Y2, }
+\item[{uint16\+\_\+t}]{color}
+\end{DoxyParamCaption}
+)}\hypertarget{st7735_8c_a6e8b3154e014fb073bee6a563109428f}{}\label{st7735_8c_a6e8b3154e014fb073bee6a563109428f}
+
+
+Dibuja una linea que une los puntos X1\+Y1 a X2\+Y2. 
+
+\index{st7735.\+c@{st7735.\+c}!lcd\+\_\+\+Pixel@{lcd\+\_\+\+Pixel}}
+\index{lcd\+\_\+\+Pixel@{lcd\+\_\+\+Pixel}!st7735.\+c@{st7735.\+c}}
+\subsubsection[{\texorpdfstring{lcd\+\_\+\+Pixel(uint16\+\_\+t X, uint16\+\_\+t Y, uint16\+\_\+t color)}{lcd_Pixel(uint16_t X, uint16_t Y, uint16_t color)}}]{\setlength{\rightskip}{0pt plus 5cm}void lcd\+\_\+\+Pixel (
+\begin{DoxyParamCaption}
+\item[{uint16\+\_\+t}]{X, }
+\item[{uint16\+\_\+t}]{Y, }
+\item[{uint16\+\_\+t}]{color}
+\end{DoxyParamCaption}
+)}\hypertarget{st7735_8c_a52199fd74db51ad05720fb77b3dd1a2a}{}\label{st7735_8c_a52199fd74db51ad05720fb77b3dd1a2a}
+
+
+colorear un pixel en específico 
+
+
+\begin{DoxyParams}{Parámetros}
+{\em X} & \+: coordenada en X del pixel \\
+\hline
+{\em Y} & \+: coordenada en y del pixel \\
+\hline
+{\em color} & \+: color del pixel \\
+\hline
+\end{DoxyParams}
+\begin{DoxyWarning}{Atención}
+\+: tener cuidado de que las coordenadas XY del pixel esten dentro de los valores actuales de X e Y, en la orientacion por defecto lcd\+\_\+orientacion usando Scr\+Orientation\+\_\+\+Type\+Def, src\+\_\+\+Normal, x va desde 0 a 128 e Y de 0 a 160 
+\end{DoxyWarning}
+\index{st7735.\+c@{st7735.\+c}!lcd\+\_\+\+Rect@{lcd\+\_\+\+Rect}}
+\index{lcd\+\_\+\+Rect@{lcd\+\_\+\+Rect}!st7735.\+c@{st7735.\+c}}
+\subsubsection[{\texorpdfstring{lcd\+\_\+\+Rect(uint16\+\_\+t X1, uint16\+\_\+t Y1, uint16\+\_\+t X2, uint16\+\_\+t Y2, uint16\+\_\+t color)}{lcd_Rect(uint16_t X1, uint16_t Y1, uint16_t X2, uint16_t Y2, uint16_t color)}}]{\setlength{\rightskip}{0pt plus 5cm}void lcd\+\_\+\+Rect (
+\begin{DoxyParamCaption}
+\item[{uint16\+\_\+t}]{X1, }
+\item[{uint16\+\_\+t}]{Y1, }
+\item[{uint16\+\_\+t}]{X2, }
+\item[{uint16\+\_\+t}]{Y2, }
+\item[{uint16\+\_\+t}]{color}
+\end{DoxyParamCaption}
+)}\hypertarget{st7735_8c_ac94e780143f8f852ca9e1712bb7c4af5}{}\label{st7735_8c_ac94e780143f8f852ca9e1712bb7c4af5}
+
+
+Funcion para dibujar un rectangulo. 
+
+
+\begin{DoxyParams}{Parámetros}
+{\em X1} & punto inicial en X \\
+\hline
+{\em Y1} & punto inicial en y \\
+\hline
+{\em X2} & ancho del rectangulo en X a partir de X1 \\
+\hline
+{\em Y2} & alto del rectangulo a partir del punto Y2 \\
+\hline
+{\em color} & color de las lineas con las que se dibuja el rectangulo \\
+\hline
+\end{DoxyParams}
+\begin{DoxyWarning}{Atención}
+\+: el alto y ancho del rectangulo no deben sobrepasar las dimensiones de la pantalla 
+\end{DoxyWarning}
+\index{st7735.\+c@{st7735.\+c}!lcd\+\_\+set\+Addr\+Window@{lcd\+\_\+set\+Addr\+Window}}
+\index{lcd\+\_\+set\+Addr\+Window@{lcd\+\_\+set\+Addr\+Window}!st7735.\+c@{st7735.\+c}}
+\subsubsection[{\texorpdfstring{lcd\+\_\+set\+Addr\+Window(uint8\+\_\+t X\+S, uint8\+\_\+t X\+E, uint8\+\_\+t Y\+S, uint8\+\_\+t Y\+E)}{lcd_setAddrWindow(uint8_t XS, uint8_t XE, uint8_t YS, uint8_t YE)}}]{\setlength{\rightskip}{0pt plus 5cm}void lcd\+\_\+set\+Addr\+Window (
+\begin{DoxyParamCaption}
+\item[{uint8\+\_\+t}]{XS, }
+\item[{uint8\+\_\+t}]{YS, }
+\item[{uint8\+\_\+t}]{XE, }
+\item[{uint8\+\_\+t}]{YE}
+\end{DoxyParamCaption}
+)}\hypertarget{st7735_8c_ac90f40c3638d0b88fe1874c6451f7c1a}{}\label{st7735_8c_ac90f40c3638d0b88fe1874c6451f7c1a}
+
+
+activa la parte de la pantalla que se va a colorear. En cordenadas X-\/Y(2D), por defecto X=0-\/128 y Y=0-\/160, es posible cambiar la orientación. 
+
+
+\begin{DoxyParams}{Parámetros}
+{\em XS} & \+: x inicial \\
+\hline
+{\em XE} & \+: x final \\
+\hline
+{\em YS} & \+: y inicial \\
+\hline
+{\em YE} & \+: y final \\
+\hline
+\end{DoxyParams}
+\index{st7735.\+c@{st7735.\+c}!lcd\+\_\+\+V\+Line@{lcd\+\_\+\+V\+Line}}
+\index{lcd\+\_\+\+V\+Line@{lcd\+\_\+\+V\+Line}!st7735.\+c@{st7735.\+c}}
+\subsubsection[{\texorpdfstring{lcd\+\_\+\+V\+Line(uint8\+\_\+t x, uint8\+\_\+t y, uint8\+\_\+t h, uint16\+\_\+t color)}{lcd_VLine(uint8_t x, uint8_t y, uint8_t h, uint16_t color)}}]{\setlength{\rightskip}{0pt plus 5cm}void lcd\+\_\+\+V\+Line (
+\begin{DoxyParamCaption}
+\item[{uint8\+\_\+t}]{x, }
+\item[{uint8\+\_\+t}]{y, }
+\item[{uint8\+\_\+t}]{h, }
+\item[{uint16\+\_\+t}]{color}
+\end{DoxyParamCaption}
+)}\hypertarget{st7735_8c_ac155886cbd46bcb85b1cdad90def7e44}{}\label{st7735_8c_ac155886cbd46bcb85b1cdad90def7e44}
+
+
+Dibuja una linea vertical que iniciará en el punto xy. 
+
+
+\begin{DoxyParams}{Parámetros}
+{\em h} & \+: alto de la linea \\
+\hline
+{\em color} & \+: color de la linea \\
+\hline
+\end{DoxyParams}
+\index{st7735.\+c@{st7735.\+c}!push\+\_\+color@{push\+\_\+color}}
+\index{push\+\_\+color@{push\+\_\+color}!st7735.\+c@{st7735.\+c}}
+\subsubsection[{\texorpdfstring{push\+\_\+color(uint16\+\_\+t color)}{push_color(uint16_t color)}}]{\setlength{\rightskip}{0pt plus 5cm}void push\+\_\+color (
+\begin{DoxyParamCaption}
+\item[{uint16\+\_\+t}]{color}
+\end{DoxyParamCaption}
+)}\hypertarget{st7735_8c_a27dc4be7d8c6a50f7898c207e9d359de}{}\label{st7735_8c_a27dc4be7d8c6a50f7898c207e9d359de}
+\index{st7735.\+c@{st7735.\+c}!R\+G\+B565@{R\+G\+B565}}
+\index{R\+G\+B565@{R\+G\+B565}!st7735.\+c@{st7735.\+c}}
+\subsubsection[{\texorpdfstring{R\+G\+B565(uint8\+\_\+t R, uint8\+\_\+t G, uint8\+\_\+t B)}{RGB565(uint8_t R, uint8_t G, uint8_t B)}}]{\setlength{\rightskip}{0pt plus 5cm}uint16\+\_\+t R\+G\+B565 (
+\begin{DoxyParamCaption}
+\item[{uint8\+\_\+t}]{R, }
+\item[{uint8\+\_\+t}]{G, }
+\item[{uint8\+\_\+t}]{B}
+\end{DoxyParamCaption}
+)}\hypertarget{st7735_8c_ac181762e52db968673396efbf0e825fe}{}\label{st7735_8c_ac181762e52db968673396efbf0e825fe}
+
+
+color 
+
+retorna el color de un pixel R\+G\+B565 de 16 bits. \index{st7735.\+c@{st7735.\+c}!spi\+\_\+setup@{spi\+\_\+setup}}
+\index{spi\+\_\+setup@{spi\+\_\+setup}!st7735.\+c@{st7735.\+c}}
+\subsubsection[{\texorpdfstring{spi\+\_\+setup(uint32\+\_\+t S\+P\+I)}{spi_setup(uint32_t SPI)}}]{\setlength{\rightskip}{0pt plus 5cm}void spi\+\_\+setup (
+\begin{DoxyParamCaption}
+\item[{uint32\+\_\+t}]{S\+PI}
+\end{DoxyParamCaption}
+)}\hypertarget{st7735_8c_acb5db9fda33cb42e565461d17593bcf6}{}\label{st7735_8c_acb5db9fda33cb42e565461d17593bcf6}
+
+
+Inicializa el periférico S\+PI a utilizar. 
+
+
+\begin{DoxyParams}{Parámetros}
+{\em S\+PI} & \+: puede ser S\+P\+I1, S\+P\+I2 O S\+P\+I3 \\
+\hline
+\end{DoxyParams}
+\index{st7735.\+c@{st7735.\+c}!st\+\_\+\+Put\+Str5x7@{st\+\_\+\+Put\+Str5x7}}
+\index{st\+\_\+\+Put\+Str5x7@{st\+\_\+\+Put\+Str5x7}!st7735.\+c@{st7735.\+c}}
+\subsubsection[{\texorpdfstring{st\+\_\+\+Put\+Str5x7(uint8\+\_\+t scale, uint8\+\_\+t X, uint8\+\_\+t Y, char $\ast$str, uint16\+\_\+t color, uint16\+\_\+t bgcolor)}{st_PutStr5x7(uint8_t scale, uint8_t X, uint8_t Y, char *str, uint16_t color, uint16_t bgcolor)}}]{\setlength{\rightskip}{0pt plus 5cm}void st\+\_\+\+Put\+Str5x7 (
+\begin{DoxyParamCaption}
+\item[{uint8\+\_\+t}]{scale, }
+\item[{uint8\+\_\+t}]{X, }
+\item[{uint8\+\_\+t}]{Y, }
+\item[{char $\ast$}]{str, }
+\item[{uint16\+\_\+t}]{color, }
+\item[{uint16\+\_\+t}]{bgcolor}
+\end{DoxyParamCaption}
+)}\hypertarget{st7735_8c_ac44b1142c890d76d774741669962728a}{}\label{st7735_8c_ac44b1142c890d76d774741669962728a}
+
+
+escribe un arreglo de chars (strings) 
+
+
+\begin{DoxyParams}{Parámetros}
+{\em scale} & tamaño del string \\
+\hline
+{\em x} & coordenada en X \\
+\hline
+{\em y} & coordenada en y \\
+\hline
+{\em str} & string \\
+\hline
+{\em bgcolor} & color de fondo del string \\
+\hline
+{\em color} & color del string \\
+\hline
+\end{DoxyParams}
+\begin{DoxyWarning}{Atención}
+scale\+: cuanto mas grande sea scale mas tarda en dibujarse en la pantalla 
+\end{DoxyWarning}
+\index{st7735.\+c@{st7735.\+c}!swapcolor@{swapcolor}}
+\index{swapcolor@{swapcolor}!st7735.\+c@{st7735.\+c}}
+\subsubsection[{\texorpdfstring{swapcolor(uint16\+\_\+t x)}{swapcolor(uint16_t x)}}]{\setlength{\rightskip}{0pt plus 5cm}uint16\+\_\+t swapcolor (
+\begin{DoxyParamCaption}
+\item[{uint16\+\_\+t}]{x}
+\end{DoxyParamCaption}
+)}\hypertarget{st7735_8c_ac7770e102c0ce9b4f7833f646ab5c6c6}{}\label{st7735_8c_ac7770e102c0ce9b4f7833f646ab5c6c6}
+
+
+Intercambia el orden de los componentes de color en un pixel, de R\+GB a B\+GR. 
+
+
+\begin{DoxyParams}{Parámetros}
+{\em x} & color actual del pixel en 16 bits. \\
+\hline
+\end{DoxyParams}
+\index{st7735.\+c@{st7735.\+c}!write\+\_\+cmd\+\_\+lcd@{write\+\_\+cmd\+\_\+lcd}}
+\index{write\+\_\+cmd\+\_\+lcd@{write\+\_\+cmd\+\_\+lcd}!st7735.\+c@{st7735.\+c}}
+\subsubsection[{\texorpdfstring{write\+\_\+cmd\+\_\+lcd(uint8\+\_\+t cmd)}{write_cmd_lcd(uint8_t cmd)}}]{\setlength{\rightskip}{0pt plus 5cm}void write\+\_\+cmd\+\_\+lcd (
+\begin{DoxyParamCaption}
+\item[{uint8\+\_\+t}]{cmd}
+\end{DoxyParamCaption}
+)}\hypertarget{st7735_8c_a4a28c3534d2f2074fe50367f1b199e7b}{}\label{st7735_8c_a4a28c3534d2f2074fe50367f1b199e7b}
+
+
+envia datos al S\+PI, es decir a la tarjeta S\+T7735S, internamente pone en bajo la bandera DC, para indicar a la tarjeta que se envian comandos de configuracion 
+
+\index{st7735.\+c@{st7735.\+c}!write\+\_\+data\+\_\+lcd@{write\+\_\+data\+\_\+lcd}}
+\index{write\+\_\+data\+\_\+lcd@{write\+\_\+data\+\_\+lcd}!st7735.\+c@{st7735.\+c}}
+\subsubsection[{\texorpdfstring{write\+\_\+data\+\_\+lcd(uint8\+\_\+t data)}{write_data_lcd(uint8_t data)}}]{\setlength{\rightskip}{0pt plus 5cm}void write\+\_\+data\+\_\+lcd (
+\begin{DoxyParamCaption}
+\item[{uint8\+\_\+t}]{data}
+\end{DoxyParamCaption}
+)}\hypertarget{st7735_8c_a0e3c78d312f9ea8019c006a74e524dda}{}\label{st7735_8c_a0e3c78d312f9ea8019c006a74e524dda}
+
+
+envia datos al S\+PI, es decir a la tarjeta S\+T7735S, internamente pone en alto la bandera DC, para indicar a la tarjeta que se envian datos 
+
+
+
+\subsection{Documentación de las variables}
+\index{st7735.\+c@{st7735.\+c}!colstart@{colstart}}
+\index{colstart@{colstart}!st7735.\+c@{st7735.\+c}}
+\subsubsection[{\texorpdfstring{colstart}{colstart}}]{\setlength{\rightskip}{0pt plus 5cm}uint8\+\_\+t colstart}\hypertarget{st7735_8c_aece82502489a4d20dab38fad9460c902}{}\label{st7735_8c_aece82502489a4d20dab38fad9460c902}
+\index{st7735.\+c@{st7735.\+c}!rowstart@{rowstart}}
+\index{rowstart@{rowstart}!st7735.\+c@{st7735.\+c}}
+\subsubsection[{\texorpdfstring{rowstart}{rowstart}}]{\setlength{\rightskip}{0pt plus 5cm}uint8\+\_\+t rowstart}\hypertarget{st7735_8c_af4427372d2c9fadec9e4d29702f7833b}{}\label{st7735_8c_af4427372d2c9fadec9e4d29702f7833b}
+\index{st7735.\+c@{st7735.\+c}!scr\+\_\+height@{scr\+\_\+height}}
+\index{scr\+\_\+height@{scr\+\_\+height}!st7735.\+c@{st7735.\+c}}
+\subsubsection[{\texorpdfstring{scr\+\_\+height}{scr_height}}]{\setlength{\rightskip}{0pt plus 5cm}uint8\+\_\+t scr\+\_\+height}\hypertarget{st7735_8c_a3ecc6bdbb12d18b378678c4886c888c3}{}\label{st7735_8c_a3ecc6bdbb12d18b378678c4886c888c3}
+\index{st7735.\+c@{st7735.\+c}!scr\+\_\+width@{scr\+\_\+width}}
+\index{scr\+\_\+width@{scr\+\_\+width}!st7735.\+c@{st7735.\+c}}
+\subsubsection[{\texorpdfstring{scr\+\_\+width}{scr_width}}]{\setlength{\rightskip}{0pt plus 5cm}uint8\+\_\+t scr\+\_\+width}\hypertarget{st7735_8c_a05ab2cd3381c6d222366afe03062360b}{}\label{st7735_8c_a05ab2cd3381c6d222366afe03062360b}
+\index{st7735.\+c@{st7735.\+c}!spi\+Port@{spi\+Port}}
+\index{spi\+Port@{spi\+Port}!st7735.\+c@{st7735.\+c}}
+\subsubsection[{\texorpdfstring{spi\+Port}{spiPort}}]{\setlength{\rightskip}{0pt plus 5cm}uint32\+\_\+t spi\+Port}\hypertarget{st7735_8c_a351c436f5cae92ffb1220aafdefa6cc9}{}\label{st7735_8c_a351c436f5cae92ffb1220aafdefa6cc9}
