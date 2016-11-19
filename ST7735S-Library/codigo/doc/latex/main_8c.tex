@@ -1,13 +1,12 @@
-\hypertarget{main_8c}{}\section{Referencia del Archivo /home/neithan/\+Microcontrolers/\+Lab5/codigo/src/main.c}
-\label{main_8c}\index{/home/neithan/\+Microcontrolers/\+Lab5/codigo/src/main.\+c@{/home/neithan/\+Microcontrolers/\+Lab5/codigo/src/main.\+c}}
+\hypertarget{main_8c}{}\section{Referencia del Archivo /home/neithan/\+Microcontrolers/\+S\+T7735\+S-\/\+Library/codigo/src/main.c}
+\label{main_8c}\index{/home/neithan/\+Microcontrolers/\+S\+T7735\+S-\/\+Library/codigo/src/main.\+c@{/home/neithan/\+Microcontrolers/\+S\+T7735\+S-\/\+Library/codigo/src/main.\+c}}
 {\ttfamily \#include $<$libopencm3/usb/usbd.\+h$>$}\\*
 {\ttfamily \#include $<$libopencm3/usb/cdc.\+h$>$}\\*
-{\ttfamily \#include \char`\"{}usb.\+h\char`\"{}}\\*
 {\ttfamily \#include \char`\"{}st7735.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}tabla.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}tabla2.\+h\char`\"{}}\\*
 \subsection*{\textquotesingle{}defines\textquotesingle{}}
 \begin{DoxyCompactItemize}
-\item 
-\#define \hyperlink{main_8c_aacaca0988244bd3a888ca5befa89f44b}{P\+W\+M\+\_\+\+P\+E\+R\+I\+OD}~2999
 \item 
 \#define \hyperlink{main_8c_a25e8f6c04deb6d3d17de4611c2322196}{L\+E\+D\+\_\+\+D\+I\+S\+C\+O\+\_\+\+G\+R\+E\+E\+N\+\_\+\+P\+O\+RT}~G\+P\+I\+OD
 \item 
@@ -18,15 +17,6 @@
 \item 
 int \hyperlink{main_8c_a840291bc02cba5474a4cb46a9b9566fe}{main} (void)
 \end{DoxyCompactItemize}
-\subsection*{Variables}
-\begin{DoxyCompactItemize}
-\item 
-uint16\+\_\+t \hyperlink{main_8c_a40a7b20d79f4633ce9325f7000626c48}{image\+\_\+buffer} \mbox{[}128 $\ast$160\mbox{]}
-\item 
-bool \hyperlink{main_8c_abc6fee288e308a5618b86361db139e18}{new\+\_\+image}
-\item 
-usbd\+\_\+device $\ast$ \hyperlink{main_8c_a371fec116e56a5c485a09d5dd8cd6c95}{usbd\+\_\+dev}
-\end{DoxyCompactItemize}
 
 
 \subsection{Documentación de los \textquotesingle{}defines\textquotesingle{}}
@@ -36,9 +26,6 @@ usbd\+\_\+device $\ast$ \hyperlink{main_8c_a371fec116e56a5c485a09d5dd8cd6c95}{us
 \index{main.\+c@{main.\+c}!L\+E\+D\+\_\+\+D\+I\+S\+C\+O\+\_\+\+G\+R\+E\+E\+N\+\_\+\+P\+O\+RT@{L\+E\+D\+\_\+\+D\+I\+S\+C\+O\+\_\+\+G\+R\+E\+E\+N\+\_\+\+P\+O\+RT}}
 \index{L\+E\+D\+\_\+\+D\+I\+S\+C\+O\+\_\+\+G\+R\+E\+E\+N\+\_\+\+P\+O\+RT@{L\+E\+D\+\_\+\+D\+I\+S\+C\+O\+\_\+\+G\+R\+E\+E\+N\+\_\+\+P\+O\+RT}!main.\+c@{main.\+c}}
 \subsubsection[{\texorpdfstring{L\+E\+D\+\_\+\+D\+I\+S\+C\+O\+\_\+\+G\+R\+E\+E\+N\+\_\+\+P\+O\+RT}{LED_DISCO_GREEN_PORT}}]{\setlength{\rightskip}{0pt plus 5cm}\#define L\+E\+D\+\_\+\+D\+I\+S\+C\+O\+\_\+\+G\+R\+E\+E\+N\+\_\+\+P\+O\+RT~G\+P\+I\+OD}\hypertarget{main_8c_a25e8f6c04deb6d3d17de4611c2322196}{}\label{main_8c_a25e8f6c04deb6d3d17de4611c2322196}
-\index{main.\+c@{main.\+c}!P\+W\+M\+\_\+\+P\+E\+R\+I\+OD@{P\+W\+M\+\_\+\+P\+E\+R\+I\+OD}}
-\index{P\+W\+M\+\_\+\+P\+E\+R\+I\+OD@{P\+W\+M\+\_\+\+P\+E\+R\+I\+OD}!main.\+c@{main.\+c}}
-\subsubsection[{\texorpdfstring{P\+W\+M\+\_\+\+P\+E\+R\+I\+OD}{PWM_PERIOD}}]{\setlength{\rightskip}{0pt plus 5cm}\#define P\+W\+M\+\_\+\+P\+E\+R\+I\+OD~2999}\hypertarget{main_8c_aacaca0988244bd3a888ca5befa89f44b}{}\label{main_8c_aacaca0988244bd3a888ca5befa89f44b}
 
 
 \subsection{Documentación de las funciones}
@@ -49,15 +36,3 @@ usbd\+\_\+device $\ast$ \hyperlink{main_8c_a371fec116e56a5c485a09d5dd8cd6c95}{us
 \item[{void}]{}
 \end{DoxyParamCaption}
 )}\hypertarget{main_8c_a840291bc02cba5474a4cb46a9b9566fe}{}\label{main_8c_a840291bc02cba5474a4cb46a9b9566fe}
-
-
-\subsection{Documentación de las variables}
-\index{main.\+c@{main.\+c}!image\+\_\+buffer@{image\+\_\+buffer}}
-\index{image\+\_\+buffer@{image\+\_\+buffer}!main.\+c@{main.\+c}}
-\subsubsection[{\texorpdfstring{image\+\_\+buffer}{image_buffer}}]{\setlength{\rightskip}{0pt plus 5cm}uint16\+\_\+t image\+\_\+buffer\mbox{[}128 $\ast$160\mbox{]}}\hypertarget{main_8c_a40a7b20d79f4633ce9325f7000626c48}{}\label{main_8c_a40a7b20d79f4633ce9325f7000626c48}
-\index{main.\+c@{main.\+c}!new\+\_\+image@{new\+\_\+image}}
-\index{new\+\_\+image@{new\+\_\+image}!main.\+c@{main.\+c}}
-\subsubsection[{\texorpdfstring{new\+\_\+image}{new_image}}]{\setlength{\rightskip}{0pt plus 5cm}bool new\+\_\+image}\hypertarget{main_8c_abc6fee288e308a5618b86361db139e18}{}\label{main_8c_abc6fee288e308a5618b86361db139e18}
-\index{main.\+c@{main.\+c}!usbd\+\_\+dev@{usbd\+\_\+dev}}
-\index{usbd\+\_\+dev@{usbd\+\_\+dev}!main.\+c@{main.\+c}}
-\subsubsection[{\texorpdfstring{usbd\+\_\+dev}{usbd_dev}}]{\setlength{\rightskip}{0pt plus 5cm}usbd\+\_\+device$\ast$ usbd\+\_\+dev}\hypertarget{main_8c_a371fec116e56a5c485a09d5dd8cd6c95}{}\label{main_8c_a371fec116e56a5c485a09d5dd8cd6c95}

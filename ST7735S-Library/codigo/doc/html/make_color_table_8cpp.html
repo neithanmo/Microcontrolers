@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.11"/>
-<title>proyecto_micro-controladores: Referencia del Archivo /home/neithan/Microcontrolers/Lab5/codigo/src/makeColorTable.cpp</title>
+<title>proyecto_micro-controladores: Referencia del Archivo /home/neithan/Microcontrolers/ST7735S-Library/codigo/src/makeColorTable.cpp</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -111,13 +111,9 @@ $(document).ready(function(){initNavTree('make_color_table_8cpp.html','');});
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &lt;sys/time.h&gt;</code><br />
-<code>#include &lt;fcntl.h&gt;</code><br />
 <code>#include &lt;unistd.h&gt;</code><br />
 <code>#include &lt;string.h&gt;</code><br />
-<code>#include &lt;termios.h&gt;</code><br />
 <code>#include &lt;stdio.h&gt;</code><br />
-<code>#include &lt;sys/types.h&gt;</code><br />
-<code>#include &lt;sys/stat.h&gt;</code><br />
 <code>#include &lt;cmath&gt;</code><br />
 <code>#include &lt;opencv2/core/core.hpp&gt;</code><br />
 <code>#include &lt;opencv2/highgui/highgui.hpp&gt;</code><br />
@@ -132,38 +128,15 @@ Funciones</h2></td></tr>
 <tr class="separator:a327e7af0a225fda1646a9b3d7aa9cf33"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a47655bbeb17e4166ddfb106e3f8adecf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="make_color_table_8cpp.html#a47655bbeb17e4166ddfb106e3f8adecf">open_image</a> (const string <a class="el" href="make_color_table_8cpp.html#ae481aa99ddc0fb8a143ff9c561df47a9">filename</a>)</td></tr>
 <tr class="separator:a47655bbeb17e4166ddfb106e3f8adecf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1804577315ec9e2823968a0b21547a7f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="make_color_table_8cpp.html#a1804577315ec9e2823968a0b21547a7f">image_send</a> ()</td></tr>
-<tr class="separator:a1804577315ec9e2823968a0b21547a7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0ddf1224851353fc92bfbff6f499fa97"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="make_color_table_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97">main</a> (int argc, char *argv[])</td></tr>
 <tr class="separator:a0ddf1224851353fc92bfbff6f499fa97"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
-<tr class="memitem:a08c9783fbb7e427a35de1f672681f6bd"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="make_color_table_8cpp.html#a08c9783fbb7e427a35de1f672681f6bd">serial_fd</a></td></tr>
-<tr class="separator:a08c9783fbb7e427a35de1f672681f6bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abc6fee288e308a5618b86361db139e18"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="make_color_table_8cpp.html#abc6fee288e308a5618b86361db139e18">new_image</a></td></tr>
-<tr class="separator:abc6fee288e308a5618b86361db139e18"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad318cca83430c6f10ce3bdcc06ac520a"><td class="memItemLeft" align="right" valign="top">unsigned short int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="make_color_table_8cpp.html#ad318cca83430c6f10ce3bdcc06ac520a">image_buffer</a> [128 *160]</td></tr>
-<tr class="separator:ad318cca83430c6f10ce3bdcc06ac520a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae481aa99ddc0fb8a143ff9c561df47a9"><td class="memItemLeft" align="right" valign="top">const string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="make_color_table_8cpp.html#ae481aa99ddc0fb8a143ff9c561df47a9">filename</a></td></tr>
 <tr class="separator:ae481aa99ddc0fb8a143ff9c561df47a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Documentación de las funciones</h2>
-<a class="anchor" id="a1804577315ec9e2823968a0b21547a7f"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void image_send </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a class="anchor" id="a0ddf1224851353fc92bfbff6f499fa97"></a>
 <div class="memitem">
 <div class="memproto">
@@ -253,49 +226,13 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ad318cca83430c6f10ce3bdcc06ac520a"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">unsigned short int image_buffer[128 *160]</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="abc6fee288e308a5618b86361db139e18"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool new_image</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a08c9783fbb7e427a35de1f672681f6bd"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int serial_fd</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="make_color_table_8cpp.html">makeColorTable.cpp</a></li>
-    <li class="footer">Generado el Viernes, 18 de Noviembre de 2016 11:49:28 para proyecto_micro-controladores por
+    <li class="footer">Generado el Sábado, 19 de Noviembre de 2016 09:06:54 para proyecto_micro-controladores por
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.11 </li>
   </ul>

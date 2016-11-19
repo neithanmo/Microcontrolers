@@ -1,13 +1,9 @@
-\hypertarget{make_color_table_8cpp}{}\section{Referencia del Archivo /home/neithan/\+Microcontrolers/\+Lab5/codigo/src/make\+Color\+Table.cpp}
-\label{make_color_table_8cpp}\index{/home/neithan/\+Microcontrolers/\+Lab5/codigo/src/make\+Color\+Table.\+cpp@{/home/neithan/\+Microcontrolers/\+Lab5/codigo/src/make\+Color\+Table.\+cpp}}
+\hypertarget{make_color_table_8cpp}{}\section{Referencia del Archivo /home/neithan/\+Microcontrolers/\+S\+T7735\+S-\/\+Library/codigo/src/make\+Color\+Table.cpp}
+\label{make_color_table_8cpp}\index{/home/neithan/\+Microcontrolers/\+S\+T7735\+S-\/\+Library/codigo/src/make\+Color\+Table.\+cpp@{/home/neithan/\+Microcontrolers/\+S\+T7735\+S-\/\+Library/codigo/src/make\+Color\+Table.\+cpp}}
 {\ttfamily \#include $<$sys/time.\+h$>$}\\*
-{\ttfamily \#include $<$fcntl.\+h$>$}\\*
 {\ttfamily \#include $<$unistd.\+h$>$}\\*
 {\ttfamily \#include $<$string.\+h$>$}\\*
-{\ttfamily \#include $<$termios.\+h$>$}\\*
 {\ttfamily \#include $<$stdio.\+h$>$}\\*
-{\ttfamily \#include $<$sys/types.\+h$>$}\\*
-{\ttfamily \#include $<$sys/stat.\+h$>$}\\*
 {\ttfamily \#include $<$cmath$>$}\\*
 {\ttfamily \#include $<$opencv2/core/core.\+hpp$>$}\\*
 {\ttfamily \#include $<$opencv2/highgui/highgui.\+hpp$>$}\\*
@@ -21,31 +17,16 @@ unsigned int \hyperlink{make_color_table_8cpp_a327e7af0a225fda1646a9b3d7aa9cf33}
 \begin{DoxyCompactList}\small\item\em color \end{DoxyCompactList}\item 
 void \hyperlink{make_color_table_8cpp_a47655bbeb17e4166ddfb106e3f8adecf}{open\+\_\+image} (const string \hyperlink{make_color_table_8cpp_ae481aa99ddc0fb8a143ff9c561df47a9}{filename})
 \item 
-void \hyperlink{make_color_table_8cpp_a1804577315ec9e2823968a0b21547a7f}{image\+\_\+send} ()
-\item 
 int \hyperlink{make_color_table_8cpp_a0ddf1224851353fc92bfbff6f499fa97}{main} (int argc, char $\ast$argv\mbox{[}$\,$\mbox{]})
 \end{DoxyCompactItemize}
 \subsection*{Variables}
 \begin{DoxyCompactItemize}
-\item 
-int \hyperlink{make_color_table_8cpp_a08c9783fbb7e427a35de1f672681f6bd}{serial\+\_\+fd}
-\item 
-bool \hyperlink{make_color_table_8cpp_abc6fee288e308a5618b86361db139e18}{new\+\_\+image}
-\item 
-unsigned short int \hyperlink{make_color_table_8cpp_ad318cca83430c6f10ce3bdcc06ac520a}{image\+\_\+buffer} \mbox{[}128 $\ast$160\mbox{]}
 \item 
 const string \hyperlink{make_color_table_8cpp_ae481aa99ddc0fb8a143ff9c561df47a9}{filename}
 \end{DoxyCompactItemize}
 
 
 \subsection{Documentación de las funciones}
-\index{make\+Color\+Table.\+cpp@{make\+Color\+Table.\+cpp}!image\+\_\+send@{image\+\_\+send}}
-\index{image\+\_\+send@{image\+\_\+send}!make\+Color\+Table.\+cpp@{make\+Color\+Table.\+cpp}}
-\subsubsection[{\texorpdfstring{image\+\_\+send()}{image_send()}}]{\setlength{\rightskip}{0pt plus 5cm}void image\+\_\+send (
-\begin{DoxyParamCaption}
-{}
-\end{DoxyParamCaption}
-)}\hypertarget{make_color_table_8cpp_a1804577315ec9e2823968a0b21547a7f}{}\label{make_color_table_8cpp_a1804577315ec9e2823968a0b21547a7f}
 \index{make\+Color\+Table.\+cpp@{make\+Color\+Table.\+cpp}!main@{main}}
 \index{main@{main}!make\+Color\+Table.\+cpp@{make\+Color\+Table.\+cpp}}
 \subsubsection[{\texorpdfstring{main(int argc, char $\ast$argv[])}{main(int argc, char *argv[])}}]{\setlength{\rightskip}{0pt plus 5cm}int main (
@@ -80,12 +61,3 @@ color
 \index{make\+Color\+Table.\+cpp@{make\+Color\+Table.\+cpp}!filename@{filename}}
 \index{filename@{filename}!make\+Color\+Table.\+cpp@{make\+Color\+Table.\+cpp}}
 \subsubsection[{\texorpdfstring{filename}{filename}}]{\setlength{\rightskip}{0pt plus 5cm}const string filename}\hypertarget{make_color_table_8cpp_ae481aa99ddc0fb8a143ff9c561df47a9}{}\label{make_color_table_8cpp_ae481aa99ddc0fb8a143ff9c561df47a9}
-\index{make\+Color\+Table.\+cpp@{make\+Color\+Table.\+cpp}!image\+\_\+buffer@{image\+\_\+buffer}}
-\index{image\+\_\+buffer@{image\+\_\+buffer}!make\+Color\+Table.\+cpp@{make\+Color\+Table.\+cpp}}
-\subsubsection[{\texorpdfstring{image\+\_\+buffer}{image_buffer}}]{\setlength{\rightskip}{0pt plus 5cm}unsigned short int image\+\_\+buffer\mbox{[}128 $\ast$160\mbox{]}}\hypertarget{make_color_table_8cpp_ad318cca83430c6f10ce3bdcc06ac520a}{}\label{make_color_table_8cpp_ad318cca83430c6f10ce3bdcc06ac520a}
-\index{make\+Color\+Table.\+cpp@{make\+Color\+Table.\+cpp}!new\+\_\+image@{new\+\_\+image}}
-\index{new\+\_\+image@{new\+\_\+image}!make\+Color\+Table.\+cpp@{make\+Color\+Table.\+cpp}}
-\subsubsection[{\texorpdfstring{new\+\_\+image}{new_image}}]{\setlength{\rightskip}{0pt plus 5cm}bool new\+\_\+image}\hypertarget{make_color_table_8cpp_abc6fee288e308a5618b86361db139e18}{}\label{make_color_table_8cpp_abc6fee288e308a5618b86361db139e18}
-\index{make\+Color\+Table.\+cpp@{make\+Color\+Table.\+cpp}!serial\+\_\+fd@{serial\+\_\+fd}}
-\index{serial\+\_\+fd@{serial\+\_\+fd}!make\+Color\+Table.\+cpp@{make\+Color\+Table.\+cpp}}
-\subsubsection[{\texorpdfstring{serial\+\_\+fd}{serial_fd}}]{\setlength{\rightskip}{0pt plus 5cm}int serial\+\_\+fd}\hypertarget{make_color_table_8cpp_a08c9783fbb7e427a35de1f672681f6bd}{}\label{make_color_table_8cpp_a08c9783fbb7e427a35de1f672681f6bd}

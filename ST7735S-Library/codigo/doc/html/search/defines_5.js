@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['init_5fduty',['INIT_DUTY',['../defs_8h.html#ad643c4d0267b346dafb2cd345d5d952d',1,'defs.h']]],
   ['initr_5f144greentab',['INITR_144GREENTAB',['../st7735_8h.html#a9c361b912f3945ccbc19d8de021c96c5',1,'st7735.h']]],
   ['initr_5f18blacktab',['INITR_18BLACKTAB',['../st7735_8h.html#aa9bf2edd9c879179cc072b3b9d4ecc8f',1,'st7735.h']]],
   ['initr_5f18greentab',['INITR_18GREENTAB',['../st7735_8h.html#a0b0bfc22b86b89c821c89e5af8d11ee0',1,'st7735.h']]],

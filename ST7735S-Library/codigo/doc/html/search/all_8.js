@@ -1,14 +1,16 @@
 var searchData=
 [
-  ['image_5fbuffer',['image_buffer',['../main_8c.html#a40a7b20d79f4633ce9325f7000626c48',1,'image_buffer():&#160;main.c'],['../make_color_table_8cpp.html#ad318cca83430c6f10ce3bdcc06ac520a',1,'image_buffer():&#160;makeColorTable.cpp']]],
-  ['image_5fsend',['image_send',['../make_color_table_8cpp.html#a1804577315ec9e2823968a0b21547a7f',1,'makeColorTable.cpp']]],
-  ['init_5fduty',['INIT_DUTY',['../defs_8h.html#ad643c4d0267b346dafb2cd345d5d952d',1,'defs.h']]],
-  ['init_5flcd',['init_lcd',['../st7735_8c.html#aafed2ade168a085630c2fe8d776432f2',1,'init_lcd(void):&#160;st7735.c'],['../st7735_8h.html#aafed2ade168a085630c2fe8d776432f2',1,'init_lcd(void):&#160;st7735.c']]],
-  ['initr_5f144greentab',['INITR_144GREENTAB',['../st7735_8h.html#a9c361b912f3945ccbc19d8de021c96c5',1,'st7735.h']]],
-  ['initr_5f18blacktab',['INITR_18BLACKTAB',['../st7735_8h.html#aa9bf2edd9c879179cc072b3b9d4ecc8f',1,'st7735.h']]],
-  ['initr_5f18greentab',['INITR_18GREENTAB',['../st7735_8h.html#a0b0bfc22b86b89c821c89e5af8d11ee0',1,'st7735.h']]],
-  ['initr_5f18redtab',['INITR_18REDTAB',['../st7735_8h.html#a2b0d94a281bc70fb8e8dc3217e51e7e0',1,'st7735.h']]],
-  ['initr_5fblacktab',['INITR_BLACKTAB',['../st7735_8h.html#a385ddeae12a0bcd313507bbe58f66e9a',1,'st7735.h']]],
-  ['initr_5fgreentab',['INITR_GREENTAB',['../st7735_8h.html#a8482c50b5e4da7ef9cc27ec7f16aa374',1,'st7735.h']]],
-  ['initr_5fredtab',['INITR_REDTAB',['../st7735_8h.html#ac861596d7089b7620395cdad635c9307',1,'st7735.h']]]
+  ['lcd_5fbacklight',['lcd_backLight',['../st7735_8c.html#a4f074060e0dabe0ad6ffc2ba58afdf44',1,'lcd_backLight(uint8_t on):&#160;st7735.c'],['../st7735_8h.html#a4f074060e0dabe0ad6ffc2ba58afdf44',1,'lcd_backLight(uint8_t on):&#160;st7735.c']]],
+  ['lcd_5fclear',['lcd_Clear',['../st7735_8c.html#a819f1bad3cfc54b2bc29accf027fbe97',1,'lcd_Clear(uint16_t color):&#160;st7735.c'],['../st7735_8h.html#a819f1bad3cfc54b2bc29accf027fbe97',1,'lcd_Clear(uint16_t color):&#160;st7735.c']]],
+  ['lcd_5fcontrol_5fport',['LCD_CONTROL_PORT',['../st7735_8h.html#a166fcfb14775ba23c5ca160f07da0fa0',1,'st7735.h']]],
+  ['lcd_5ffillrect',['lcd_FillRect',['../st7735_8c.html#aeba6ba7c6ce32b47c5437325d57dd2c3',1,'lcd_FillRect(uint8_t x, uint8_t y, uint8_t w, uint8_t h, uint16_t color):&#160;st7735.c'],['../st7735_8h.html#aeba6ba7c6ce32b47c5437325d57dd2c3',1,'lcd_FillRect(uint8_t x, uint8_t y, uint8_t w, uint8_t h, uint16_t color):&#160;st7735.c']]],
+  ['lcd_5fhline',['lcd_HLine',['../st7735_8c.html#a51ad2be435bd72bc5597072999b304bd',1,'lcd_HLine(uint8_t x, uint8_t y, uint8_t w, uint16_t color):&#160;st7735.c'],['../st7735_8h.html#a51ad2be435bd72bc5597072999b304bd',1,'lcd_HLine(uint8_t x, uint8_t y, uint8_t w, uint16_t color):&#160;st7735.c']]],
+  ['lcd_5fline',['lcd_Line',['../st7735_8c.html#a6e8b3154e014fb073bee6a563109428f',1,'lcd_Line(int16_t X1, int16_t Y1, int16_t X2, int16_t Y2, uint16_t color):&#160;st7735.c'],['../st7735_8h.html#a6e8b3154e014fb073bee6a563109428f',1,'lcd_Line(int16_t X1, int16_t Y1, int16_t X2, int16_t Y2, uint16_t color):&#160;st7735.c']]],
+  ['lcd_5forientacion',['lcd_orientacion',['../st7735_8h.html#a202ef105fb5662318faa8bc3f7839082',1,'st7735.h']]],
+  ['lcd_5fpixel',['lcd_Pixel',['../st7735_8c.html#a52199fd74db51ad05720fb77b3dd1a2a',1,'lcd_Pixel(uint16_t X, uint16_t Y, uint16_t color):&#160;st7735.c'],['../st7735_8h.html#a52199fd74db51ad05720fb77b3dd1a2a',1,'lcd_Pixel(uint16_t X, uint16_t Y, uint16_t color):&#160;st7735.c']]],
+  ['lcd_5frect',['lcd_Rect',['../st7735_8c.html#ac94e780143f8f852ca9e1712bb7c4af5',1,'lcd_Rect(uint16_t X1, uint16_t Y1, uint16_t X2, uint16_t Y2, uint16_t color):&#160;st7735.c'],['../st7735_8h.html#ac94e780143f8f852ca9e1712bb7c4af5',1,'lcd_Rect(uint16_t X1, uint16_t Y1, uint16_t X2, uint16_t Y2, uint16_t color):&#160;st7735.c']]],
+  ['lcd_5fsetaddrwindow',['lcd_setAddrWindow',['../st7735_8c.html#ac90f40c3638d0b88fe1874c6451f7c1a',1,'lcd_setAddrWindow(uint8_t XS, uint8_t XE, uint8_t YS, uint8_t YE):&#160;st7735.c'],['../st7735_8h.html#ab12791310beed0a32afc8df3f42cf642',1,'lcd_setAddrWindow(uint8_t XS, uint8_t YS, uint8_t XE, uint8_t YE):&#160;st7735.c']]],
+  ['lcd_5fvline',['lcd_VLine',['../st7735_8c.html#ac155886cbd46bcb85b1cdad90def7e44',1,'lcd_VLine(uint8_t x, uint8_t y, uint8_t h, uint16_t color):&#160;st7735.c'],['../st7735_8h.html#ac155886cbd46bcb85b1cdad90def7e44',1,'lcd_VLine(uint8_t x, uint8_t y, uint8_t h, uint16_t color):&#160;st7735.c']]],
+  ['led_5fdisco_5fgreen_5fpin',['LED_DISCO_GREEN_PIN',['../main_8c.html#aacefdccc2ed5b4045ac32f843d71d3b1',1,'main.c']]],
+  ['led_5fdisco_5fgreen_5fport',['LED_DISCO_GREEN_PORT',['../main_8c.html#a25e8f6c04deb6d3d17de4611c2322196',1,'main.c']]]
 ];
