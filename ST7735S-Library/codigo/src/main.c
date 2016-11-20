@@ -210,7 +210,25 @@ int main(void)
 					lcd_Pixel(i, j, imagen_tabla[i+(j*128)]);
 			}
 		}
-		 delay_ms(10000);				
+		 delay_ms(10000);
+		lcd_orientacion(scr_CW);//x0y0 esquina inferior izquierda, util para imagenes horizontales
+		lcd_FillRect(0, 0, 160, 128, imagen_tabla[10000]);
+		lcd_setAddrWindow(0, 160,0, 128);
+		st_PutStr5x7(1, 1, 64, "x0y0 estan ahora en la esquina inferior izquierda", COLOR565_STEEL_BLUE, COLOR565_WHITE);
+		 delay_ms(10000);
+		for(j=0;j<128;j++){
+			for(i=0;i<160;i++){
+				lcd_Pixel(i, j, imagen_tabla[j+(i*128)]);
+			}
+		}
+		 delay_ms(10000);
+		for(j=0;j<128;j++){
+			for(i=0;i<160;i++){
+				lcd_Pixel(i, j, imagen2_tabla[j+(i*128)]);
+			}
+		}
+		lcd_orientacion(scr_normal);
+		 delay_ms(50000);				
 
 	}
 	return 0;
