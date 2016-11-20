@@ -7,7 +7,7 @@ Esta es una libreria para utilizar la pantalla TFT ST7735S utilizando la tarjeta
 	se baso en la libreria de adafruit la cual es compatible con arduino y escrita completamente en C++.
 	se integran ciertas funcionalidades y primitivas encontradas en la libraria de adafruit, sin embargo se omiten otras por compatibilidad
 	Esta libreria se encarga de la inicialización de alguno de los 3 SPI disponibles en las tarjetas ya mencionadas.
-    @author Natanael MojicaJimenez
+    @author Natanael Mojica Jimenez
     @date Noviembre 2016
     */
 
@@ -140,12 +140,13 @@ Esta es una libreria para utilizar la pantalla TFT ST7735S utilizando la tarjeta
 #define WIDTH	128
 #define HEIGHT	160
 
+
 typedef enum
 {
   scr_normal = 0,
-  scr_CW     = 1,
-  scr_CCW    = 2,
-  scr_180    = 3
+  scr_CW     = 1,/// X-Y Exchange,Y-Mirror
+  scr_CCW    = 2,/// X-Y Exchange,X-Mirror
+  scr_180    = 3 /// X-Mirror,Y-Mirror: Bottom to top; Right to left; RGB
 } ScrOrientation_TypeDef;
 
 enum st7735_cmd {

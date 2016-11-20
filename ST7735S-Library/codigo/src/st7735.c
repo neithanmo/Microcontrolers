@@ -305,38 +305,37 @@ void lcd_backLight(uint8_t on)
 }
 
 
-/*void lcd_orientacion(ScrOrientation_TypeDef orientation)
+void lcd_orientacion(ScrOrientation_TypeDef orientation)
 {
   write_cmd_lcd(0x36); // Memory data access control:
   switch (orientation)
   {
   case scr_CW:
-    _width  = scr_h;
-    _height = scr_w;
+    scr_width  = HEIGHT;
+    scr_height = WIDTH;
     write_data_lcd(0xA0); // X-Y Exchange,Y-Mirror
     break;
   case scr_CCW:
-    scr_width  = scr_h;
-    scr_height = scr_w;
+    scr_width  = HEIGHT;
+    scr_height = WIDTH;
     write_data_lcd(0x60); // X-Y Exchange,X-Mirror
     break;
   case scr_180:
-    scr_width  = scr_w;
-    scr_height = scr_h;
+    scr_width  = WIDTH;
+    scr_height = HEIGHT;
     write_data_lcd(0xc0); // X-Mirror,Y-Mirror: Bottom to top; Right to left; RGB
     break;
   default:
-    scr_width  = scr_w;
-    scr_height = scr_h;
+    scr_width  = WIDTH;
+    scr_height = HEIGHT;
     write_data_lcd(0x00); // Normal: Top to Bottom; Left to Right; RGB
     break;
   }
-}*/
+}
 
 
 void lcd_setAddrWindow(uint8_t XS, uint8_t XE, uint8_t YS, uint8_t YE) 
 {
-
   write_cmd_lcd(ST7735_CASET); // Column address set
   write_data_lcd(0x00);
   write_data_lcd(XS/*+colstart*/);
@@ -354,8 +353,8 @@ void lcd_setAddrWindow(uint8_t XS, uint8_t XE, uint8_t YS, uint8_t YE)
 void lcd_Clear(uint16_t color)
 {
   uint16_t i;
-  lcd_setAddrWindow(0, WIDTH - 1, 0, HEIGHT - 1);
-  for (i = 0; i < WIDTH * HEIGHT; i++)
+  lcd_setAddrWindow(0, scr_width - 1, 0, scr_height - 1);
+  for (i = 0; i < scr_width * scr_height; i++)
   {
     write_data_lcd(color >> 8);
     write_data_lcd(color);
@@ -365,7 +364,7 @@ void lcd_Clear(uint16_t color)
 
 void lcd_Pixel(uint16_t X, uint16_t Y, uint16_t color)
 {
-  if((X < 0) ||(X >= WIDTH) || (Y < 0) || (Y >= HEIGHT)) return;
+  if((X < 0) ||(X >= scr_width) || (Y < 0) || (Y >= scr_height)) return;
   lcd_setAddrWindow(X,X+1,Y, Y+1);
   write_data_lcd(color >> 8);
   write_data_lcd(color);
@@ -486,9 +485,9 @@ void lcd_FillRect(uint8_t x, uint8_t y, uint8_t w, uint8_t h, uint16_t color)
   //uint8_t y=0;
   uint8_t CH = color >> 8;
   uint8_t CL = (uint8_t)color;
-  if((x > WIDTH) || (y > HEIGHT)) return;
-  if((x + w - 1) >= WIDTH)  w = WIDTH  - x;
-  if((y + h - 1) >= HEIGHT) h = HEIGHT - y;
+  if((x > scr_width) || (y > scr_height)) return;
+  if((x + w - 1) >= scr_width)  w = scr_width  - x;
+  if((y + h - 1) >= scr_height) h = scr_height - y;
   uint16_t FS = (w - x + 1) * (h - y + 1);
   lcd_setAddrWindow(x,x+w-1, y, y+h-1);
   for(i=0; i<FS; i++) {
