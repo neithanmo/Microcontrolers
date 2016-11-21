@@ -170,7 +170,7 @@ void spi_setup(uint32_t SPI)
 		rcc_periph_clock_enable(RCC_GPIOB);
 		gpio_mode_setup(GPIOB, GPIO_MODE_AF, GPIO_PUPD_NONE, GPIO10 | GPIO15);
 		gpio_set_af(GPIOB, GPIO_AF5, GPIO10 | GPIO15);
-		//gpio_set_output_options(GPIOB, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, GPIO10 | GPIO15);
+		gpio_set_output_options(GPIOB, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, GPIO10 | GPIO15);
 		rcc_periph_clock_enable(RCC_SPI2);
 		}
 		  /* CLK=PB10 || MOSI=PB15 */
@@ -183,29 +183,19 @@ void spi_setup(uint32_t SPI)
 		gpio_set_af(GPIOC, GPIO_AF6, GPIO12);
 		gpio_mode_setup(GPIOB, GPIO_MODE_AF, GPIO_PUPD_NONE, GPIO3);
 		gpio_set_af(GPIOB, GPIO_AF6, GPIO3);
-		//gpio_set_output_options(GPIOC, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, GPIO10 | GPIO12);
+		gpio_set_output_options(GPIOC, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, GPIO10 | GPIO12);
 		rcc_periph_clock_enable(RCC_SPI3);
 		}
 		   /* CLK=PC10 || MOSI=PC12 */
 		break;
         default:
-		{
-		 gpio_mode_setup(GPIOD, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, GPIO6 | GPIO7);
-		 gpio_set_output_options(GPIOD, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, GPIO6 | GPIO7);
-                }
 		break;
 	}
 		spi_reset(SPI);
 		spi_set_master_mode(SPI);
-		//spi_send_msb_first(SPI);
-		//spi_set_dff_8bit(SPI);
-		//spi_set_unidirectional_mode(SPI);
-		//spi_set_clock_phase_0(SPI);
-		//spi_set_clock_polarity_0(SPI);
 		spi_enable_software_slave_management(SPI);
 		spi_set_nss_high(SPI);// no multiple masters
 		spi_enable_ss_output(SPI);
-		//spi_set_standard_mode(SPI, 0);
 		spi_init_master(SPI, 8000000, SPI_CR1_CPOL_CLK_TO_0_WHEN_IDLE,
 			SPI_CR1_CPHA_CLK_TRANSITION_1, SPI_CR1_DFF_8BIT, SPI_CR1_MSBFIRST);
 		/* Enable SPI1 periph. */
@@ -223,22 +213,8 @@ write_data_lcd(uint8_t data)
  	DC_H();
 	CS_L();
 	spi_send(spiPort, data);
-	delay_us(350);
+        while (SPI_SR(spiPort) & SPI_SR_BSY);//esperar hasta que el registro SPI_SR este vacio, para activar CS
 	CS_H();
-/*se ha de indicar a la pantalla el tipo de datos que se envia:
-si DC esta en alto, se le indica que se ha enviado data a graficar
-caso contraio se le indica a la pantalla que se envia un comando 
-tambien hay que habilitar el dispositivo, CS en bajo activa la pantalla 
-y RST en alto resetea la pantalla, es decir ambas banderas deben estar en bajo*/
-     /*uint8_t bit;
-    for(bit = 0x80; bit; bit >>= 1) {
-      gpio_clear(GPIOD,GPIO6);
-      if(data & bit) gpio_set(GPIOD,GPIO7);
-      else          gpio_clear(GPIOD,GPIO7);
-      gpio_set(GPIOD,GPIO6);
-      gpio_toggle(GPIOD, GPIO12);
-      gpio_toggle(GPIOD, GPIO14);
-    }*/
 }
 
 void write_cmd_lcd(uint8_t cmd)
@@ -249,16 +225,8 @@ void write_cmd_lcd(uint8_t cmd)
 	DC_L();
 	CS_L();
 	spi_send(spiPort, cmd);
-	delay_us(350);
+        while (SPI_SR(spiPort) & SPI_SR_BSY);//esperar hasta que el registro SPI_SR este vacio, para activar CS
 	CS_H();
-    /*for(bit = 0x80; bit; bit >>= 1) {
-      gpio_clear(GPIOD,GPIO6);
-      if(cmd & bit) gpio_set(GPIOD,GPIO7);
-      else          gpio_clear(GPIOD,GPIO7);
-      gpio_set(GPIOD,GPIO6);
-      gpio_toggle(GPIOD, GPIO12);
-      gpio_toggle(GPIOD, GPIO14);
-    }*/
 }	
 
 void init_lcd(void)
