@@ -1,5 +1,6 @@
 #include <libopencm3/usb/usbd.h>
 #include <libopencm3/usb/cdc.h>
+#include <math.h>
 #include "st7735.h"
 #include "tabla.h"
 #include "tabla2.h"
@@ -26,6 +27,15 @@ static void gpio_setup(void)
 		LED_DISCO_GREEN_PIN | GPIO15 | GPIO12 | GPIO13 | GPIO14 | GPIO3 | GPIO4 | GPIO5 | GPIO1);
 }
 
+double sqroot(double square)
+{
+    double root=square/3;
+    int i;
+    if (square <= 0) return 0;
+    for (i=0; i<128; i++)
+        root = (root + square / root) / 2;
+    return root;
+}
 
 
 int main(void)
@@ -221,14 +231,15 @@ int main(void)
 				lcd_Pixel(i, j, imagen_tabla[j+(i*128)]);
 			}
 		}
-		 delay_ms(10000);
 		for(j=0;j<128;j++){
 			for(i=0;i<160;i++){
 				lcd_Pixel(i, j, imagen2_tabla[j+(i*128)]);
 			}
 		}
 		lcd_orientacion(scr_normal);
-		 delay_ms(50000);				
+		 delay_ms(10000);
+        	lcd_setAddrWindow(0,128,0,160);
+		 delay_ms(100000);				
 
 	}
 	return 0;
