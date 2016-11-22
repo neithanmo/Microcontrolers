@@ -798,11 +798,11 @@ void drawChar(uint8_t x, uint8_t y, unsigned char c,
       for(j=0; j<8; j++, line >>= 1) {
         if(line & 0x1) {
           if(size == 1) lcd_Pixel(x+i, y+j, color);
-          else          lcd_FillRect(x+(i*size), y+(j*size), size, size, color);
-        } else if(bg != color) {
-          if(size == 1) lcd_Pixel(x+i, y+j, bg);
-          else          lcd_FillRect(x+i*size, y+j*size, size, size, bg);
-        }
+          else  lcd_FillRect(x+(i*size), y+(j*size), size, size, color);
+        } /*else if(bg != color) {
+          if(size == 1)  lcd_Pixel(x+i, y+j, bg);
+          else 		 lcd_FillRect(x+i*size, y+j*size, size, size, bg); //no background en el texto
+        }*/
       }
     }
 
