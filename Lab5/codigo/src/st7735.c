@@ -162,6 +162,14 @@ void spi_setup(uint32_t SPI)
 		gpio_mode_setup(GPIOA, GPIO_MODE_INPUT, GPIO_PUPD_NONE, GPIO0); //para usar el boton
 		gpio_set_output_options(GPIOA, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, GPIO7 | GPIO5);
 		rcc_periph_clock_enable(RCC_SPI1);
+		/* 120 000000/8 = 15 000 000 
+		    15000000 / 15 = 1000000 es decir
+		    una interrupcion cada 1uS 
+		*/
+		/*systick_set_clocksource(STK_CSR_CLKSOURCE_AHB_DIV8);
+		systick_set_reload(15);//tick a 1uS
+		systick_counter_enable();
+		systick_interrupt_enable();*/
 		/* CLK=PA5 || MOSI=PA7 */
 		}
 		break;
@@ -170,7 +178,7 @@ void spi_setup(uint32_t SPI)
 		rcc_periph_clock_enable(RCC_GPIOB);
 		gpio_mode_setup(GPIOB, GPIO_MODE_AF, GPIO_PUPD_NONE, GPIO10 | GPIO15);
 		gpio_set_af(GPIOB, GPIO_AF5, GPIO10 | GPIO15);
-		//gpio_set_output_options(GPIOB, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, GPIO10 | GPIO15);
+		gpio_set_output_options(GPIOB, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, GPIO10 | GPIO15);
 		rcc_periph_clock_enable(RCC_SPI2);
 		}
 		  /* CLK=PB10 || MOSI=PB15 */
@@ -183,29 +191,19 @@ void spi_setup(uint32_t SPI)
 		gpio_set_af(GPIOC, GPIO_AF6, GPIO12);
 		gpio_mode_setup(GPIOB, GPIO_MODE_AF, GPIO_PUPD_NONE, GPIO3);
 		gpio_set_af(GPIOB, GPIO_AF6, GPIO3);
-		//gpio_set_output_options(GPIOC, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, GPIO10 | GPIO12);
+		gpio_set_output_options(GPIOC, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, GPIO10 | GPIO12);
 		rcc_periph_clock_enable(RCC_SPI3);
 		}
 		   /* CLK=PC10 || MOSI=PC12 */
 		break;
         default:
-		{
-		 gpio_mode_setup(GPIOD, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, GPIO6 | GPIO7);
-		 gpio_set_output_options(GPIOD, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, GPIO6 | GPIO7);
-                }
 		break;
 	}
 		spi_reset(SPI);
 		spi_set_master_mode(SPI);
-		//spi_send_msb_first(SPI);
-		//spi_set_dff_8bit(SPI);
-		//spi_set_unidirectional_mode(SPI);
-		//spi_set_clock_phase_0(SPI);
-		//spi_set_clock_polarity_0(SPI);
 		spi_enable_software_slave_management(SPI);
 		spi_set_nss_high(SPI);// no multiple masters
 		spi_enable_ss_output(SPI);
-		//spi_set_standard_mode(SPI, 0);
 		spi_init_master(SPI, 8000000, SPI_CR1_CPOL_CLK_TO_0_WHEN_IDLE,
 			SPI_CR1_CPHA_CLK_TRANSITION_1, SPI_CR1_DFF_8BIT, SPI_CR1_MSBFIRST);
 		/* Enable SPI1 periph. */
@@ -223,22 +221,8 @@ write_data_lcd(uint8_t data)
  	DC_H();
 	CS_L();
 	spi_send(spiPort, data);
-	delay_us(350);
+        while (SPI_SR(spiPort) & SPI_SR_BSY);//esperar hasta que el registro SPI_SR este vacio, para activar CS
 	CS_H();
-/*se ha de indicar a la pantalla el tipo de datos que se envia:
-si DC esta en alto, se le indica que se ha enviado data a graficar
-caso contraio se le indica a la pantalla que se envia un comando 
-tambien hay que habilitar el dispositivo, CS en bajo activa la pantalla 
-y RST en alto resetea la pantalla, es decir ambas banderas deben estar en bajo*/
-     /*uint8_t bit;
-    for(bit = 0x80; bit; bit >>= 1) {
-      gpio_clear(GPIOD,GPIO6);
-      if(data & bit) gpio_set(GPIOD,GPIO7);
-      else          gpio_clear(GPIOD,GPIO7);
-      gpio_set(GPIOD,GPIO6);
-      gpio_toggle(GPIOD, GPIO12);
-      gpio_toggle(GPIOD, GPIO14);
-    }*/
 }
 
 void write_cmd_lcd(uint8_t cmd)
@@ -249,16 +233,8 @@ void write_cmd_lcd(uint8_t cmd)
 	DC_L();
 	CS_L();
 	spi_send(spiPort, cmd);
-	delay_us(350);
+        while (SPI_SR(spiPort) & SPI_SR_BSY);//esperar hasta que el registro SPI_SR este vacio, para activar CS
 	CS_H();
-    /*for(bit = 0x80; bit; bit >>= 1) {
-      gpio_clear(GPIOD,GPIO6);
-      if(cmd & bit) gpio_set(GPIOD,GPIO7);
-      else          gpio_clear(GPIOD,GPIO7);
-      gpio_set(GPIOD,GPIO6);
-      gpio_toggle(GPIOD, GPIO12);
-      gpio_toggle(GPIOD, GPIO14);
-    }*/
 }	
 
 void init_lcd(void)
@@ -305,38 +281,37 @@ void lcd_backLight(uint8_t on)
 }
 
 
-/*void lcd_orientacion(ScrOrientation_TypeDef orientation)
+void lcd_orientacion(ScrOrientation_TypeDef orientation)
 {
   write_cmd_lcd(0x36); // Memory data access control:
   switch (orientation)
   {
   case scr_CW:
-    _width  = scr_h;
-    _height = scr_w;
+    scr_width  = HEIGHT;
+    scr_height = WIDTH;
     write_data_lcd(0xA0); // X-Y Exchange,Y-Mirror
     break;
   case scr_CCW:
-    scr_width  = scr_h;
-    scr_height = scr_w;
+    scr_width  = HEIGHT;
+    scr_height = WIDTH;
     write_data_lcd(0x60); // X-Y Exchange,X-Mirror
     break;
   case scr_180:
-    scr_width  = scr_w;
-    scr_height = scr_h;
+    scr_width  = WIDTH;
+    scr_height = HEIGHT;
     write_data_lcd(0xc0); // X-Mirror,Y-Mirror: Bottom to top; Right to left; RGB
     break;
   default:
-    scr_width  = scr_w;
-    scr_height = scr_h;
+    scr_width  = WIDTH;
+    scr_height = HEIGHT;
     write_data_lcd(0x00); // Normal: Top to Bottom; Left to Right; RGB
     break;
   }
-}*/
+}
 
 
 void lcd_setAddrWindow(uint8_t XS, uint8_t XE, uint8_t YS, uint8_t YE) 
 {
-
   write_cmd_lcd(ST7735_CASET); // Column address set
   write_data_lcd(0x00);
   write_data_lcd(XS/*+colstart*/);
@@ -354,8 +329,8 @@ void lcd_setAddrWindow(uint8_t XS, uint8_t XE, uint8_t YS, uint8_t YE)
 void lcd_Clear(uint16_t color)
 {
   uint16_t i;
-  lcd_setAddrWindow(0, WIDTH - 1, 0, HEIGHT - 1);
-  for (i = 0; i < WIDTH * HEIGHT; i++)
+  lcd_setAddrWindow(0, scr_width - 1, 0, scr_height - 1);
+  for (i = 0; i < scr_width * scr_height; i++)
   {
     write_data_lcd(color >> 8);
     write_data_lcd(color);
@@ -365,7 +340,7 @@ void lcd_Clear(uint16_t color)
 
 void lcd_Pixel(uint16_t X, uint16_t Y, uint16_t color)
 {
-  if((X < 0) ||(X >= WIDTH) || (Y < 0) || (Y >= HEIGHT)) return;
+  if((X < 0) ||(X >= scr_width) || (Y < 0) || (Y >= scr_height)) return;
   lcd_setAddrWindow(X,X+1,Y, Y+1);
   write_data_lcd(color >> 8);
   write_data_lcd(color);
@@ -486,9 +461,9 @@ void lcd_FillRect(uint8_t x, uint8_t y, uint8_t w, uint8_t h, uint16_t color)
   //uint8_t y=0;
   uint8_t CH = color >> 8;
   uint8_t CL = (uint8_t)color;
-  if((x > WIDTH) || (y > HEIGHT)) return;
-  if((x + w - 1) >= WIDTH)  w = WIDTH  - x;
-  if((y + h - 1) >= HEIGHT) h = HEIGHT - y;
+  if((x > scr_width) || (y > scr_height)) return;
+  if((x + w - 1) >= scr_width)  w = scr_width  - x;
+  if((y + h - 1) >= scr_height) h = scr_height - y;
   uint16_t FS = (w - x + 1) * (h - y + 1);
   lcd_setAddrWindow(x,x+w-1, y, y+h-1);
   for(i=0; i<FS; i++) {
@@ -831,11 +806,11 @@ void drawChar(uint8_t x, uint8_t y, unsigned char c,
       for(j=0; j<8; j++, line >>= 1) {
         if(line & 0x1) {
           if(size == 1) lcd_Pixel(x+i, y+j, color);
-          else          lcd_FillRect(x+(i*size), y+(j*size), size, size, color);
-        } else if(bg != color) {
-          if(size == 1) lcd_Pixel(x+i, y+j, bg);
-          else          lcd_FillRect(x+i*size, y+j*size, size, size, bg);
-        }
+          else  lcd_FillRect(x+(i*size), y+(j*size), size, size, color);
+        } /*else if(bg != color) {
+          if(size == 1)  lcd_Pixel(x+i, y+j, bg);
+          else 		 lcd_FillRect(x+i*size, y+j*size, size, size, bg); //no background en el texto
+        }*/
       }
     }
 

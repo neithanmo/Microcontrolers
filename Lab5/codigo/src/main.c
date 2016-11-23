@@ -1,5 +1,14 @@
+#include <libopencm3/stm32/rcc.h>
+#include <libopencm3/stm32/gpio.h>
+#include <libopencm3/stm32/timer.h>
+#include <libopencm3/cm3/nvic.h>
+#include <libopencm3/stm32/exti.h>
+#include <libopencmsis/core_cm3.h>
+#include <libopencm3/stm32/adc.h>
 #include <libopencm3/usb/usbd.h>
 #include <libopencm3/usb/cdc.h>
+#include <libopencm3/cm3/scb.h>
+#include <math.h>
 #include "usb.h"
 #include "st7735.h"
 #include "tabla.h"
@@ -15,6 +24,17 @@ uint16_t image_buffer[128*160];
 bool new_image;
 usbd_device *usbd_dev;
 
+uint16_t frequency_sequence[1] = {
+	1
+};
+
+uint8_t frequency_sel;
+uint16_t compare_time;
+uint16_t new_time;
+uint16_t frequency;
+uint16_t buff[1];//es necesario declarar un arreglo debido al cont void * ptr
+uint16_t count;
+
 
 static void clock_setup(void)///
 {
@@ -28,10 +48,11 @@ static void clock_setup(void)///
 static void gpio_setup(void)
 {
 	rcc_periph_clock_enable(RCC_GPIOD);
+	rcc_periph_clock_enable(RCC_GPIOA);
+	gpio_mode_setup(GPIOA, GPIO_MODE_INPUT, GPIO_PUPD_NONE, GPIO0);
 	rcc_peripheral_enable_clock(&RCC_AHB1ENR, RCC_AHB1ENR_IOPCEN);
         gpio_mode_setup(LED_DISCO_GREEN_PORT, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE,
 		LED_DISCO_GREEN_PIN | GPIO15 | GPIO12 | GPIO13 | GPIO14 | GPIO3 | GPIO4 | GPIO5 | GPIO1);
-	gpio_set(LED_DISCO_GREEN_PORT, GPIO12);
 	gpio_clear(LED_DISCO_GREEN_PORT, GPIO14);
 
 	/* D/C =  conectado al pin 3 del puerto c
@@ -49,6 +70,50 @@ static void usb_setup(void)
 	gpio_set_af(GPIOA, GPIO_AF10, GPIO9 | GPIO11 | GPIO12);
 }
 
+
+static void tim_setup(void)
+{
+	rcc_periph_clock_enable(RCC_TIM2);
+	nvic_enable_irq(NVIC_TIM2_IRQ);
+	timer_reset(TIM2);
+
+	timer_set_mode(TIM2, TIM_CR1_CKD_CK_INT,
+		       TIM_CR1_CMS_EDGE, TIM_CR1_DIR_UP);
+        /* 12MHz frecuencia del reloj
+         * esto asegura junto al periodo
+         * una buena tasa de bits en la
+         * transmision de datos usb*/
+        timer_set_prescaler(TIM2, 1);
+	timer_disable_preload(TIM2);
+	timer_continuous_mode(TIM2);
+
+        timer_set_period(TIM2, 65536);
+	timer_disable_oc_output(TIM2, TIM_OC1);
+	timer_disable_oc_output(TIM2, TIM_OC2);
+	timer_disable_oc_output(TIM2, TIM_OC3);
+	timer_disable_oc_output(TIM2, TIM_OC4);
+
+	timer_disable_oc_clear(TIM2, TIM_OC1);
+	timer_disable_oc_preload(TIM2, TIM_OC1);
+	timer_set_oc_slow_mode(TIM2, TIM_OC1);
+	timer_set_oc_mode(TIM2, TIM_OC1, TIM_OCM_FROZEN);
+	timer_set_oc_value(TIM2, TIM_OC1, frequency_sequence[0]);
+        timer_enable_counter(TIM2);
+}
+void tim2_isr(void)
+{
+	if (timer_get_flag(TIM2, TIM_SR_CC1IF)) {
+		timer_clear_flag(TIM2, TIM_SR_CC1IF);
+		compare_time = timer_get_counter(TIM2);
+		frequency = frequency_sequence[frequency_sel++];
+		new_time = compare_time + frequency;
+		timer_set_oc_value(TIM2, TIM_OC1, new_time);
+
+		if(frequency_sel == 1){
+			frequency_sel = 0;				
+		}
+	}
+}
 static int cdcacm_control_request(usbd_device *usbd,
 	struct usb_setup_data *req, uint8_t **buf, uint16_t *len,
         void (**complete)(usbd_device *usbd_dev1, struct usb_setup_data *req))
@@ -58,7 +123,6 @@ static int cdcacm_control_request(usbd_device *usbd,
         (void)usbd;
 	switch (req->bRequest) {
 	case USB_CDC_REQ_SET_CONTROL_LINE_STATE: {
-		gpio_toggle(LED_DISCO_GREEN_PORT, GPIO15);
                 timer_enable_irq(TIM2, TIM_DIER_CC1IE);
 		return 1;
 		}
@@ -75,15 +139,14 @@ static int cdcacm_control_request(usbd_device *usbd,
 static void cdcacm_data_rx_cb(usbd_device *usbd_read, uint8_t ep)///leer el setpoint enviado por el usuario
 {
 	(void)ep;
-	int len = usbd_ep_read_packet(usbd_read, 0x01, image_buffer, sizeof(image_buffer));
+	int len = usbd_ep_read_packet(usbd_read, 0x01, buff, 2);
 	gpio_toggle(GPIOD,GPIO14);
-	//(buf[0]='i') ? (new_image=true) : (new_image=false);
-	/*if (len) {
-		if(buf[0] != )
-		//while (usbd_ep_write_packet(usbd_dev, 0x82, buf, len) == 0);
-                image_buffer[i++] = buf[0];;
-                gpio_toggle(LED_DISCO_GREEN_PORT, GPIO14);
-	}*/
+	image_buffer[count]=buff[0];
+	count=count+1;
+	if(count==20480){
+		count=0;
+		new_image=true;
+	}
 }
 
 
@@ -109,216 +172,35 @@ int main(void)
 	clock_setup();
 	spi_setup(SPI1);
 	gpio_setup();
+        usb_setup();
 	lcd_backLight(1);
 	init_lcd();
-	delay_ms(500);
-	new_image=false;
-	usb_setup();
+	new_image = false;
 
 	usbd_dev = usbd_init(&otgfs_usb_driver, &dev, &config,
 			usb_strings, 3,
 			usbd_control_buffer, sizeof(usbd_control_buffer));
 
 	usbd_register_set_config_callback(usbd_dev, cdcacm_set_config);
-
-	uint8_t dx,dy;
+	/*uint8_t dx,dy;
 	dx = 0;
-        dy = 0;
+        dy = 0;*/
+	uint16_t j;
         lcd_setAddrWindow(0,128,0,159);
 	while (1) {
-		//usbd_poll(usbd_dev);
-                 /*for(dy=0;dy<160;dy++){
-  		     lcd_HLine(0, dy,128,COLOR565_CHOCOLATE);
-		 }
-		 for(dy=0;dy<80;dy++){
-		     for(dx=0;dx<64;dx++){
-                         lcd_Pixel(64+dx, 80+dy, COLOR565_GOLD);
-			 lcd_Pixel(64-dx, 80-dy, COLOR565_GOLD);
- 		     }
-                  }
-                 for(dx=0;dx<128;dx++){
-		     lcd_VLine(dx, 0, 160,RGB565(dx,255-dx,127+dx));
-		 }
-                 for(dy=160;dy>0;dy--){
-		     lcd_HLine(0, dy,128,RGB565(94+dy,dy,255-dy));
-		 }
-                 for(dx=128;dx>0;dx--){
-		     lcd_VLine(dx, 0, 160,RGB565(255-dx,127+dx,dx));
-		 }
-                 for(dy=0;dy<160;dy++){
-  		     lcd_HLine(0, dy,128,RGB565(dy,94+dy,255-dy));
-		 }*/
-		 lcd_FillRect(0, 0, 128, 160, COLOR565_BLACK);
-		  dy=0;
-                  while((80-dy)){
-			lcd_Pixel(64, 79+dy, COLOR565_GOLD);
-			dy++;
-		  }
-		  dx=0;
-                  while((64-dx)){
-			lcd_Pixel(63+dx, 80, COLOR565_GOLD);
-			dx++;
-		  }
-		  dy=0;
-                  while((80-dy)){
-			lcd_Pixel(64, 80-dy, COLOR565_GOLD);
-			dy++;
-		  }
-		  dx=0;
-                  while((64-dx)){
-			lcd_Pixel(64-dx, 80, COLOR565_GOLD);
-			dx++;
-		  }
-		  dx=0;
-                  while((64-dx)){
-			drawCircle(64, 80, dx+15, COLOR565_GOLD+dx);
-			dx++;
-		  }
-		  delay_ms(5000);
-		 
-		 lcd_FillRect(0, 0, 128, 160, COLOR565_BLACK);
-		 fillTriangle(45, 40, 105, 40, 75, 150, COLOR565_SANDY_BROWN);
-		 delay_ms(5000);
-		 lcd_Clear(COLOR565_TEAL);
-		 drawRoundRect(10, 20, 110,110, 50, COLOR565_MEDIUM_TURQUOISE);
-		 delay_ms(5000);
-		 fillRoundRect(10, 20, 110,110, 50, COLOR565_SANDY_BROWN);	 
-		 delay_ms(5000);
-		 lcd_setAddrWindow(0,128,0,159);
-	         uint16_t i,j;
-		 for(j=0;j<20480;j++){
-			push_color(imagen_tabla[j]);
-		 }
-		 delay_ms(10000);
-		 for(j=0;j<20480;j++){
-			push_color(imagen2_tabla[j]);
-		 }
-		 delay_ms(10000);
-		 for(j=20480;j>0;j--){
-			push_color(imagen2_tabla[j]);
-		 }
-
-//################################# circulos2 #####################################
-		 delay_ms(5000);
-		 drawCircle(16, 32, 16, imagen_tabla[512]);
-		 delay_ms(1000);
-		 drawCircle(48, 32, 16, imagen_tabla[1536]);
-		 delay_ms(1000);
-		 drawCircle(80, 32, 16, imagen_tabla[2560]);
-		 delay_ms(1000);
-		 drawCircle(112, 32, 16, imagen_tabla[3584]);
-//################################# circulos3 #####################################
-		 delay_ms(5000);
-		 drawCircle(16, 64, 16, imagen2_tabla[1024]);
-		 delay_ms(1000);
-		 drawCircle(48, 64, 16, imagen2_tabla[3072]);
-		 delay_ms(1000);
-		 drawCircle(80, 64, 16, imagen2_tabla[5120]);
-		 delay_ms(1000);
-		 drawCircle(112, 64, 16, imagen2_tabla[7168]);
-//################################# circulos4 #####################################
-		 delay_ms(5000);
-		 drawCircle(16, 96, 16, imagen_tabla[1535]);
-		 delay_ms(1000);
-		 drawCircle(48, 96, 16, imagen_tabla[4608]);
-		 delay_ms(1000);
-		 drawCircle(80, 96, 16, imagen_tabla[7680]);
-		 delay_ms(1000);
-		 drawCircle(112, 96, 16, imagen_tabla[10752]);
-//################################# circulos5 #####################################
-		 delay_ms(5000);
-		 drawCircle(16, 128, 16, imagen2_tabla[16*128]);
-		 delay_ms(1000);
-		 drawCircle(48, 128, 16, imagen2_tabla[48*128]);
-		 delay_ms(1000);
-		 drawCircle(80, 128, 16, imagen2_tabla[80*128]);
-		 delay_ms(1000);
-		 drawCircle(112, 128, 16, imagen2_tabla[112*128]);
-//################################# fin circulos ###############################
-                 lcd_setAddrWindow(0,128,0,159);
-		 for(j=0;j<20480;j++){
-			push_color(imagen_tabla[j]);
-		 }
-		 delay_ms(10000);
-
-		 for(j=0;j<20480;j++){
-			push_color(RGB565(getBlue(imagen_tabla[j]), getGreen(imagen_tabla[j]), getRed(imagen_tabla[j])));
-		 }
-		 for(j=0;j<20480;j++){
-			push_color(RGB565(getGreen(imagen_tabla[j]), getBlue(imagen_tabla[j]), getRed(imagen_tabla[j])));
-		 }
-		 for(j=0;j<20480;j++){
-			push_color(RGB565(getGreen(imagen_tabla[j]), getRed(imagen_tabla[j]), getBlue(imagen_tabla[j])));
-		 }
-		 for(j=0;j<20480;j++){
-			push_color(swapcolor(imagen_tabla[j]));
-		 }
-		st_PutStr5x7(1, 5, 10, "NATANAEL", COLOR565_RED, COLOR565_WHITE);
-		 st_PutStr5x7(1, 5, 20, "MOJICA", COLOR565_RED, COLOR565_WHITE);
-		 st_PutStr5x7(1, 5, 30, "JIMENEZ", COLOR565_RED, COLOR565_WHITE);
-		 st_PutStr5x7(1, 60, 40, "LAB", COLOR565_RED, COLOR565_WHITE);
-		 st_PutStr5x7(1, 10, 50, "MICROCONTROLADORES", COLOR565_RED, COLOR565_WHITE);
-		 delay_ms(10000);
-        	lcd_setAddrWindow(0,128,0,159);
-
-		 for(j=0;j<10240;j++){
-			push_color(imagen2_tabla[j]);
-		 }
-		 delay_ms(10000);
-		 for(j=10240;j<20480;j++){
-			push_color(imagen_tabla[j]);
-		 }
-		 delay_ms(10000);
-		st_PutStr5x7(1, 10, 50, "ST7735S", COLOR565_BLACK, COLOR565_WHITE);
-		 delay_ms(10000);
-		st_PutStr5x7(1, 1, 70, "Library for STM32F411", COLOR565_STEEL_BLUE, COLOR565_WHITE);
-
-		lcd_setAddrWindow(0,128,80,160);
-		 delay_ms(10000);
-		 for(j=0;j<10240;j++){
-			push_color(imagen2_tabla[j]);
-		 }
-		 delay_ms(10000);
-        	lcd_setAddrWindow(0,128,0,80);
-		 for(j=20480;j>10420;j--){
-			push_color(imagen2_tabla[j]);
-		 }
-
-
-        	lcd_setAddrWindow(64,128,0,160);
-		 delay_ms(10000);
-		for(j=0;j<160;j++){
-			for(i=64;i<128;i++){
-				lcd_Pixel(i, j, imagen2_tabla[i+(j*128)]);
-			}
+		/*if(new_image){
+		
+        		lcd_setAddrWindow(0,128,0,159);
+			push_color(buff[0]);
+			new_image=false;
+		}*/
+		usbd_poll(usbd_dev);
+		//push_color(image_buffer[0]);
+		for(j=0;j<20480;j++){
+			push_color(image_buffer[j]);
+			usbd_poll(usbd_dev);
 		}
-        	lcd_setAddrWindow(0,64,0,160);
-		for(j=0;j<160;j++){
-			for(i=0;i<64;i++){
-				lcd_Pixel(i, j, imagen2_tabla[i+(j*128)]);
-			}
-		}
-                 for(dy=160;dy>0;dy--){
-  		     lcd_HLine(0, dy,128,RGB565(dy,94+dy,255-dy));
-		 }
-        	lcd_setAddrWindow(0,128,0,160);
-		for(j=0;j<160;j++){
-			for(i=0;i<128;i++){
-				if((j>20)&(j<74))
-					lcd_Pixel(i, j, imagen2_tabla[i+(j*128)]);
-				else
-					lcd_Pixel(i, j, imagen_tabla[i+(j*128)]);
-			}
-		}
-		 delay_ms(8000);
-		for(j=0;j<160;j++){
-			for(i=0;i<128;i++){
-				if((j>20)&(j<74))
-					lcd_Pixel(i, j, imagen_tabla[i+(j*128)]);
-			}
-		}
-		 delay_ms(10000);				
-
+		usbd_poll(usbd_dev);		
 	}
 	return 0;
 }
