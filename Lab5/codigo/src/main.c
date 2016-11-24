@@ -139,14 +139,13 @@ static int cdcacm_control_request(usbd_device *usbd,
 static void cdcacm_data_rx_cb(usbd_device *usbd_read, uint8_t ep)///leer el setpoint enviado por el usuario
 {
 	(void)ep;
-	int len = usbd_ep_read_packet(usbd_read, 0x01, buff, 2);
+	//int len = usbd_ep_read_packet(usbd_read, 0x01, image_buffer, 40960);
+	int len = usbd_ep_read_packet(usbd_read, 0x01, buff, sizeof(uint16_t));
 	gpio_toggle(GPIOD,GPIO14);
+	if(count==20480) count=0;
 	image_buffer[count]=buff[0];
+	//push_color(image_buffer[count]);
 	count=count+1;
-	if(count==20480){
-		count=0;
-		new_image=true;
-	}
 }
 
 
@@ -185,22 +184,28 @@ int main(void)
 	/*uint8_t dx,dy;
 	dx = 0;
         dy = 0;*/
-	uint16_t j;
+	uint16_t j,i;
         lcd_setAddrWindow(0,128,0,159);
 	while (1) {
-		/*if(new_image){
-		
-        		lcd_setAddrWindow(0,128,0,159);
+		if(gpio_get(GPIOA, GPIO0)){
+			count=0;
+			gpio_toggle(GPIOD, GPIO12);
+        		/*lcd_setAddrWindow(0,128,0,159);
 			push_color(buff[0]);
-			new_image=false;
-		}*/
-		usbd_poll(usbd_dev);
-		//push_color(image_buffer[0]);
-		for(j=0;j<20480;j++){
-			push_color(image_buffer[j]);
-			usbd_poll(usbd_dev);
+			new_image=false;*/
 		}
-		usbd_poll(usbd_dev);		
+		if(count==20480){
+			count=0;
+			gpio_toggle(GPIOD, GPIO15);
+			for(j=0;j<160;j++){
+				for(i=0;i<128;i++){
+				lcd_Pixel(i,j,image_buffer[i+(j*128)]);
+				usbd_poll(usbd_dev);
+				}
+			}
+		}
+		usbd_poll(usbd_dev);
+		//push_color(image_buffer[0]);		
 	}
 	return 0;
 }

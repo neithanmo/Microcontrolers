@@ -162,14 +162,6 @@ void spi_setup(uint32_t SPI)
 		gpio_mode_setup(GPIOA, GPIO_MODE_INPUT, GPIO_PUPD_NONE, GPIO0); //para usar el boton
 		gpio_set_output_options(GPIOA, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, GPIO7 | GPIO5);
 		rcc_periph_clock_enable(RCC_SPI1);
-		/* 120 000000/8 = 15 000 000 
-		    15000000 / 15 = 1000000 es decir
-		    una interrupcion cada 1uS 
-		*/
-		/*systick_set_clocksource(STK_CSR_CLKSOURCE_AHB_DIV8);
-		systick_set_reload(15);//tick a 1uS
-		systick_counter_enable();
-		systick_interrupt_enable();*/
 		/* CLK=PA5 || MOSI=PA7 */
 		}
 		break;
@@ -340,7 +332,7 @@ void lcd_Clear(uint16_t color)
 
 void lcd_Pixel(uint16_t X, uint16_t Y, uint16_t color)
 {
-  if((X < 0) ||(X >= scr_width) || (Y < 0) || (Y >= scr_height)) return;
+  if((X >= scr_width) || (Y >= scr_height)) return;
   lcd_setAddrWindow(X,X+1,Y, Y+1);
   write_data_lcd(color >> 8);
   write_data_lcd(color);
@@ -348,7 +340,6 @@ void lcd_Pixel(uint16_t X, uint16_t Y, uint16_t color)
 
 void lcd_HLine(uint8_t x, uint8_t y, uint8_t w, uint16_t color)
 {
-  uint16_t i;
   uint8_t CH = color >> 8;
   uint8_t CL = (uint8_t)color;
   
@@ -369,7 +360,7 @@ void push_color(uint16_t color)
 
 void lcd_VLine(uint8_t x, uint8_t y, uint8_t h, uint16_t color)
 {
-  uint16_t i;
+
   uint8_t CH = color >> 8;
   uint8_t CL = (uint8_t)color;
 
@@ -787,7 +778,7 @@ uint16_t swapcolor(uint16_t x)
 }
 
 void drawChar(uint8_t x, uint8_t y, unsigned char c,
- uint16_t color, uint16_t bg, uint8_t size) {
+ uint16_t color, uint8_t size) {
 
   if(1) { // 'Classic' built-in font
 
@@ -807,24 +798,21 @@ void drawChar(uint8_t x, uint8_t y, unsigned char c,
         if(line & 0x1) {
           if(size == 1) lcd_Pixel(x+i, y+j, color);
           else  lcd_FillRect(x+(i*size), y+(j*size), size, size, color);
-        } /*else if(bg != color) {
-          if(size == 1)  lcd_Pixel(x+i, y+j, bg);
-          else 		 lcd_FillRect(x+i*size, y+j*size, size, size, bg); //no background en el texto
-        }*/
+        } 
       }
     }
 
   }
 }
 
-void st_PutStr5x7(uint8_t scale, uint8_t X, uint8_t Y, char *str, uint16_t color, uint16_t bgcolor)
+void st_PutStr5x7(uint8_t scale, uint8_t X, uint8_t Y, char *str, uint16_t color)
 {
   // scale equals 1 drawing faster
   if (scale == 1)
   {
     while (*str)
     {
-      drawChar(X,Y,*str++,color,bgcolor,scale);
+      drawChar(X,Y,*str++,color,scale);
       if (X < scr_width - 6) { X += 6; } else if (Y < scr_height - 8) { X = 0; Y += 8; } else { X = 0; Y = 0; }
     };
   }
@@ -832,7 +820,7 @@ void st_PutStr5x7(uint8_t scale, uint8_t X, uint8_t Y, char *str, uint16_t color
   {
     while (*str)
     {
-      drawChar(X,Y,*str++,color,bgcolor,scale);
+      drawChar(X,Y,*str++,color,scale);
       if (X < scr_width - (scale*5) + scale) { X += (scale * 5) + scale; } else if (Y < scr_height - (scale * 7) + scale) { X = 0; Y += (scale * 7) + scale; } else { X = 0; Y = 0; }
     };
   }
@@ -850,6 +838,7 @@ void drawBitmap(uint8_t x, uint8_t y,
       if(i & 7) byte >>= 1;
       else      byte   = bitmap[j * byteWidth + i / 8];
       if(byte & 0x01) lcd_Pixel(x+i, y+j, color);
+      else            lcd_Pixel(x+i, y+j, bg);
     }
   }
 }

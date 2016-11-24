@@ -7,7 +7,7 @@ Esta es una libreria para utilizar la pantalla TFT ST7735S utilizando la tarjeta
 	se baso en la libreria de adafruit la cual es compatible con arduino y escrita completamente en C++.
 	se integran ciertas funcionalidades y primitivas encontradas en la libraria de adafruit, sin embargo se omiten otras por compatibilidad
 	Esta libreria se encarga de la inicialización de alguno de los 3 SPI disponibles en las tarjetas ya mencionadas.
-    @author Natanael MojicaJimenez
+    @author Natanael Mojica Jimenez
     @date Noviembre 2016
     */
 
@@ -17,14 +17,11 @@ Esta es una libreria para utilizar la pantalla TFT ST7735S utilizando la tarjeta
 #include <libopencm3/stm32/rcc.h>
 #include <libopencm3/stm32/gpio.h>
 #include <libopencm3/stm32/timer.h>
-#include <libopencm3/cm3/nvic.h>
 #include <libopencm3/stm32/exti.h>
 #include <libopencmsis/core_cm3.h>
-#include <libopencm3/stm32/adc.h>
-#include <libopencm3/usb/usbd.h>
-#include <libopencm3/usb/cdc.h>
-#include <libopencm3/cm3/scb.h>
 #include <libopencm3/stm32/spi.h>
+#include <libopencm3/cm3/nvic.h>
+#include <libopencm3/cm3/systick.h>
 #include "color.h"
 #include "font5x7.h"
 
@@ -140,12 +137,13 @@ Esta es una libreria para utilizar la pantalla TFT ST7735S utilizando la tarjeta
 #define WIDTH	128
 #define HEIGHT	160
 
+
 typedef enum
 {
   scr_normal = 0,
-  scr_CW     = 1,
-  scr_CCW    = 2,
-  scr_180    = 3
+  scr_CW     = 1,/// X-Y Exchange,Y-Mirror
+  scr_CCW    = 2,/// X-Y Exchange,X-Mirror
+  scr_180    = 3 /// X-Mirror,Y-Mirror: Bottom to top; Right to left; RGB
 } ScrOrientation_TypeDef;
 
 enum st7735_cmd {
@@ -404,7 +402,7 @@ void fillRoundRect(uint8_t x, uint8_t y, uint8_t w,
       @param color color del string
       \warning scale: cuanto mas grande sea scale mas tarda en dibujarse en la pantalla
   */
-void st_PutStr5x7(uint8_t scale, uint8_t X, uint8_t Y, char *str, uint16_t color, uint16_t bgcolor);
+void st_PutStr5x7(uint8_t scale, uint8_t X, uint8_t Y, char *str, uint16_t color);
 /** 
       @brief escribe un solo char en la pantalla, el fond utilizado se encuentra en font5x7.h
       @param x coordenada en X
@@ -416,7 +414,7 @@ void st_PutStr5x7(uint8_t scale, uint8_t X, uint8_t Y, char *str, uint16_t color
       \warning size : cuanto mas grande sea mas tarda en dibujarse en la pantalla
   */
 void drawChar(uint8_t x, uint8_t y, unsigned char c,
- uint16_t color, uint16_t bg, uint8_t size);
+ uint16_t color, uint8_t size);
 /** 
       @brief Dibuja un mapa de bits extraido de una imagen, esta función es obsoleta, ya que es posible utilizando funciones como push_color(), lcd_Pixel(), lcd_setAddrWindow() dibujar imagenes a color y en blanco y negro a partir de una tabla de pixeles, esta ultima se obtiene con las funciones encontradas en el archivo makeColorTable.cpp ver el demo en main.c para entender su uso.
       @param x punto inicial en X
@@ -429,4 +427,12 @@ void drawChar(uint8_t x, uint8_t y, unsigned char c,
   */
 void drawBitmap(uint8_t x, uint8_t y,
  uint8_t *bitmap, uint8_t w, uint8_t h, uint16_t color, uint16_t bg);
+
+/** 
+      @brief envia a la pantalla un color de 16 bits
+      @param color color en 16 bits, puede ser alguno de los encontrados en color.h
+
+  */
+
+void push_color(uint16_t color);
 #endif
