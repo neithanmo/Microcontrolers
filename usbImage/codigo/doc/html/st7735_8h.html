@@ -1,0 +1,2794 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.11"/>
+<title>proyecto_micro-controladores: Referencia del Archivo /home/neithan/Microcontrolers/Lab5/codigo/src/st7735.h</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript">
+  $(document).ready(initResizable);
+  $(window).load(resizeHeight);
+</script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript">
+  $(document).ready(function() { init_search(); });
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">proyecto_micro-controladores
+   </div>
+   <div id="projectbrief">Editar</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.8.11 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search",false,'Buscar');
+</script>
+  <div id="navrow1" class="tabs">
+    <ul class="tablist">
+      <li><a href="index.html"><span>Página&#160;principal</span></a></li>
+      <li><a href="annotated.html"><span>Clases</span></a></li>
+      <li class="current"><a href="files.html"><span>Archivos</span></a></li>
+      <li>
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <img id="MSearchSelect" src="search/mag_sel.png"
+               onmouseover="return searchBox.OnSearchSelectShow()"
+               onmouseout="return searchBox.OnSearchSelectHide()"
+               alt=""/>
+          <input type="text" id="MSearchField" value="Buscar" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.png" alt=""/></a>
+          </span>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div id="navrow2" class="tabs2">
+    <ul class="tablist">
+      <li><a href="files.html"><span>Lista&#160;de&#160;archivos</span></a></li>
+      <li><a href="globals.html"><span>Miembros&#160;de&#160;los&#160;ficheros</span></a></li>
+    </ul>
+  </div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){initNavTree('st7735_8h.html','');});
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#nested-classes">Clases</a> &#124;
+<a href="#define-members">'defines'</a> &#124;
+<a href="#enum-members">Enumeraciones</a> &#124;
+<a href="#func-members">Funciones</a>  </div>
+  <div class="headertitle">
+<div class="title">Referencia del Archivo st7735.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Esta es una libreria para utilizar la pantalla TFT ST7735S utilizando la tarjeta STM32F4/F3, se baso en la libreria de adafruit la cual es compatible con arduino y escrita completamente en C++. se integran ciertas funcionalidades y primitivas encontradas en la libraria de adafruit, sin embargo se omiten otras por compatibilidad Esta libreria se encarga de la inicialización de alguno de los 3 SPI disponibles en las tarjetas ya mencionadas.  
+<a href="#details">Más...</a></p>
+<div class="textblock"><code>#include &lt;stdlib.h&gt;</code><br />
+<code>#include &lt;assert.h&gt;</code><br />
+<code>#include &lt;string.h&gt;</code><br />
+<code>#include &lt;libopencm3/stm32/rcc.h&gt;</code><br />
+<code>#include &lt;libopencm3/stm32/gpio.h&gt;</code><br />
+<code>#include &lt;libopencm3/stm32/timer.h&gt;</code><br />
+<code>#include &lt;libopencm3/cm3/nvic.h&gt;</code><br />
+<code>#include &lt;libopencm3/stm32/exti.h&gt;</code><br />
+<code>#include &lt;libopencmsis/core_cm3.h&gt;</code><br />
+<code>#include &lt;libopencm3/stm32/adc.h&gt;</code><br />
+<code>#include &lt;libopencm3/usb/usbd.h&gt;</code><br />
+<code>#include &lt;libopencm3/usb/cdc.h&gt;</code><br />
+<code>#include &lt;libopencm3/cm3/scb.h&gt;</code><br />
+<code>#include &lt;libopencm3/stm32/spi.h&gt;</code><br />
+<code>#include &quot;<a class="el" href="color_8h_source.html">color.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="font5x7_8h_source.html">font5x7.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="tabla_8h_source.html">tabla.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="tabla2_8h_source.html">tabla2.h</a>&quot;</code><br />
+</div>
+<p><a href="st7735_8h_source.html">Ir al código fuente de este archivo.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Clases</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structst7735__function.html">st7735_function</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
+'defines'</h2></td></tr>
+<tr class="memitem:a8112c985f7444e82198d7571ce0a9160"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#a8112c985f7444e82198d7571ce0a9160">SPI_PORT</a>&#160;&#160;&#160;SPI</td></tr>
+<tr class="separator:a8112c985f7444e82198d7571ce0a9160"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a166fcfb14775ba23c5ca160f07da0fa0"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#a166fcfb14775ba23c5ca160f07da0fa0">LCD_CONTROL_PORT</a>&#160;&#160;&#160;GPIOD</td></tr>
+<tr class="separator:a166fcfb14775ba23c5ca160f07da0fa0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a218aea20cbae8743a9182fcbc8e482f7"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#a218aea20cbae8743a9182fcbc8e482f7">BLK_PIN</a>&#160;&#160;&#160;GPIO3</td></tr>
+<tr class="memdesc:a218aea20cbae8743a9182fcbc8e482f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">usado para controlar la luminosidad de la pantalla  <a href="#a218aea20cbae8743a9182fcbc8e482f7">Más...</a><br /></td></tr>
+<tr class="separator:a218aea20cbae8743a9182fcbc8e482f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a36932b0e869e0114f32e255f61306d6b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#a36932b0e869e0114f32e255f61306d6b">RST_PIN</a>&#160;&#160;&#160;GPIO1</td></tr>
+<tr class="memdesc:a36932b0e869e0114f32e255f61306d6b"><td class="mdescLeft">&#160;</td><td class="mdescRight">gpio para hardware reset de la pantalla  <a href="#a36932b0e869e0114f32e255f61306d6b">Más...</a><br /></td></tr>
+<tr class="separator:a36932b0e869e0114f32e255f61306d6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abfcf05153ddbd63d5aff5d018867cc19"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#abfcf05153ddbd63d5aff5d018867cc19">CS_PIN</a>&#160;&#160;&#160;GPIO5</td></tr>
+<tr class="memdesc:abfcf05153ddbd63d5aff5d018867cc19"><td class="mdescLeft">&#160;</td><td class="mdescRight">gpio para "chip select"  <a href="#abfcf05153ddbd63d5aff5d018867cc19">Más...</a><br /></td></tr>
+<tr class="separator:abfcf05153ddbd63d5aff5d018867cc19"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4131edec89d3efa5af72db14ee3119c2"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#a4131edec89d3efa5af72db14ee3119c2">DC_PIN</a>&#160;&#160;&#160;GPIO4</td></tr>
+<tr class="memdesc:a4131edec89d3efa5af72db14ee3119c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">gpio "DATA/COMMAND"  <a href="#a4131edec89d3efa5af72db14ee3119c2">Más...</a><br /></td></tr>
+<tr class="separator:a4131edec89d3efa5af72db14ee3119c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aff39d3f24f2073ad7a18ed433827fb5b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#aff39d3f24f2073ad7a18ed433827fb5b">DC_L</a>()&#160;&#160;&#160;gpio_clear(<a class="el" href="st7735_8h.html#a166fcfb14775ba23c5ca160f07da0fa0">LCD_CONTROL_PORT</a>, <a class="el" href="st7735_8h.html#a4131edec89d3efa5af72db14ee3119c2">DC_PIN</a>)</td></tr>
+<tr class="memdesc:aff39d3f24f2073ad7a18ed433827fb5b"><td class="mdescLeft">&#160;</td><td class="mdescRight">set low the DC pin  <a href="#aff39d3f24f2073ad7a18ed433827fb5b">Más...</a><br /></td></tr>
+<tr class="separator:aff39d3f24f2073ad7a18ed433827fb5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab484b58929061c4628bd6b7900df3224"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#ab484b58929061c4628bd6b7900df3224">DC_H</a>()&#160;&#160;&#160;gpio_set(<a class="el" href="st7735_8h.html#a166fcfb14775ba23c5ca160f07da0fa0">LCD_CONTROL_PORT</a>, <a class="el" href="st7735_8h.html#a4131edec89d3efa5af72db14ee3119c2">DC_PIN</a>)</td></tr>
+<tr class="memdesc:ab484b58929061c4628bd6b7900df3224"><td class="mdescLeft">&#160;</td><td class="mdescRight">set hight the DC pin  <a href="#ab484b58929061c4628bd6b7900df3224">Más...</a><br /></td></tr>
+<tr class="separator:ab484b58929061c4628bd6b7900df3224"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae809be768bb813a2d5e6cb1edaa7e0af"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#ae809be768bb813a2d5e6cb1edaa7e0af">CS_L</a>()&#160;&#160;&#160;gpio_clear(<a class="el" href="st7735_8h.html#a166fcfb14775ba23c5ca160f07da0fa0">LCD_CONTROL_PORT</a>, <a class="el" href="st7735_8h.html#abfcf05153ddbd63d5aff5d018867cc19">CS_PIN</a>)</td></tr>
+<tr class="memdesc:ae809be768bb813a2d5e6cb1edaa7e0af"><td class="mdescLeft">&#160;</td><td class="mdescRight">set low the CS pin  <a href="#ae809be768bb813a2d5e6cb1edaa7e0af">Más...</a><br /></td></tr>
+<tr class="separator:ae809be768bb813a2d5e6cb1edaa7e0af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab6872874dbf2ac63a9885446a5a6da36"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#ab6872874dbf2ac63a9885446a5a6da36">CS_H</a>()&#160;&#160;&#160;gpio_set(<a class="el" href="st7735_8h.html#a166fcfb14775ba23c5ca160f07da0fa0">LCD_CONTROL_PORT</a>, <a class="el" href="st7735_8h.html#abfcf05153ddbd63d5aff5d018867cc19">CS_PIN</a>)</td></tr>
+<tr class="memdesc:ab6872874dbf2ac63a9885446a5a6da36"><td class="mdescLeft">&#160;</td><td class="mdescRight">set hight the CS pin  <a href="#ab6872874dbf2ac63a9885446a5a6da36">Más...</a><br /></td></tr>
+<tr class="separator:ab6872874dbf2ac63a9885446a5a6da36"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d742354b2b784f46058306e407518ca"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#a6d742354b2b784f46058306e407518ca">RST_L</a>()&#160;&#160;&#160;gpio_clear(<a class="el" href="st7735_8h.html#a166fcfb14775ba23c5ca160f07da0fa0">LCD_CONTROL_PORT</a>, <a class="el" href="st7735_8h.html#a36932b0e869e0114f32e255f61306d6b">RST_PIN</a>)</td></tr>
+<tr class="memdesc:a6d742354b2b784f46058306e407518ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">set low the RST pin  <a href="#a6d742354b2b784f46058306e407518ca">Más...</a><br /></td></tr>
+<tr class="separator:a6d742354b2b784f46058306e407518ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a831807c3a5da1596afad841775b1f2e8"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#a831807c3a5da1596afad841775b1f2e8">RST_H</a>()&#160;&#160;&#160;gpio_set(<a class="el" href="st7735_8h.html#a166fcfb14775ba23c5ca160f07da0fa0">LCD_CONTROL_PORT</a>, <a class="el" href="st7735_8h.html#a36932b0e869e0114f32e255f61306d6b">RST_PIN</a>)</td></tr>
+<tr class="memdesc:a831807c3a5da1596afad841775b1f2e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">set hight the RST pin  <a href="#a831807c3a5da1596afad841775b1f2e8">Más...</a><br /></td></tr>
+<tr class="separator:a831807c3a5da1596afad841775b1f2e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3118b14d778fd5d8527eee4be2bec881"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#a3118b14d778fd5d8527eee4be2bec881">_swap_uint8_t</a>(a,  b)&#160;&#160;&#160;{ uint8_t t = a; a = b; b = t; }</td></tr>
+<tr class="memdesc:a3118b14d778fd5d8527eee4be2bec881"><td class="mdescLeft">&#160;</td><td class="mdescRight">swap data a, b, function is not part of the API, but is a utility  <a href="#a3118b14d778fd5d8527eee4be2bec881">Más...</a><br /></td></tr>
+<tr class="separator:a3118b14d778fd5d8527eee4be2bec881"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8482c50b5e4da7ef9cc27ec7f16aa374"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#a8482c50b5e4da7ef9cc27ec7f16aa374">INITR_GREENTAB</a>&#160;&#160;&#160;0x0</td></tr>
+<tr class="separator:a8482c50b5e4da7ef9cc27ec7f16aa374"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac861596d7089b7620395cdad635c9307"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#ac861596d7089b7620395cdad635c9307">INITR_REDTAB</a>&#160;&#160;&#160;0x1</td></tr>
+<tr class="separator:ac861596d7089b7620395cdad635c9307"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a385ddeae12a0bcd313507bbe58f66e9a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#a385ddeae12a0bcd313507bbe58f66e9a">INITR_BLACKTAB</a>&#160;&#160;&#160;0x2</td></tr>
+<tr class="separator:a385ddeae12a0bcd313507bbe58f66e9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b0bfc22b86b89c821c89e5af8d11ee0"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#a0b0bfc22b86b89c821c89e5af8d11ee0">INITR_18GREENTAB</a>&#160;&#160;&#160;<a class="el" href="st7735_8h.html#a8482c50b5e4da7ef9cc27ec7f16aa374">INITR_GREENTAB</a></td></tr>
+<tr class="separator:a0b0bfc22b86b89c821c89e5af8d11ee0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b0d94a281bc70fb8e8dc3217e51e7e0"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#a2b0d94a281bc70fb8e8dc3217e51e7e0">INITR_18REDTAB</a>&#160;&#160;&#160;<a class="el" href="st7735_8h.html#ac861596d7089b7620395cdad635c9307">INITR_REDTAB</a></td></tr>
+<tr class="separator:a2b0d94a281bc70fb8e8dc3217e51e7e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa9bf2edd9c879179cc072b3b9d4ecc8f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#aa9bf2edd9c879179cc072b3b9d4ecc8f">INITR_18BLACKTAB</a>&#160;&#160;&#160;<a class="el" href="st7735_8h.html#a385ddeae12a0bcd313507bbe58f66e9a">INITR_BLACKTAB</a></td></tr>
+<tr class="separator:aa9bf2edd9c879179cc072b3b9d4ecc8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9c361b912f3945ccbc19d8de021c96c5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#a9c361b912f3945ccbc19d8de021c96c5">INITR_144GREENTAB</a>&#160;&#160;&#160;0x1</td></tr>
+<tr class="separator:a9c361b912f3945ccbc19d8de021c96c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1b574de2db49ecfa63ce0216112903cc"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#a1b574de2db49ecfa63ce0216112903cc">ST7735_NOP</a>&#160;&#160;&#160;0x00</td></tr>
+<tr class="separator:a1b574de2db49ecfa63ce0216112903cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2816f2fce9a937ced8567b2c2797767b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#a2816f2fce9a937ced8567b2c2797767b">ST7735_SWRESET</a>&#160;&#160;&#160;0x01</td></tr>
+<tr class="separator:a2816f2fce9a937ced8567b2c2797767b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec4c29f7c63a6c6f168764b2bcec50cf"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#aec4c29f7c63a6c6f168764b2bcec50cf">ST7735_RDDID</a>&#160;&#160;&#160;0x04</td></tr>
+<tr class="separator:aec4c29f7c63a6c6f168764b2bcec50cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb42f35cd7e667ba514f8b6022d0dac5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#acb42f35cd7e667ba514f8b6022d0dac5">ST7735_RDDST</a>&#160;&#160;&#160;0x09</td></tr>
+<tr class="separator:acb42f35cd7e667ba514f8b6022d0dac5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5656049de5d79e5a77260b69042179af"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#a5656049de5d79e5a77260b69042179af">ST7735_SLPIN</a>&#160;&#160;&#160;0x10</td></tr>
+<tr class="separator:a5656049de5d79e5a77260b69042179af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa061cfc0b8f0fea3e70b59d72f6e1caa"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#aa061cfc0b8f0fea3e70b59d72f6e1caa">ST7735_SLPOUT</a>&#160;&#160;&#160;0x11</td></tr>
+<tr class="separator:aa061cfc0b8f0fea3e70b59d72f6e1caa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aac679645f819d98761965299f19620f6"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#aac679645f819d98761965299f19620f6">ST7735_PTLON</a>&#160;&#160;&#160;0x12</td></tr>
+<tr class="separator:aac679645f819d98761965299f19620f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9e059398ac81ef081169997c28f908cb"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#a9e059398ac81ef081169997c28f908cb">ST7735_NORON</a>&#160;&#160;&#160;0x13</td></tr>
+<tr class="separator:a9e059398ac81ef081169997c28f908cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad66cc531ec897ce0465ff21d152b756a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#ad66cc531ec897ce0465ff21d152b756a">ST7735_INVOFF</a>&#160;&#160;&#160;0x20</td></tr>
+<tr class="separator:ad66cc531ec897ce0465ff21d152b756a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae670a3d34e887559366735ca999e80d3"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#ae670a3d34e887559366735ca999e80d3">ST7735_INVON</a>&#160;&#160;&#160;0x21</td></tr>
+<tr class="separator:ae670a3d34e887559366735ca999e80d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f9701dd8594cc2fb7c6f783b05d2f65"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#a1f9701dd8594cc2fb7c6f783b05d2f65">ST7735_DISPOFF</a>&#160;&#160;&#160;0x28</td></tr>
+<tr class="separator:a1f9701dd8594cc2fb7c6f783b05d2f65"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1afa532348b3d081b7b1ecdfa9ba17e0"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#a1afa532348b3d081b7b1ecdfa9ba17e0">ST7735_DISPON</a>&#160;&#160;&#160;0x29</td></tr>
+<tr class="separator:a1afa532348b3d081b7b1ecdfa9ba17e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a484d38defdf6303f4a8d19f994d0593d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#a484d38defdf6303f4a8d19f994d0593d">ST7735_CASET</a>&#160;&#160;&#160;0x2A</td></tr>
+<tr class="separator:a484d38defdf6303f4a8d19f994d0593d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae879d0b7f5639d5ecd3d265d9971c979"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#ae879d0b7f5639d5ecd3d265d9971c979">ST7735_RASET</a>&#160;&#160;&#160;0x2B</td></tr>
+<tr class="separator:ae879d0b7f5639d5ecd3d265d9971c979"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa9a60c99890ac51b71eb799b68d5c6d5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#aa9a60c99890ac51b71eb799b68d5c6d5">ST7735_RAMWR</a>&#160;&#160;&#160;0x2C</td></tr>
+<tr class="separator:aa9a60c99890ac51b71eb799b68d5c6d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5cbfe14163815f14aea1a4a89ea2fffc"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#a5cbfe14163815f14aea1a4a89ea2fffc">ST7735_RAMRD</a>&#160;&#160;&#160;0x2E</td></tr>
+<tr class="separator:a5cbfe14163815f14aea1a4a89ea2fffc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a057611dfe567fd9095f27d40087e4948"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#a057611dfe567fd9095f27d40087e4948">ST7735_PTLAR</a>&#160;&#160;&#160;0x30</td></tr>
+<tr class="separator:a057611dfe567fd9095f27d40087e4948"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9caf06c78cdaba66cea553668103b759"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#a9caf06c78cdaba66cea553668103b759">ST7735_COLMOD</a>&#160;&#160;&#160;0x3A</td></tr>
+<tr class="separator:a9caf06c78cdaba66cea553668103b759"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74afa388731002f70e250770901f90a2"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#a74afa388731002f70e250770901f90a2">ST7735_MADCTL</a>&#160;&#160;&#160;0x36</td></tr>
+<tr class="separator:a74afa388731002f70e250770901f90a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb5c49fcdd239ab153f5d9b15304ca9c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#aeb5c49fcdd239ab153f5d9b15304ca9c">ST7735_FRMCTR1</a>&#160;&#160;&#160;0xB1</td></tr>
+<tr class="separator:aeb5c49fcdd239ab153f5d9b15304ca9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3b416f231bb6eedec8cfcf277c6d36d3"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#a3b416f231bb6eedec8cfcf277c6d36d3">ST7735_FRMCTR2</a>&#160;&#160;&#160;0xB2</td></tr>
+<tr class="separator:a3b416f231bb6eedec8cfcf277c6d36d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4afe2b326d709aaeb70c657f8210ea2b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#a4afe2b326d709aaeb70c657f8210ea2b">ST7735_FRMCTR3</a>&#160;&#160;&#160;0xB3</td></tr>
+<tr class="separator:a4afe2b326d709aaeb70c657f8210ea2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:addfb44b70c2b60a0d04e3d22611d54ee"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#addfb44b70c2b60a0d04e3d22611d54ee">ST7735_INVCTR</a>&#160;&#160;&#160;0xB4</td></tr>
+<tr class="separator:addfb44b70c2b60a0d04e3d22611d54ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ace47a845775310352dc7e2fae3e1586a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#ace47a845775310352dc7e2fae3e1586a">ST7735_DISSET5</a>&#160;&#160;&#160;0xB6</td></tr>
+<tr class="separator:ace47a845775310352dc7e2fae3e1586a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab4294b48d705690347bf0fed4af82697"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#ab4294b48d705690347bf0fed4af82697">ST7735_PWCTR1</a>&#160;&#160;&#160;0xC0</td></tr>
+<tr class="separator:ab4294b48d705690347bf0fed4af82697"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef4c5d9e00b07b6fc601f8ad2dbbb101"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#aef4c5d9e00b07b6fc601f8ad2dbbb101">ST7735_PWCTR2</a>&#160;&#160;&#160;0xC1</td></tr>
+<tr class="separator:aef4c5d9e00b07b6fc601f8ad2dbbb101"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac69d092c9c2693807a2a992dbf297f24"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#ac69d092c9c2693807a2a992dbf297f24">ST7735_PWCTR3</a>&#160;&#160;&#160;0xC2</td></tr>
+<tr class="separator:ac69d092c9c2693807a2a992dbf297f24"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95b55308b48e83b1a3e2cf51393030f1"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#a95b55308b48e83b1a3e2cf51393030f1">ST7735_PWCTR4</a>&#160;&#160;&#160;0xC3</td></tr>
+<tr class="separator:a95b55308b48e83b1a3e2cf51393030f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a91cc0e141903ca80ad7fc6f108988184"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#a91cc0e141903ca80ad7fc6f108988184">ST7735_PWCTR5</a>&#160;&#160;&#160;0xC4</td></tr>
+<tr class="separator:a91cc0e141903ca80ad7fc6f108988184"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa4d4dfc0e9e5b75add3eb42fd7987c29"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#aa4d4dfc0e9e5b75add3eb42fd7987c29">ST7735_VMCTR1</a>&#160;&#160;&#160;0xC5</td></tr>
+<tr class="separator:aa4d4dfc0e9e5b75add3eb42fd7987c29"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a904eaad54b53eec42bec05f81baee26f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#a904eaad54b53eec42bec05f81baee26f">ST7735_RDID1</a>&#160;&#160;&#160;0xDA</td></tr>
+<tr class="separator:a904eaad54b53eec42bec05f81baee26f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef8a3757b39dd1bf1d79920be09511ae"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#aef8a3757b39dd1bf1d79920be09511ae">ST7735_RDID2</a>&#160;&#160;&#160;0xDB</td></tr>
+<tr class="separator:aef8a3757b39dd1bf1d79920be09511ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8a827d3b90198c117f3d744cc4201c68"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#a8a827d3b90198c117f3d744cc4201c68">ST7735_RDID3</a>&#160;&#160;&#160;0xDC</td></tr>
+<tr class="separator:a8a827d3b90198c117f3d744cc4201c68"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ca62118c4ce1ed1d288c6958004188e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#a1ca62118c4ce1ed1d288c6958004188e">ST7735_RDID4</a>&#160;&#160;&#160;0xDD</td></tr>
+<tr class="separator:a1ca62118c4ce1ed1d288c6958004188e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a13453718ec9240ae7966d0d8995d0c8a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#a13453718ec9240ae7966d0d8995d0c8a">ST7735_PWCTR6</a>&#160;&#160;&#160;0xFC</td></tr>
+<tr class="separator:a13453718ec9240ae7966d0d8995d0c8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad90bd9bbed9c95192a2b44b8f63f86e5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#ad90bd9bbed9c95192a2b44b8f63f86e5">ST7735_GMCTRP1</a>&#160;&#160;&#160;0xE0</td></tr>
+<tr class="separator:ad90bd9bbed9c95192a2b44b8f63f86e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad3c0783af31cd4c4e33bf8748e961fa"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#aad3c0783af31cd4c4e33bf8748e961fa">ST7735_GMCTRN1</a>&#160;&#160;&#160;0xE1</td></tr>
+<tr class="separator:aad3c0783af31cd4c4e33bf8748e961fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a241aeeb764887ae5e3de58b98f04b16d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#a241aeeb764887ae5e3de58b98f04b16d">WIDTH</a>&#160;&#160;&#160;128</td></tr>
+<tr class="separator:a241aeeb764887ae5e3de58b98f04b16d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed89bd71aee8be823e8a20ec4e093c1e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#aed89bd71aee8be823e8a20ec4e093c1e">HEIGHT</a>&#160;&#160;&#160;160</td></tr>
+<tr class="separator:aed89bd71aee8be823e8a20ec4e093c1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
+Enumeraciones</h2></td></tr>
+<tr class="memitem:a5ae84ca942eaca100e8898474a926b40"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#a5ae84ca942eaca100e8898474a926b40">ScrOrientation_TypeDef</a> { <a class="el" href="st7735_8h.html#a5ae84ca942eaca100e8898474a926b40aa07c9000fe12525afdc2745a87dadbb5">scr_normal</a> = 0, 
+<a class="el" href="st7735_8h.html#a5ae84ca942eaca100e8898474a926b40a2b0ac0a99f5355d9b34c3852f08719d6">scr_CW</a> = 1, 
+<a class="el" href="st7735_8h.html#a5ae84ca942eaca100e8898474a926b40a3bb8884e9045b3f119a9902f010cc225">scr_CCW</a> = 2, 
+<a class="el" href="st7735_8h.html#a5ae84ca942eaca100e8898474a926b40aacd3043a7474f1c585acf27271da3b34">scr_180</a> = 3
+ }</td></tr>
+<tr class="separator:a5ae84ca942eaca100e8898474a926b40"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9c2b1a91913423d58dbec9c795cc18dd"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#a9c2b1a91913423d58dbec9c795cc18dd">st7735_cmd</a> { <br />
+&#160;&#160;<a class="el" href="st7735_8h.html#a9c2b1a91913423d58dbec9c795cc18ddab784b7602a9a2e684f6390fe87b82c02">ST7735_START</a>, 
+<a class="el" href="st7735_8h.html#a9c2b1a91913423d58dbec9c795cc18dda4f71b343d00050f4ad75ab5566cc4ceb">ST7735_END</a>, 
+<a class="el" href="st7735_8h.html#a9c2b1a91913423d58dbec9c795cc18dda6f0d44bdcdbb8a652379e52ff1483be8">ST7735_CMD</a>, 
+<a class="el" href="st7735_8h.html#a9c2b1a91913423d58dbec9c795cc18dda1f23be27e318b5eefe077a142900c0bc">ST7735_DATA</a>, 
+<br />
+&#160;&#160;<a class="el" href="st7735_8h.html#a9c2b1a91913423d58dbec9c795cc18ddaa1b4c618843c2d5c9697248e648c7438">ST7735_DELAY</a>
+<br />
+ }</td></tr>
+<tr class="separator:a9c2b1a91913423d58dbec9c795cc18dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Funciones</h2></td></tr>
+<tr class="memitem:ac181762e52db968673396efbf0e825fe"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#ac181762e52db968673396efbf0e825fe">RGB565</a> (uint8_t R, uint8_t G, uint8_t B)</td></tr>
+<tr class="memdesc:ac181762e52db968673396efbf0e825fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">retorna el color de un pixel RGB565 de 16 bits.  <a href="#ac181762e52db968673396efbf0e825fe">Más...</a><br /></td></tr>
+<tr class="separator:ac181762e52db968673396efbf0e825fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac7770e102c0ce9b4f7833f646ab5c6c6"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#ac7770e102c0ce9b4f7833f646ab5c6c6">swapcolor</a> (uint16_t x)</td></tr>
+<tr class="memdesc:ac7770e102c0ce9b4f7833f646ab5c6c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Intercambia el orden de los componentes de color en un pixel, de RGB a BGR.  <a href="#ac7770e102c0ce9b4f7833f646ab5c6c6">Más...</a><br /></td></tr>
+<tr class="separator:ac7770e102c0ce9b4f7833f646ab5c6c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9e0759026ca579899f965cfc956412df"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#a9e0759026ca579899f965cfc956412df">getRed</a> (uint16_t rgbPixel)</td></tr>
+<tr class="memdesc:a9e0759026ca579899f965cfc956412df"><td class="mdescLeft">&#160;</td><td class="mdescRight">retorna el nivel de rojo de un pixel  <a href="#a9e0759026ca579899f965cfc956412df">Más...</a><br /></td></tr>
+<tr class="separator:a9e0759026ca579899f965cfc956412df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af775caa54b75571bdb757362d3e8de3c"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#af775caa54b75571bdb757362d3e8de3c">getBlue</a> (uint16_t rgbPixel)</td></tr>
+<tr class="memdesc:af775caa54b75571bdb757362d3e8de3c"><td class="mdescLeft">&#160;</td><td class="mdescRight">retorna el nivel de azul de un pixel  <a href="#af775caa54b75571bdb757362d3e8de3c">Más...</a><br /></td></tr>
+<tr class="separator:af775caa54b75571bdb757362d3e8de3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3f60030b79f293f90d6a4fc7d2986d73"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#a3f60030b79f293f90d6a4fc7d2986d73">getGreen</a> (uint16_t rgbPixel)</td></tr>
+<tr class="memdesc:a3f60030b79f293f90d6a4fc7d2986d73"><td class="mdescLeft">&#160;</td><td class="mdescRight">retorna el nivel de verde de un pixel  <a href="#a3f60030b79f293f90d6a4fc7d2986d73">Más...</a><br /></td></tr>
+<tr class="separator:a3f60030b79f293f90d6a4fc7d2986d73"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a25a7a26b441d259e596301aa69abbb03"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#a25a7a26b441d259e596301aa69abbb03">delay_ms</a> (const uint32_t delay)</td></tr>
+<tr class="memdesc:a25a7a26b441d259e596301aa69abbb03"><td class="mdescLeft">&#160;</td><td class="mdescRight">retardo en milisegundos  <a href="#a25a7a26b441d259e596301aa69abbb03">Más...</a><br /></td></tr>
+<tr class="separator:a25a7a26b441d259e596301aa69abbb03"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa08019f10d06c82d85327ef646f44435"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#aa08019f10d06c82d85327ef646f44435">delay_us</a> (const uint32_t delay)</td></tr>
+<tr class="memdesc:aa08019f10d06c82d85327ef646f44435"><td class="mdescLeft">&#160;</td><td class="mdescRight">retardo en microsegundos  <a href="#aa08019f10d06c82d85327ef646f44435">Más...</a><br /></td></tr>
+<tr class="separator:aa08019f10d06c82d85327ef646f44435"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0e3c78d312f9ea8019c006a74e524dda"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#a0e3c78d312f9ea8019c006a74e524dda">write_data_lcd</a> (uint8_t data)</td></tr>
+<tr class="memdesc:a0e3c78d312f9ea8019c006a74e524dda"><td class="mdescLeft">&#160;</td><td class="mdescRight">envia datos al SPI, es decir a la tarjeta ST7735S, internamente pone en alto la bandera DC, para indicar a la tarjeta que se envian datos  <a href="#a0e3c78d312f9ea8019c006a74e524dda">Más...</a><br /></td></tr>
+<tr class="separator:a0e3c78d312f9ea8019c006a74e524dda"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a28c3534d2f2074fe50367f1b199e7b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#a4a28c3534d2f2074fe50367f1b199e7b">write_cmd_lcd</a> (uint8_t cmd)</td></tr>
+<tr class="memdesc:a4a28c3534d2f2074fe50367f1b199e7b"><td class="mdescLeft">&#160;</td><td class="mdescRight">envia datos al SPI, es decir a la tarjeta ST7735S, internamente pone en bajo la bandera DC, para indicar a la tarjeta que se envian comandos de configuracion  <a href="#a4a28c3534d2f2074fe50367f1b199e7b">Más...</a><br /></td></tr>
+<tr class="separator:a4a28c3534d2f2074fe50367f1b199e7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aafed2ade168a085630c2fe8d776432f2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#aafed2ade168a085630c2fe8d776432f2">init_lcd</a> (void)</td></tr>
+<tr class="memdesc:aafed2ade168a085630c2fe8d776432f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">inicializa la pantalla,aqui se ajusta el formato y bits de color, etc.  <a href="#aafed2ade168a085630c2fe8d776432f2">Más...</a><br /></td></tr>
+<tr class="separator:aafed2ade168a085630c2fe8d776432f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb5db9fda33cb42e565461d17593bcf6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#acb5db9fda33cb42e565461d17593bcf6">spi_setup</a> (uint32_t SPI)</td></tr>
+<tr class="memdesc:acb5db9fda33cb42e565461d17593bcf6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inicializa el periférico SPI a utilizar.  <a href="#acb5db9fda33cb42e565461d17593bcf6">Más...</a><br /></td></tr>
+<tr class="separator:acb5db9fda33cb42e565461d17593bcf6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab12791310beed0a32afc8df3f42cf642"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#ab12791310beed0a32afc8df3f42cf642">lcd_setAddrWindow</a> (uint8_t XS, uint8_t YS, uint8_t XE, uint8_t YE)</td></tr>
+<tr class="memdesc:ab12791310beed0a32afc8df3f42cf642"><td class="mdescLeft">&#160;</td><td class="mdescRight">activa la parte de la pantalla que se va a colorear. En cordenadas X-Y(2D), por defecto X=0-128 y Y=0-160, es posible cambiar la orientación.  <a href="#ab12791310beed0a32afc8df3f42cf642">Más...</a><br /></td></tr>
+<tr class="separator:ab12791310beed0a32afc8df3f42cf642"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a202ef105fb5662318faa8bc3f7839082"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#a202ef105fb5662318faa8bc3f7839082">lcd_orientacion</a> (<a class="el" href="st7735_8h.html#a5ae84ca942eaca100e8898474a926b40">ScrOrientation_TypeDef</a> orientation)</td></tr>
+<tr class="memdesc:a202ef105fb5662318faa8bc3f7839082"><td class="mdescLeft">&#160;</td><td class="mdescRight">Utilizada para cambiar la orientación de la pantalla.  <a href="#a202ef105fb5662318faa8bc3f7839082">Más...</a><br /></td></tr>
+<tr class="separator:a202ef105fb5662318faa8bc3f7839082"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a819f1bad3cfc54b2bc29accf027fbe97"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#a819f1bad3cfc54b2bc29accf027fbe97">lcd_Clear</a> (uint16_t color)</td></tr>
+<tr class="memdesc:a819f1bad3cfc54b2bc29accf027fbe97"><td class="mdescLeft">&#160;</td><td class="mdescRight">Llenar la pantalla de un solo color.  <a href="#a819f1bad3cfc54b2bc29accf027fbe97">Más...</a><br /></td></tr>
+<tr class="separator:a819f1bad3cfc54b2bc29accf027fbe97"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a52199fd74db51ad05720fb77b3dd1a2a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#a52199fd74db51ad05720fb77b3dd1a2a">lcd_Pixel</a> (uint16_t X, uint16_t Y, uint16_t color)</td></tr>
+<tr class="memdesc:a52199fd74db51ad05720fb77b3dd1a2a"><td class="mdescLeft">&#160;</td><td class="mdescRight">colorear un pixel en específico  <a href="#a52199fd74db51ad05720fb77b3dd1a2a">Más...</a><br /></td></tr>
+<tr class="separator:a52199fd74db51ad05720fb77b3dd1a2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a51ad2be435bd72bc5597072999b304bd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#a51ad2be435bd72bc5597072999b304bd">lcd_HLine</a> (uint8_t x, uint8_t y, uint8_t w, uint16_t color)</td></tr>
+<tr class="memdesc:a51ad2be435bd72bc5597072999b304bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dibuja una linea horizontal que iniciará en el punto xy.  <a href="#a51ad2be435bd72bc5597072999b304bd">Más...</a><br /></td></tr>
+<tr class="separator:a51ad2be435bd72bc5597072999b304bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac155886cbd46bcb85b1cdad90def7e44"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#ac155886cbd46bcb85b1cdad90def7e44">lcd_VLine</a> (uint8_t x, uint8_t y, uint8_t h, uint16_t color)</td></tr>
+<tr class="memdesc:ac155886cbd46bcb85b1cdad90def7e44"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dibuja una linea vertical que iniciará en el punto xy.  <a href="#ac155886cbd46bcb85b1cdad90def7e44">Más...</a><br /></td></tr>
+<tr class="separator:ac155886cbd46bcb85b1cdad90def7e44"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e8b3154e014fb073bee6a563109428f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#a6e8b3154e014fb073bee6a563109428f">lcd_Line</a> (int16_t X1, int16_t Y1, int16_t X2, int16_t Y2, uint16_t color)</td></tr>
+<tr class="memdesc:a6e8b3154e014fb073bee6a563109428f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dibuja una linea que une los puntos X1Y1 a X2Y2.  <a href="#a6e8b3154e014fb073bee6a563109428f">Más...</a><br /></td></tr>
+<tr class="separator:a6e8b3154e014fb073bee6a563109428f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac94e780143f8f852ca9e1712bb7c4af5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#ac94e780143f8f852ca9e1712bb7c4af5">lcd_Rect</a> (uint16_t X1, uint16_t Y1, uint16_t X2, uint16_t Y2, uint16_t color)</td></tr>
+<tr class="memdesc:ac94e780143f8f852ca9e1712bb7c4af5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Funcion para dibujar un rectangulo.  <a href="#ac94e780143f8f852ca9e1712bb7c4af5">Más...</a><br /></td></tr>
+<tr class="separator:ac94e780143f8f852ca9e1712bb7c4af5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeba6ba7c6ce32b47c5437325d57dd2c3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#aeba6ba7c6ce32b47c5437325d57dd2c3">lcd_FillRect</a> (uint8_t x, uint8_t y, uint8_t w, uint8_t h, uint16_t color)</td></tr>
+<tr class="memdesc:aeba6ba7c6ce32b47c5437325d57dd2c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Rellena un rectangulo con un determinado color.  <a href="#aeba6ba7c6ce32b47c5437325d57dd2c3">Más...</a><br /></td></tr>
+<tr class="separator:aeba6ba7c6ce32b47c5437325d57dd2c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f074060e0dabe0ad6ffc2ba58afdf44"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#a4f074060e0dabe0ad6ffc2ba58afdf44">lcd_backLight</a> (uint8_t on)</td></tr>
+<tr class="memdesc:a4f074060e0dabe0ad6ffc2ba58afdf44"><td class="mdescLeft">&#160;</td><td class="mdescRight">enciende o apaga la luz de fondo de la pantalla  <a href="#a4f074060e0dabe0ad6ffc2ba58afdf44">Más...</a><br /></td></tr>
+<tr class="separator:a4f074060e0dabe0ad6ffc2ba58afdf44"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a61fdb9fe606c8ecab09cd33dbf315a6a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#a61fdb9fe606c8ecab09cd33dbf315a6a">drawCircle</a> (uint8_t x0, uint8_t y0, uint8_t r, uint16_t color)</td></tr>
+<tr class="memdesc:a61fdb9fe606c8ecab09cd33dbf315a6a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dibujar un circulo.  <a href="#a61fdb9fe606c8ecab09cd33dbf315a6a">Más...</a><br /></td></tr>
+<tr class="separator:a61fdb9fe606c8ecab09cd33dbf315a6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab1e9920baf8bd7cb0dc9abe0581c4dfe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#ab1e9920baf8bd7cb0dc9abe0581c4dfe">drawCircleHelper</a> (uint8_t x0, uint8_t y0, uint8_t r, uint8_t cornername, uint16_t color)</td></tr>
+<tr class="memdesc:ab1e9920baf8bd7cb0dc9abe0581c4dfe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Funcion auxiliar utilizada por drawCircle y dibujar aun mas rapidamente el circulo.  <a href="#ab1e9920baf8bd7cb0dc9abe0581c4dfe">Más...</a><br /></td></tr>
+<tr class="separator:ab1e9920baf8bd7cb0dc9abe0581c4dfe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afd58757c44d467755bf5f951221de7d0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#afd58757c44d467755bf5f951221de7d0">fillCircle</a> (uint8_t x0, uint8_t y0, uint8_t r, uint16_t color)</td></tr>
+<tr class="memdesc:afd58757c44d467755bf5f951221de7d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dibujar y rellenar un circulo.  <a href="#afd58757c44d467755bf5f951221de7d0">Más...</a><br /></td></tr>
+<tr class="separator:afd58757c44d467755bf5f951221de7d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49edfd7dd64ca3d741800c0f29eb7f97"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#a49edfd7dd64ca3d741800c0f29eb7f97">fillCircleHelper</a> (uint8_t x0, uint8_t y0, uint8_t r, uint8_t cornername, uint8_t delta, uint16_t color)</td></tr>
+<tr class="memdesc:a49edfd7dd64ca3d741800c0f29eb7f97"><td class="mdescLeft">&#160;</td><td class="mdescRight">Funcion auxiliar utilizada por fillCircle y dibujar/rellenar el circulo.  <a href="#a49edfd7dd64ca3d741800c0f29eb7f97">Más...</a><br /></td></tr>
+<tr class="separator:a49edfd7dd64ca3d741800c0f29eb7f97"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b5d124d653e3fca7f0a4da92a59d99c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#a5b5d124d653e3fca7f0a4da92a59d99c">drawTriangle</a> (uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint16_t color)</td></tr>
+<tr class="memdesc:a5b5d124d653e3fca7f0a4da92a59d99c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dibujar un triangulo, dibuja tres lineas que unen los tres vertices del triangulo, cada vertice con coordenadas x0y0, x1y1,x2y2.  <a href="#a5b5d124d653e3fca7f0a4da92a59d99c">Más...</a><br /></td></tr>
+<tr class="separator:a5b5d124d653e3fca7f0a4da92a59d99c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af864fedf3dd0b022ce4df8e5472f2d80"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#af864fedf3dd0b022ce4df8e5472f2d80">drawRect</a> (uint8_t x, uint8_t y, uint8_t w, uint8_t h, uint16_t color)</td></tr>
+<tr class="memdesc:af864fedf3dd0b022ce4df8e5472f2d80"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dibuja un rectangulo utilizando un algoritmo diferente al usado en lcd_Rect.  <a href="#af864fedf3dd0b022ce4df8e5472f2d80">Más...</a><br /></td></tr>
+<tr class="separator:af864fedf3dd0b022ce4df8e5472f2d80"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae3f81d88c3bba11537fb3edfda8b8f44"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#ae3f81d88c3bba11537fb3edfda8b8f44">drawLine</a> (uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, uint16_t color)</td></tr>
+<tr class="memdesc:ae3f81d88c3bba11537fb3edfda8b8f44"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dibuja una linea,utiliza otro algoritmo al empleado por lcd_Line.  <a href="#ae3f81d88c3bba11537fb3edfda8b8f44">Más...</a><br /></td></tr>
+<tr class="separator:ae3f81d88c3bba11537fb3edfda8b8f44"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b780581fab62fff9338d0b0a8fb4c45"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#a7b780581fab62fff9338d0b0a8fb4c45">drawFastVLine</a> (uint8_t x, uint8_t y, uint8_t h, uint16_t color)</td></tr>
+<tr class="memdesc:a7b780581fab62fff9338d0b0a8fb4c45"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dibuja una linea horizontal ,utilizando <a class="el" href="st7735_8h.html#ae3f81d88c3bba11537fb3edfda8b8f44" title="Dibuja una linea,utiliza otro algoritmo al empleado por lcd_Line. ">drawLine()</a>  <a href="#a7b780581fab62fff9338d0b0a8fb4c45">Más...</a><br /></td></tr>
+<tr class="separator:a7b780581fab62fff9338d0b0a8fb4c45"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc7507ca222d325daf1c0a8ef912d068"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#afc7507ca222d325daf1c0a8ef912d068">drawFastHLine</a> (uint8_t x, uint8_t y, uint8_t w, uint16_t color)</td></tr>
+<tr class="memdesc:afc7507ca222d325daf1c0a8ef912d068"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dibuja una linea horizontal ,utilizando <a class="el" href="st7735_8h.html#ae3f81d88c3bba11537fb3edfda8b8f44" title="Dibuja una linea,utiliza otro algoritmo al empleado por lcd_Line. ">drawLine()</a>  <a href="#afc7507ca222d325daf1c0a8ef912d068">Más...</a><br /></td></tr>
+<tr class="separator:afc7507ca222d325daf1c0a8ef912d068"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9a16d7c88a1ea94262311f59722cba6b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#a9a16d7c88a1ea94262311f59722cba6b">fillTriangle</a> (uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint16_t color)</td></tr>
+<tr class="memdesc:a9a16d7c88a1ea94262311f59722cba6b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dibuja/rellena un triangulo, utilizando tres lineas que unen los tres vertices del triangulo, cada vertice con coordenadas x0y0, x1y1,x2y2.  <a href="#a9a16d7c88a1ea94262311f59722cba6b">Más...</a><br /></td></tr>
+<tr class="separator:a9a16d7c88a1ea94262311f59722cba6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf9d9500299437b02e25004c97e916ed"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#aaf9d9500299437b02e25004c97e916ed">fillRect</a> (uint8_t x, uint8_t y, uint8_t w, uint8_t h, uint16_t color)</td></tr>
+<tr class="memdesc:aaf9d9500299437b02e25004c97e916ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Rellena un rectangulo con un determinado color, utiliza un algoritmo diferente al utilizado en lcd_FillRect, el cual es utili para dibujo de pequeños rectangulos.  <a href="#aaf9d9500299437b02e25004c97e916ed">Más...</a><br /></td></tr>
+<tr class="separator:aaf9d9500299437b02e25004c97e916ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4fa4297e4aa1901a20f395d819e0392"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#ae4fa4297e4aa1901a20f395d819e0392">drawRoundRect</a> (uint8_t x, uint8_t y, uint8_t w, uint8_t, uint8_t r, uint16_t color)</td></tr>
+<tr class="memdesc:ae4fa4297e4aa1901a20f395d819e0392"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dibuja un Round rectangulo con un determinado color.  <a href="#ae4fa4297e4aa1901a20f395d819e0392">Más...</a><br /></td></tr>
+<tr class="separator:ae4fa4297e4aa1901a20f395d819e0392"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf0786e14e204ca2740d7c1aef27a0a0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#adf0786e14e204ca2740d7c1aef27a0a0">fillRoundRect</a> (uint8_t x, uint8_t y, uint8_t w, uint8_t h, uint8_t r, uint16_t color)</td></tr>
+<tr class="memdesc:adf0786e14e204ca2740d7c1aef27a0a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Rellena un Round rectangulo con un determinado color.  <a href="#adf0786e14e204ca2740d7c1aef27a0a0">Más...</a><br /></td></tr>
+<tr class="separator:adf0786e14e204ca2740d7c1aef27a0a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac44b1142c890d76d774741669962728a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#ac44b1142c890d76d774741669962728a">st_PutStr5x7</a> (uint8_t scale, uint8_t X, uint8_t Y, char *str, uint16_t color, uint16_t bgcolor)</td></tr>
+<tr class="memdesc:ac44b1142c890d76d774741669962728a"><td class="mdescLeft">&#160;</td><td class="mdescRight">escribe un arreglo de chars (strings)  <a href="#ac44b1142c890d76d774741669962728a">Más...</a><br /></td></tr>
+<tr class="separator:ac44b1142c890d76d774741669962728a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af77d21781d7f3f0aef16e2e19950867c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#af77d21781d7f3f0aef16e2e19950867c">drawChar</a> (uint8_t x, uint8_t y, unsigned char c, uint16_t color, uint16_t bg, uint8_t size)</td></tr>
+<tr class="memdesc:af77d21781d7f3f0aef16e2e19950867c"><td class="mdescLeft">&#160;</td><td class="mdescRight">escribe un solo char en la pantalla, el fond utilizado se encuentra en <a class="el" href="font5x7_8h.html">font5x7.h</a>  <a href="#af77d21781d7f3f0aef16e2e19950867c">Más...</a><br /></td></tr>
+<tr class="separator:af77d21781d7f3f0aef16e2e19950867c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a65a6ff575ed87440bde00a9c1b0a0457"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st7735_8h.html#a65a6ff575ed87440bde00a9c1b0a0457">drawBitmap</a> (uint8_t x, uint8_t y, uint8_t *bitmap, uint8_t w, uint8_t h, uint16_t color, uint16_t bg)</td></tr>
+<tr class="memdesc:a65a6ff575ed87440bde00a9c1b0a0457"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dibuja un mapa de bits extraido de una imagen, esta función es obsoleta, ya que es posible utilizando funciones como <a class="el" href="st7735_8c.html#a27dc4be7d8c6a50f7898c207e9d359de">push_color()</a>, <a class="el" href="st7735_8h.html#a52199fd74db51ad05720fb77b3dd1a2a" title="colorear un pixel en específico ">lcd_Pixel()</a>, <a class="el" href="st7735_8h.html#ab12791310beed0a32afc8df3f42cf642" title="activa la parte de la pantalla que se va a colorear. En cordenadas X-Y(2D), por defecto X=0-128 y Y=0...">lcd_setAddrWindow()</a> dibujar imagenes a color y en blanco y negro a partir de una tabla de pixeles, esta ultima se obtiene con las funciones encontradas en el archivo <a class="el" href="make_color_table_8cpp.html">makeColorTable.cpp</a> ver el demo en <a class="el" href="main_8c.html">main.c</a> para entender su uso.  <a href="#a65a6ff575ed87440bde00a9c1b0a0457">Más...</a><br /></td></tr>
+<tr class="separator:a65a6ff575ed87440bde00a9c1b0a0457"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Descripción detallada</h2>
+<div class="textblock"><p>Esta es una libreria para utilizar la pantalla TFT ST7735S utilizando la tarjeta STM32F4/F3, se baso en la libreria de adafruit la cual es compatible con arduino y escrita completamente en C++. se integran ciertas funcionalidades y primitivas encontradas en la libraria de adafruit, sin embargo se omiten otras por compatibilidad Esta libreria se encarga de la inicialización de alguno de los 3 SPI disponibles en las tarjetas ya mencionadas. </p>
+<dl class="section author"><dt>Autor</dt><dd>Natanael MojicaJimenez </dd></dl>
+<dl class="section date"><dt>Fecha</dt><dd>Noviembre 2016 </dd></dl>
+</div><h2 class="groupheader">Documentación de los 'defines'</h2>
+<a class="anchor" id="a3118b14d778fd5d8527eee4be2bec881"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define _swap_uint8_t</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">a, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">b&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;{ uint8_t t = a; a = b; b = t; }</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>swap data a, b, function is not part of the API, but is a utility </p>
+
+</div>
+</div>
+<a class="anchor" id="a218aea20cbae8743a9182fcbc8e482f7"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define BLK_PIN&#160;&#160;&#160;GPIO3</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>usado para controlar la luminosidad de la pantalla </p>
+
+</div>
+</div>
+<a class="anchor" id="ab6872874dbf2ac63a9885446a5a6da36"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CS_H</td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td>&#160;&#160;&#160;gpio_set(<a class="el" href="st7735_8h.html#a166fcfb14775ba23c5ca160f07da0fa0">LCD_CONTROL_PORT</a>, <a class="el" href="st7735_8h.html#abfcf05153ddbd63d5aff5d018867cc19">CS_PIN</a>)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>set hight the CS pin </p>
+
+</div>
+</div>
+<a class="anchor" id="ae809be768bb813a2d5e6cb1edaa7e0af"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CS_L</td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td>&#160;&#160;&#160;gpio_clear(<a class="el" href="st7735_8h.html#a166fcfb14775ba23c5ca160f07da0fa0">LCD_CONTROL_PORT</a>, <a class="el" href="st7735_8h.html#abfcf05153ddbd63d5aff5d018867cc19">CS_PIN</a>)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>set low the CS pin </p>
+
+</div>
+</div>
+<a class="anchor" id="abfcf05153ddbd63d5aff5d018867cc19"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CS_PIN&#160;&#160;&#160;GPIO5</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>gpio para "chip select" </p>
+
+</div>
+</div>
+<a class="anchor" id="ab484b58929061c4628bd6b7900df3224"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define DC_H</td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td>&#160;&#160;&#160;gpio_set(<a class="el" href="st7735_8h.html#a166fcfb14775ba23c5ca160f07da0fa0">LCD_CONTROL_PORT</a>, <a class="el" href="st7735_8h.html#a4131edec89d3efa5af72db14ee3119c2">DC_PIN</a>)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>set hight the DC pin </p>
+
+</div>
+</div>
+<a class="anchor" id="aff39d3f24f2073ad7a18ed433827fb5b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define DC_L</td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td>&#160;&#160;&#160;gpio_clear(<a class="el" href="st7735_8h.html#a166fcfb14775ba23c5ca160f07da0fa0">LCD_CONTROL_PORT</a>, <a class="el" href="st7735_8h.html#a4131edec89d3efa5af72db14ee3119c2">DC_PIN</a>)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>set low the DC pin </p>
+
+</div>
+</div>
+<a class="anchor" id="a4131edec89d3efa5af72db14ee3119c2"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define DC_PIN&#160;&#160;&#160;GPIO4</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>gpio "DATA/COMMAND" </p>
+
+</div>
+</div>
+<a class="anchor" id="aed89bd71aee8be823e8a20ec4e093c1e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define HEIGHT&#160;&#160;&#160;160</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a9c361b912f3945ccbc19d8de021c96c5"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define INITR_144GREENTAB&#160;&#160;&#160;0x1</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aa9bf2edd9c879179cc072b3b9d4ecc8f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define INITR_18BLACKTAB&#160;&#160;&#160;<a class="el" href="st7735_8h.html#a385ddeae12a0bcd313507bbe58f66e9a">INITR_BLACKTAB</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a0b0bfc22b86b89c821c89e5af8d11ee0"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define INITR_18GREENTAB&#160;&#160;&#160;<a class="el" href="st7735_8h.html#a8482c50b5e4da7ef9cc27ec7f16aa374">INITR_GREENTAB</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a2b0d94a281bc70fb8e8dc3217e51e7e0"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define INITR_18REDTAB&#160;&#160;&#160;<a class="el" href="st7735_8h.html#ac861596d7089b7620395cdad635c9307">INITR_REDTAB</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a385ddeae12a0bcd313507bbe58f66e9a"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define INITR_BLACKTAB&#160;&#160;&#160;0x2</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a8482c50b5e4da7ef9cc27ec7f16aa374"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define INITR_GREENTAB&#160;&#160;&#160;0x0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ac861596d7089b7620395cdad635c9307"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define INITR_REDTAB&#160;&#160;&#160;0x1</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a166fcfb14775ba23c5ca160f07da0fa0"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define LCD_CONTROL_PORT&#160;&#160;&#160;GPIOD</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a831807c3a5da1596afad841775b1f2e8"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define RST_H</td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td>&#160;&#160;&#160;gpio_set(<a class="el" href="st7735_8h.html#a166fcfb14775ba23c5ca160f07da0fa0">LCD_CONTROL_PORT</a>, <a class="el" href="st7735_8h.html#a36932b0e869e0114f32e255f61306d6b">RST_PIN</a>)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>set hight the RST pin </p>
+
+</div>
+</div>
+<a class="anchor" id="a6d742354b2b784f46058306e407518ca"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define RST_L</td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td>&#160;&#160;&#160;gpio_clear(<a class="el" href="st7735_8h.html#a166fcfb14775ba23c5ca160f07da0fa0">LCD_CONTROL_PORT</a>, <a class="el" href="st7735_8h.html#a36932b0e869e0114f32e255f61306d6b">RST_PIN</a>)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>set low the RST pin </p>
+
+</div>
+</div>
+<a class="anchor" id="a36932b0e869e0114f32e255f61306d6b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define RST_PIN&#160;&#160;&#160;GPIO1</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>gpio para hardware reset de la pantalla </p>
+
+</div>
+</div>
+<a class="anchor" id="a8112c985f7444e82198d7571ce0a9160"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define SPI_PORT&#160;&#160;&#160;SPI</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a484d38defdf6303f4a8d19f994d0593d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ST7735_CASET&#160;&#160;&#160;0x2A</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a9caf06c78cdaba66cea553668103b759"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ST7735_COLMOD&#160;&#160;&#160;0x3A</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a1f9701dd8594cc2fb7c6f783b05d2f65"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ST7735_DISPOFF&#160;&#160;&#160;0x28</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a1afa532348b3d081b7b1ecdfa9ba17e0"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ST7735_DISPON&#160;&#160;&#160;0x29</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ace47a845775310352dc7e2fae3e1586a"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ST7735_DISSET5&#160;&#160;&#160;0xB6</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aeb5c49fcdd239ab153f5d9b15304ca9c"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ST7735_FRMCTR1&#160;&#160;&#160;0xB1</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a3b416f231bb6eedec8cfcf277c6d36d3"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ST7735_FRMCTR2&#160;&#160;&#160;0xB2</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a4afe2b326d709aaeb70c657f8210ea2b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ST7735_FRMCTR3&#160;&#160;&#160;0xB3</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aad3c0783af31cd4c4e33bf8748e961fa"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ST7735_GMCTRN1&#160;&#160;&#160;0xE1</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ad90bd9bbed9c95192a2b44b8f63f86e5"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ST7735_GMCTRP1&#160;&#160;&#160;0xE0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="addfb44b70c2b60a0d04e3d22611d54ee"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ST7735_INVCTR&#160;&#160;&#160;0xB4</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ad66cc531ec897ce0465ff21d152b756a"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ST7735_INVOFF&#160;&#160;&#160;0x20</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ae670a3d34e887559366735ca999e80d3"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ST7735_INVON&#160;&#160;&#160;0x21</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a74afa388731002f70e250770901f90a2"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ST7735_MADCTL&#160;&#160;&#160;0x36</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a1b574de2db49ecfa63ce0216112903cc"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ST7735_NOP&#160;&#160;&#160;0x00</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a9e059398ac81ef081169997c28f908cb"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ST7735_NORON&#160;&#160;&#160;0x13</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a057611dfe567fd9095f27d40087e4948"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ST7735_PTLAR&#160;&#160;&#160;0x30</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aac679645f819d98761965299f19620f6"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ST7735_PTLON&#160;&#160;&#160;0x12</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ab4294b48d705690347bf0fed4af82697"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ST7735_PWCTR1&#160;&#160;&#160;0xC0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aef4c5d9e00b07b6fc601f8ad2dbbb101"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ST7735_PWCTR2&#160;&#160;&#160;0xC1</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ac69d092c9c2693807a2a992dbf297f24"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ST7735_PWCTR3&#160;&#160;&#160;0xC2</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a95b55308b48e83b1a3e2cf51393030f1"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ST7735_PWCTR4&#160;&#160;&#160;0xC3</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a91cc0e141903ca80ad7fc6f108988184"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ST7735_PWCTR5&#160;&#160;&#160;0xC4</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a13453718ec9240ae7966d0d8995d0c8a"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ST7735_PWCTR6&#160;&#160;&#160;0xFC</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a5cbfe14163815f14aea1a4a89ea2fffc"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ST7735_RAMRD&#160;&#160;&#160;0x2E</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aa9a60c99890ac51b71eb799b68d5c6d5"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ST7735_RAMWR&#160;&#160;&#160;0x2C</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ae879d0b7f5639d5ecd3d265d9971c979"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ST7735_RASET&#160;&#160;&#160;0x2B</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aec4c29f7c63a6c6f168764b2bcec50cf"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ST7735_RDDID&#160;&#160;&#160;0x04</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="acb42f35cd7e667ba514f8b6022d0dac5"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ST7735_RDDST&#160;&#160;&#160;0x09</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a904eaad54b53eec42bec05f81baee26f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ST7735_RDID1&#160;&#160;&#160;0xDA</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aef8a3757b39dd1bf1d79920be09511ae"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ST7735_RDID2&#160;&#160;&#160;0xDB</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a8a827d3b90198c117f3d744cc4201c68"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ST7735_RDID3&#160;&#160;&#160;0xDC</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a1ca62118c4ce1ed1d288c6958004188e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ST7735_RDID4&#160;&#160;&#160;0xDD</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a5656049de5d79e5a77260b69042179af"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ST7735_SLPIN&#160;&#160;&#160;0x10</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aa061cfc0b8f0fea3e70b59d72f6e1caa"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ST7735_SLPOUT&#160;&#160;&#160;0x11</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a2816f2fce9a937ced8567b2c2797767b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ST7735_SWRESET&#160;&#160;&#160;0x01</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aa4d4dfc0e9e5b75add3eb42fd7987c29"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ST7735_VMCTR1&#160;&#160;&#160;0xC5</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a241aeeb764887ae5e3de58b98f04b16d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define WIDTH&#160;&#160;&#160;128</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Documentación de las enumeraciones</h2>
+<a class="anchor" id="a5ae84ca942eaca100e8898474a926b40"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="st7735_8h.html#a5ae84ca942eaca100e8898474a926b40">ScrOrientation_TypeDef</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Valores de enumeraciones</th></tr><tr><td class="fieldname"><a class="anchor" id="a5ae84ca942eaca100e8898474a926b40aa07c9000fe12525afdc2745a87dadbb5"></a>scr_normal&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a5ae84ca942eaca100e8898474a926b40a2b0ac0a99f5355d9b34c3852f08719d6"></a>scr_CW&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a5ae84ca942eaca100e8898474a926b40a3bb8884e9045b3f119a9902f010cc225"></a>scr_CCW&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a5ae84ca942eaca100e8898474a926b40aacd3043a7474f1c585acf27271da3b34"></a>scr_180&#160;</td><td class="fielddoc">
+</td></tr>
+</table>
+
+</div>
+</div>
+<a class="anchor" id="a9c2b1a91913423d58dbec9c795cc18dd"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="st7735_8h.html#a9c2b1a91913423d58dbec9c795cc18dd">st7735_cmd</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Valores de enumeraciones</th></tr><tr><td class="fieldname"><a class="anchor" id="a9c2b1a91913423d58dbec9c795cc18ddab784b7602a9a2e684f6390fe87b82c02"></a>ST7735_START&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a9c2b1a91913423d58dbec9c795cc18dda4f71b343d00050f4ad75ab5566cc4ceb"></a>ST7735_END&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a9c2b1a91913423d58dbec9c795cc18dda6f0d44bdcdbb8a652379e52ff1483be8"></a>ST7735_CMD&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a9c2b1a91913423d58dbec9c795cc18dda1f23be27e318b5eefe077a142900c0bc"></a>ST7735_DATA&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a9c2b1a91913423d58dbec9c795cc18ddaa1b4c618843c2d5c9697248e648c7438"></a>ST7735_DELAY&#160;</td><td class="fielddoc">
+</td></tr>
+</table>
+
+</div>
+</div>
+<h2 class="groupheader">Documentación de las funciones</h2>
+<a class="anchor" id="a25a7a26b441d259e596301aa69abbb03"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void delay_ms </td>
+          <td>(</td>
+          <td class="paramtype">const uint32_t&#160;</td>
+          <td class="paramname"><em>delay</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>retardo en milisegundos </p>
+
+</div>
+</div>
+<a class="anchor" id="aa08019f10d06c82d85327ef646f44435"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void delay_us </td>
+          <td>(</td>
+          <td class="paramtype">const uint32_t&#160;</td>
+          <td class="paramname"><em>delay</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>retardo en microsegundos </p>
+
+</div>
+</div>
+<a class="anchor" id="a65a6ff575ed87440bde00a9c1b0a0457"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void drawBitmap </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>bitmap</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>w</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>h</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>color</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>bg</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Dibuja un mapa de bits extraido de una imagen, esta función es obsoleta, ya que es posible utilizando funciones como <a class="el" href="st7735_8c.html#a27dc4be7d8c6a50f7898c207e9d359de">push_color()</a>, <a class="el" href="st7735_8h.html#a52199fd74db51ad05720fb77b3dd1a2a" title="colorear un pixel en específico ">lcd_Pixel()</a>, <a class="el" href="st7735_8h.html#ab12791310beed0a32afc8df3f42cf642" title="activa la parte de la pantalla que se va a colorear. En cordenadas X-Y(2D), por defecto X=0-128 y Y=0...">lcd_setAddrWindow()</a> dibujar imagenes a color y en blanco y negro a partir de una tabla de pixeles, esta ultima se obtiene con las funciones encontradas en el archivo <a class="el" href="make_color_table_8cpp.html">makeColorTable.cpp</a> ver el demo en <a class="el" href="main_8c.html">main.c</a> para entender su uso. </p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>punto inicial en X </td></tr>
+    <tr><td class="paramname">y</td><td>punto inicial en y </td></tr>
+    <tr><td class="paramname">w</td><td>ancho de la imagen </td></tr>
+    <tr><td class="paramname">h</td><td>alto de la imagen </td></tr>
+    <tr><td class="paramname">color</td><td>del pixel en alto </td></tr>
+    <tr><td class="paramname">bg</td><td>del pixel en bajo </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="af77d21781d7f3f0aef16e2e19950867c"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void drawChar </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned char&#160;</td>
+          <td class="paramname"><em>c</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>color</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>bg</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>escribe un solo char en la pantalla, el fond utilizado se encuentra en <a class="el" href="font5x7_8h.html">font5x7.h</a> </p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>coordenada en X </td></tr>
+    <tr><td class="paramname">y</td><td>coordenada en y </td></tr>
+    <tr><td class="paramname">c</td><td>char a escribir </td></tr>
+    <tr><td class="paramname">bg</td><td>color de fondo del char </td></tr>
+    <tr><td class="paramname">color</td><td>color del char </td></tr>
+    <tr><td class="paramname">size</td><td>tamaño del char en pantalla </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section warning"><dt>Atención</dt><dd>size : cuanto mas grande sea mas tarda en dibujarse en la pantalla </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a61fdb9fe606c8ecab09cd33dbf315a6a"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void drawCircle </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>x0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>y0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>r</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>color</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Dibujar un circulo. </p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x0</td><td>coordenada en X del centro del circulo </td></tr>
+    <tr><td class="paramname">y0</td><td>coordenada en ydel centro del circulo </td></tr>
+    <tr><td class="paramname">r</td><td>radio del circulo </td></tr>
+    <tr><td class="paramname">color</td><td>color del circulo </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section warning"><dt>Atención</dt><dd>: cuanto mas grande sea  mas tarda en dibujarse en la pantalla </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ab1e9920baf8bd7cb0dc9abe0581c4dfe"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void drawCircleHelper </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>x0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>y0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>r</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>cornername</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>color</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Funcion auxiliar utilizada por drawCircle y dibujar aun mas rapidamente el circulo. </p>
+
+</div>
+</div>
+<a class="anchor" id="afc7507ca222d325daf1c0a8ef912d068"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void drawFastHLine </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>w</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>color</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Dibuja una linea horizontal ,utilizando <a class="el" href="st7735_8h.html#ae3f81d88c3bba11537fb3edfda8b8f44" title="Dibuja una linea,utiliza otro algoritmo al empleado por lcd_Line. ">drawLine()</a> </p>
+
+</div>
+</div>
+<a class="anchor" id="a7b780581fab62fff9338d0b0a8fb4c45"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void drawFastVLine </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>h</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>color</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Dibuja una linea horizontal ,utilizando <a class="el" href="st7735_8h.html#ae3f81d88c3bba11537fb3edfda8b8f44" title="Dibuja una linea,utiliza otro algoritmo al empleado por lcd_Line. ">drawLine()</a> </p>
+
+</div>
+</div>
+<a class="anchor" id="ae3f81d88c3bba11537fb3edfda8b8f44"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void drawLine </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>x0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>y0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>x1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>y1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>color</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Dibuja una linea,utiliza otro algoritmo al empleado por lcd_Line. </p>
+
+</div>
+</div>
+<a class="anchor" id="af864fedf3dd0b022ce4df8e5472f2d80"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void drawRect </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>w</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>h</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>color</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Dibuja un rectangulo utilizando un algoritmo diferente al usado en lcd_Rect. </p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>punto inicial en X </td></tr>
+    <tr><td class="paramname">y</td><td>punto inicial en y </td></tr>
+    <tr><td class="paramname">w</td><td>ancho del rectangulo en X a partir de X1 </td></tr>
+    <tr><td class="paramname">h</td><td>alto del rectangulo a partir del punto Y2 </td></tr>
+    <tr><td class="paramname">color</td><td>utilizado para rellenar el rectangulo </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section warning"><dt>Atención</dt><dd>el alto y ancho del rectangulo no deben sobrepasar las dimensiones de la pantalla </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ae4fa4297e4aa1901a20f395d819e0392"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void drawRoundRect </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>w</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>r</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>color</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Dibuja un Round rectangulo con un determinado color. </p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>punto inicial en X </td></tr>
+    <tr><td class="paramname">y</td><td>punto inicial en y </td></tr>
+    <tr><td class="paramname">w</td><td>ancho del rectangulo en X a partir de X1 </td></tr>
+    <tr><td class="paramname">r</td><td>radio del circulo interno </td></tr>
+    <tr><td class="paramname">color</td><td>utilizado para rellenar el rectangulo </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a5b5d124d653e3fca7f0a4da92a59d99c"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void drawTriangle </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>x0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>y0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>x1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>y1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>x2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>y2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>color</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Dibujar un triangulo, dibuja tres lineas que unen los tres vertices del triangulo, cada vertice con coordenadas x0y0, x1y1,x2y2. </p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">color</td><td>color de las lineas </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="afd58757c44d467755bf5f951221de7d0"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void fillCircle </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>x0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>y0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>r</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>color</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Dibujar y rellenar un circulo. </p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x0</td><td>coordenada en X del centro del circulo </td></tr>
+    <tr><td class="paramname">y0</td><td>coordenada en ydel centro del circulo </td></tr>
+    <tr><td class="paramname">r</td><td>radio del circulo </td></tr>
+    <tr><td class="paramname">color</td><td>color del relleno </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a49edfd7dd64ca3d741800c0f29eb7f97"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void fillCircleHelper </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>x0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>y0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>r</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>cornername</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>delta</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>color</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Funcion auxiliar utilizada por fillCircle y dibujar/rellenar el circulo. </p>
+
+</div>
+</div>
+<a class="anchor" id="aaf9d9500299437b02e25004c97e916ed"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void fillRect </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>w</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>h</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>color</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Rellena un rectangulo con un determinado color, utiliza un algoritmo diferente al utilizado en lcd_FillRect, el cual es utili para dibujo de pequeños rectangulos. </p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>punto inicial en X </td></tr>
+    <tr><td class="paramname">y</td><td>punto inicial en y </td></tr>
+    <tr><td class="paramname">w</td><td>ancho del rectangulo en X a partir de X1 </td></tr>
+    <tr><td class="paramname">h</td><td>alto del rectangulo a partir del punto Y2 </td></tr>
+    <tr><td class="paramname">color</td><td>utilizado para rellenar el rectangulo </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section warning"><dt>Atención</dt><dd>Esta funcion es mucho más lenta que lcd_FillRect, pero más preciso </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="adf0786e14e204ca2740d7c1aef27a0a0"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void fillRoundRect </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>w</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>h</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>r</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>color</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Rellena un Round rectangulo con un determinado color. </p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>punto inicial en X </td></tr>
+    <tr><td class="paramname">y</td><td>punto inicial en y </td></tr>
+    <tr><td class="paramname">w</td><td>ancho del rectangulo en X a partir de X1 </td></tr>
+    <tr><td class="paramname">r</td><td>radio del circulo interno </td></tr>
+    <tr><td class="paramname">color</td><td>utilizado para rellenar el rectangulo </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a9a16d7c88a1ea94262311f59722cba6b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void fillTriangle </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>x0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>y0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>x1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>y1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>x2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>y2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>color</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Dibuja/rellena un triangulo, utilizando tres lineas que unen los tres vertices del triangulo, cada vertice con coordenadas x0y0, x1y1,x2y2. </p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">color</td><td>color del relleno </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="af775caa54b75571bdb757362d3e8de3c"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t getBlue </td>
+          <td>(</td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>rgbPixel</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>retorna el nivel de azul de un pixel </p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rgbPixel</td><td>color actual del pixel en 16 bits. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a3f60030b79f293f90d6a4fc7d2986d73"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t getGreen </td>
+          <td>(</td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>rgbPixel</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>retorna el nivel de verde de un pixel </p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rgbPixel</td><td>color actual del pixel en 16 bits. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a9e0759026ca579899f965cfc956412df"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t getRed </td>
+          <td>(</td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>rgbPixel</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>retorna el nivel de rojo de un pixel </p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rgbPixel</td><td>color actual del pixel en 16 bits. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="aafed2ade168a085630c2fe8d776432f2"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void init_lcd </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>inicializa la pantalla,aqui se ajusta el formato y bits de color, etc. </p>
+
+</div>
+</div>
+<a class="anchor" id="a4f074060e0dabe0ad6ffc2ba58afdf44"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void lcd_backLight </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>on</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>enciende o apaga la luz de fondo de la pantalla </p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">on</td><td>cero=apaga, on&gt;0, la enciende </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a819f1bad3cfc54b2bc29accf027fbe97"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void lcd_Clear </td>
+          <td>(</td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>color</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Llenar la pantalla de un solo color. </p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">color</td><td>: color RGB565, alguno de los ya definidos en <a class="el" href="color_8h.html">color.h</a> </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="aeba6ba7c6ce32b47c5437325d57dd2c3"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void lcd_FillRect </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>w</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>h</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>color</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Rellena un rectangulo con un determinado color. </p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>punto inicial en X </td></tr>
+    <tr><td class="paramname">y</td><td>punto inicial en y </td></tr>
+    <tr><td class="paramname">w</td><td>ancho del rectangulo en X a partir de X1 </td></tr>
+    <tr><td class="paramname">h</td><td>alto del rectangulo a partir del punto Y2 </td></tr>
+    <tr><td class="paramname">color</td><td>utilizado para rellenar el rectangulo </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section warning"><dt>Atención</dt><dd>: el alto y ancho del rectangulo no deben sobrepasar las dimensiones de la pantalla </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a51ad2be435bd72bc5597072999b304bd"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void lcd_HLine </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>w</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>color</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Dibuja una linea horizontal que iniciará en el punto xy. </p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">w</td><td>: ancho de la linea </td></tr>
+    <tr><td class="paramname">color</td><td>: color de la linea </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a6e8b3154e014fb073bee6a563109428f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void lcd_Line </td>
+          <td>(</td>
+          <td class="paramtype">int16_t&#160;</td>
+          <td class="paramname"><em>X1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int16_t&#160;</td>
+          <td class="paramname"><em>Y1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int16_t&#160;</td>
+          <td class="paramname"><em>X2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int16_t&#160;</td>
+          <td class="paramname"><em>Y2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>color</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Dibuja una linea que une los puntos X1Y1 a X2Y2. </p>
+
+</div>
+</div>
+<a class="anchor" id="a202ef105fb5662318faa8bc3f7839082"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void lcd_orientacion </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="st7735_8h.html#a5ae84ca942eaca100e8898474a926b40">ScrOrientation_TypeDef</a>&#160;</td>
+          <td class="paramname"><em>orientation</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Utilizada para cambiar la orientación de la pantalla. </p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">orientation</td><td>: enum con 1 de los cuatro posibles modos de orientacion </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a52199fd74db51ad05720fb77b3dd1a2a"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void lcd_Pixel </td>
+          <td>(</td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>X</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>Y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>color</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>colorear un pixel en específico </p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">X</td><td>: coordenada en X del pixel </td></tr>
+    <tr><td class="paramname">Y</td><td>: coordenada en y del pixel </td></tr>
+    <tr><td class="paramname">color</td><td>: color del pixel </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section warning"><dt>Atención</dt><dd>: tener cuidado de que las coordenadas XY del pixel esten dentro de los valores actuales de X e Y, en la orientacion por defecto lcd_orientacion usando ScrOrientation_TypeDef, src_Normal, x va desde 0 a 128 e Y de 0 a 160 </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ac94e780143f8f852ca9e1712bb7c4af5"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void lcd_Rect </td>
+          <td>(</td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>X1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>Y1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>X2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>Y2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>color</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Funcion para dibujar un rectangulo. </p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">X1</td><td>punto inicial en X </td></tr>
+    <tr><td class="paramname">Y1</td><td>punto inicial en y </td></tr>
+    <tr><td class="paramname">X2</td><td>ancho del rectangulo en X a partir de X1 </td></tr>
+    <tr><td class="paramname">Y2</td><td>alto del rectangulo a partir del punto Y2 </td></tr>
+    <tr><td class="paramname">color</td><td>color de las lineas con las que se dibuja el rectangulo </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section warning"><dt>Atención</dt><dd>: el alto y ancho del rectangulo no deben sobrepasar las dimensiones de la pantalla </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ab12791310beed0a32afc8df3f42cf642"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void lcd_setAddrWindow </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>XS</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>YS</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>XE</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>YE</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>activa la parte de la pantalla que se va a colorear. En cordenadas X-Y(2D), por defecto X=0-128 y Y=0-160, es posible cambiar la orientación. </p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">XS</td><td>: x inicial </td></tr>
+    <tr><td class="paramname">XE</td><td>: x final </td></tr>
+    <tr><td class="paramname">YS</td><td>: y inicial </td></tr>
+    <tr><td class="paramname">YE</td><td>: y final </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="ac155886cbd46bcb85b1cdad90def7e44"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void lcd_VLine </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>h</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>color</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Dibuja una linea vertical que iniciará en el punto xy. </p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">h</td><td>: alto de la linea </td></tr>
+    <tr><td class="paramname">color</td><td>: color de la linea </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="ac181762e52db968673396efbf0e825fe"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint16_t RGB565 </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>R</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>G</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>B</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>retorna el color de un pixel RGB565 de 16 bits. </p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">R</td><td>nivel de rojo, valor entre 0 y 255(unsigned char) </td></tr>
+    <tr><td class="paramname">G</td><td>nivel de verde, valor entre 0 y 255(unsigned char) </td></tr>
+    <tr><td class="paramname">B</td><td>nivel de azul, valor entre 0 y 255(unsigned char) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section warning"><dt>Atención</dt><dd>Esta funcion retorna un valor de color de 16 bits. Lo cual es compatible con la ST7735S, si quiere utilizar una mayor cantidad de bits de color debe de configurar la tarjeta con el comando adecuado, por defecto se configura en 16-bits</dd></dl>
+<p>retorna el color de un pixel RGB565 de 16 bits. </p>
+
+</div>
+</div>
+<a class="anchor" id="acb5db9fda33cb42e565461d17593bcf6"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void spi_setup </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>SPI</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Inicializa el periférico SPI a utilizar. </p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">SPI</td><td>: puede ser SPI1, SPI2 O SPI3 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="ac44b1142c890d76d774741669962728a"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void st_PutStr5x7 </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>scale</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>X</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>Y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>str</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>color</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>bgcolor</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>escribe un arreglo de chars (strings) </p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">scale</td><td>tamaño del string </td></tr>
+    <tr><td class="paramname">x</td><td>coordenada en X </td></tr>
+    <tr><td class="paramname">y</td><td>coordenada en y </td></tr>
+    <tr><td class="paramname">str</td><td>string </td></tr>
+    <tr><td class="paramname">bgcolor</td><td>color de fondo del string </td></tr>
+    <tr><td class="paramname">color</td><td>color del string </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section warning"><dt>Atención</dt><dd>scale: cuanto mas grande sea scale mas tarda en dibujarse en la pantalla </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ac7770e102c0ce9b4f7833f646ab5c6c6"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint16_t swapcolor </td>
+          <td>(</td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>x</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Intercambia el orden de los componentes de color en un pixel, de RGB a BGR. </p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>color actual del pixel en 16 bits. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a4a28c3534d2f2074fe50367f1b199e7b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void write_cmd_lcd </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>cmd</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>envia datos al SPI, es decir a la tarjeta ST7735S, internamente pone en bajo la bandera DC, para indicar a la tarjeta que se envian comandos de configuracion </p>
+
+</div>
+</div>
+<a class="anchor" id="a0e3c78d312f9ea8019c006a74e524dda"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void write_data_lcd </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>data</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>envia datos al SPI, es decir a la tarjeta ST7735S, internamente pone en alto la bandera DC, para indicar a la tarjeta que se envian datos </p>
+
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="st7735_8h.html">st7735.h</a></li>
+    <li class="footer">Generado el Viernes, 18 de Noviembre de 2016 11:49:28 para proyecto_micro-controladores por
+    <a href="http://www.doxygen.org/index.html">
+    <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.11 </li>
+  </ul>
+</div>
+</body>
+</html>
