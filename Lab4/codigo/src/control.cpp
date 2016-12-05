@@ -12,7 +12,7 @@
 using namespace std;
 
 int serial_fd;
-
+bool new;
 int serial_open(char *serial_name, speed_t baud)
 {
       struct termios newtermios;
@@ -33,7 +33,7 @@ int serial_open(char *serial_name, speed_t baud)
 }    
 
 
-void nuevo_set_point( void ) 
+void nueva_imagen( void ) 
 {
   char ch = '\0';
   int set_point;
@@ -44,7 +44,7 @@ void nuevo_set_point( void )
   while(ch != 'c')
   {
 	if(ch == 'n'){
-           printf("ingrese el valor deseado de temperatura en C°\n");
+           printf("Desea enviar un nuevo mapa de bits a la tarjeta?(esto sobreescribira la imagen actual)\n");
            scanf("%d",&set_point);
            printf("valor deseado es %dC° \n", set_point);
         }
@@ -62,6 +62,7 @@ void nuevo_set_point( void )
 
 int main(int argc, char *argv[])
 {
+   new = false;
     
    int n, longitud;
    char *device="/dev/ttyACM0";

@@ -98,10 +98,10 @@ void MainWindow::realtimeDataSlot()
 if (key-lastPointKey > 0.0000000001);
   {
     // add data to lines:
-    n=read (serial_fd, &data, 2 * sizeof(int));//lee linea a linea el caracter de 16 bits
+    n=read (serial_fd, &data, sizeof(int));//lee linea a linea el caracter de 32 bits
     int dataT = data & 0x0fff;
     (dataT <= 50) ? (y = dataT-50.0):(y = (dataT/4046.0)*150);
-    dataC = (data >> 16); //el valor deseado son los 8 bits mas significativos
+    dataC = (data >> 16); //el set point  son los 8 bits mas significativos
     ui->customPlot->graph(0)->addData(key, y);
     ui->customPlot->graph(1)->addData(key, dataC);
     // rescale value (vertical) axis to fit the current data:
