@@ -8,6 +8,7 @@
 #include <libopencm3/usb/usbd.h>
 #include <libopencm3/usb/cdc.h>
 #include <libopencm3/cm3/scb.h>
+#include <libopencm3/cm3/systick.h>
 #include <math.h>
 #include "usb.h"
 #include "st7735.h"
@@ -34,7 +35,27 @@ uint16_t new_time;
 uint16_t frequency;
 uint16_t buff[1];//es necesario declarar un arreglo debido al cont void * ptr
 uint16_t count;
+uint32_t temp32;
 
+void sys_tick_handler(void)
+{
+	temp32++;
+	//usbd_poll(usbd_dev);
+	/* We call this handler every 1ms so 1000ms = 1s on/off. */
+	if (temp32 == 1000) {
+		gpio_toggle(GPIOD, GPIO13); 
+		temp32 = 0;
+	}
+	if(gpio_get(GPIOA, GPIO0)){
+		count=0;
+		gpio_toggle(GPIOD, GPIO12);
+		new_image=false;
+		usbd_poll(usbd_dev);
+		systick_counter_disable();
+		
+	}
+
+}
 
 static void clock_setup(void)///
 {
@@ -42,6 +63,18 @@ static void clock_setup(void)///
   /* apb1 = 30MHz
      apb2 = 60MHz usado por adc
      ahb = 120MHz USB, DMA, usb solo puede trabajar a un maximo de 120MHz*/
+
+	/* 120MHz / 8 => 15MHz counts per second 
+	  15MHz/15 = 1000000 de ticks por segundo, es decir un tick
+ 	   cada 1uS si utiliza STK_CSR_CLKSOURCE_AHB_DIV8*/
+	systick_clear();
+	systick_set_clocksource(STK_CSR_CLKSOURCE_AHB);
+	systick_interrupt_enable();
+	/* 120,MHz/240000 = 500 ticks por segundo, es decir
+	    0.5S */
+	systick_set_reload(240000);//tick cada 500 milisegundos
+	/* Start counting. */
+	systick_counter_enable();
 
 }
 
@@ -191,50 +224,34 @@ int main(void)
         dy = 0;*/
 	uint16_t j,i;
 	uint16_t dx,dy;
-        lcd_setAddrWindow(0,128,0,159);
+        lcd_setAddrWindow(0,128,0,160);
 	while (1) {
 		usbd_poll(usbd_dev);
-		if(gpio_get(GPIOA, GPIO0)){
-			count=0;
-			gpio_toggle(GPIOD, GPIO12);
-			new_image=false;
-			usbd_poll(usbd_dev);
-		}
 
 		if(count==20479){
 			count=0;
 			gpio_toggle(GPIOD, GPIO15);
-			/*for(j=0;j<160;j++){
-				for(i=0;i<128;i++){
-				lcd_Pixel(i,j,image_buffer[i+(j*128)]);
-				usbd_poll(usbd_dev);
-				}
-			}*/
 			if(image_number==0) image_number=1;
 			else 		    image_number=0;
 			new_image=true;
+			systick_counter_enable();
 		}
-		usbd_poll(usbd_dev);
 
 		if(new_image){
 
-			 for(j=0;j<20480;j++){
-				push_color(image_buffer[j]);
-			 }
-			delay_ms(2000);
 
 		         lcd_setAddrWindow(0,128,0,160);
 			 for(j=0;j<20480;j++){
 				push_color(RGB565(getBlue(image_buffer[j]), getGreen(image_buffer[j]), getRed(image_buffer[j])));
-				delay_us(800);
+				delay_us(500);
 			 }
 			 for(j=0;j<20480;j++){
 				push_color(RGB565(getGreen(image_buffer[j]), getBlue(image_buffer[j]), getRed(image_buffer[j])));
-				delay_us(800);
+				delay_us(500);
 			 }
 		 	for(j=0;j<20480;j++){
 				push_color(RGB565(getGreen(image_buffer[j]), getRed(image_buffer[j]), getBlue(image_buffer[j])));
-				delay_us(800);
+				delay_us(500);
 		 	}
 
 			lcd_setAddrWindow(64,128,0,160);
@@ -242,21 +259,34 @@ int main(void)
 			for(j=0;j<160;j++){
 				for(i=64;i<128;i++){
 					lcd_Pixel(i, j, image2_buffer[i+(j*128)]);
-					delay_us(1500);
+					delay_us(1000);
 				}
 			}
 			lcd_setAddrWindow(0,64,0,160);
 			for(j=0;j<160;j++){
 				for(i=0;i<64;i++){
 					lcd_Pixel(i, j, image2_buffer[i+(j*128)]);
-					delay_us(1500);
+					delay_us(1000);
+				}
+			}
+			lcd_setAddrWindow(64,128,0,160);
+			 delay_ms(10000);
+			for(j=161;j>0;j--){
+				for(i=128;i>63;i--){
+					lcd_Pixel(i, j-1, image_buffer[i+(j*128-1)]);
+					delay_us(1000);
+				}
+			}
+			lcd_setAddrWindow(0,64,0,160);
+			for(j=0;j<160;j++){
+				for(i=0;i<64;i++){
+					lcd_Pixel(i, j, image_buffer[i+(j*128)]);
+					delay_us(1000);
 				}
 			}
 			lcd_setAddrWindow(0,128,0,160);
-			delay_ms(10000);
-		}
-		//push_color(image_buffer[0]);	
-		usbd_poll(usbd_dev);	
+			delay_ms(8000);
+		}	
 	}
 	return 0;
 }

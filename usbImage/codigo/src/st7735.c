@@ -210,11 +210,13 @@ write_data_lcd(uint8_t data)
 	//DC = 1 datos, DC=0 comandos
         //cs 1=disable LCD, 0=enable LCD
 	//reset debe estar en bajo
+	systick_counter_disable();//desactivar ticks, los cuales afectan el envio de datos
  	DC_H();
 	CS_L();
 	spi_send(spiPort, data);
         while (SPI_SR(spiPort) & SPI_SR_BSY);//esperar hasta que el registro SPI_SR este vacio, para activar CS
 	CS_H();
+	systick_counter_enable();
 }
 
 void write_cmd_lcd(uint8_t cmd)
@@ -222,11 +224,13 @@ void write_cmd_lcd(uint8_t cmd)
 	//DC = 1 datos, DC=0 comandos
         //cs 1=disable LCD, 0=enable LCD
 	//reset debe estar en bajo
+	systick_counter_disable();
 	DC_L();
 	CS_L();
 	spi_send(spiPort, cmd);
         while (SPI_SR(spiPort) & SPI_SR_BSY);//esperar hasta que el registro SPI_SR este vacio, para activar CS
 	CS_H();
+	systick_counter_enable();
 }	
 
 void init_lcd(void)

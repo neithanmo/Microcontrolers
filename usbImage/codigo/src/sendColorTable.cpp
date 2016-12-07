@@ -14,6 +14,14 @@
 #include <fstream>
 #include <time.h>
 
+/*
+	compile this program with
+		g++ sendColorTable.cpp -o getTable `pkg-config --cflags --libs opencv`
+	
+	ther run with:
+		./getTable imageFilePathFullName
+*/
+
 using namespace std;
 using namespace cv;
 
